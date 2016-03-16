@@ -15,9 +15,9 @@ import oracle.jdbc.pool.OracleDataSource;
 public class OracleConnections {
     private static OracleDataSource ods = null;
     
-    private static final String USER = "prof_francillon";
-    private static final String PASSWORD = "prof_francillon";
-    private static final String HOST = "ne-ege-leto.ig.he-arc.ch";
+    private static final String USER = "boris_klett";
+    private static final String PASSWORD = "boris_klett";
+    private static final String HOST = "db.ig.he-arc.ch";
     private static final String PORT = "1521";
     private static final String SID = "ens2";
     
