@@ -37,6 +37,13 @@ public class modifierCompte extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
+        try {
+            HtmlHttpUtils.isAuthenticate(request);
+        } catch (NullPointerException ex) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+        
         WebUtilities.doHeader(out, "Modifier un compte");
         try {
             Client cli = new Client();

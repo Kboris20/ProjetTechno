@@ -1,10 +1,10 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,15 +13,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
 import modele.Compte;
 import utilities.WebUtilities;
 
 /**
  *
- * @author christop.francill
+ * @author boris.klett
  */
-public class deleteCompteConfirm extends HttpServlet {
+public class transfereConfirm extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,6 +35,7 @@ public class deleteCompteConfirm extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
@@ -43,26 +43,35 @@ public class deleteCompteConfirm extends HttpServlet {
         }
 
         try {
+            WebUtilities.doHeader(out, "Confirmer le transfère");
+            Float somme = Float.valueOf(request.getParameter("somme"));
+            String id = request.getParameter("id");
+            String id1 = request.getParameter("id1");
+            String idCli = request.getParameter("idCli");
             Compte cpt = new Compte();
-            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            Compte cptDest = new Compte();
+
+            cpt.setIdentifiant(Integer.valueOf(id));
+            cptDest.setIdentifiant(Integer.valueOf(id1));
             ArrayList<Compte> cptListe = CompteDao.research(cpt);
-            WebUtilities.doHeader(out, "Supprimer un client");
-            if (cptListe.size() > 0) {
-                cpt = cptListe.get(0);
-                String owner = CompteDao.researchOwner(cpt.getIdentifiant());
-                out.println("<h3>Voulez-vous vraiment supprimer le compte " + cpt.getNom() + " de " + owner + " ?</h3>");
-                out.println("<form action=\"deleteCompte\">");
-                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cpt.getIdentifiant() + "\"/>");
-                out.println("<input type=\"hidden\" name=\"cliId\" value=\"" + request.getParameter("idCli") + "\"/>");
-                out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
-                out.println("</form>");
-                out.println("<a href=\"afficherClient?id=" + request.getParameter("idCli") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
-            } else {
-                out.println("<div class=\"alert alert-warning\">");
-                out.println("Aucun compte n'existe avec cet identifiant.");
-                out.println("</div>");
-            }
+            ArrayList<Compte> cptListeDest = CompteDao.research(cptDest);
+
+            cpt = cptListe.get(0);
+            String owner = CompteDao.researchOwner(cpt.getIdentifiant());
+            out.println("<h3>Transfère du compte " + cpt.getNom() + " de " + owner + " </h3>");
+            out.println("<br/>");
+
+            cptDest = cptListeDest.get(0);
+            String ownerDest = CompteDao.researchOwner(cptDest.getIdentifiant());
+            out.println("<h3>au compte " + cptDest.getNom() + " de " + ownerDest + " </h3>");
+            out.println("<br/>");
+            out.println("<h3>Montant " + somme + " </h3>");
+            out.println("<br/>");
+            out.println("<a href=\"transfere?somme=" + somme + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "\"class=\"btn btn-primary btn-mini\"><i class=\"icon-white icon-plus\"></i>Confirmer</a>");
+            out.println("<a href=\"transfereCompteACompte?id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
+
         } finally {
+            WebUtilities.doFooter(out);
             out.close();
         }
     }
@@ -105,4 +114,5 @@ public class deleteCompteConfirm extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

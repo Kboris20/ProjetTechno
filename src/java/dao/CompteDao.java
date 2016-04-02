@@ -277,7 +277,7 @@ public class CompteDao {
         System.out.println(cptId);
         try{
             cnx = OracleConnections.getConnection();
-            sql = new StringBuilder("select c.id from client c inner join compte cpt on cpt.id_client=c.id where cpt.id=" + cptId);
+            sql = new StringBuilder("select c.numero as id from client c inner join compte cpt on cpt.numero_client=c.numero where cpt.numero=" + cptId);
             System.out.println("SQL Query: " + sql.toString());
             stmt = cnx.createStatement();
 

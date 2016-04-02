@@ -16,6 +16,24 @@ public class WebUtilities {
         out.println("</head>");
         out.println("<body style=\"padding: 10px;\">");
         out.println("<h1>"+ title +"</h1>");
+        out.println("<br/>");
+    }
+    
+    public static void doHeader(PrintWriter out, String title, String sous_title){
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>"+ title +"</title>");
+        out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");    
+        out.println("<meta name=\"viewport\" content=\"width=device-width; initial-scale=0.5; maximum-scale=0.5; user-scalable=0;\" />");
+        out.println("<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />");
+        out.println("<meta names=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\" />");
+        out.println("</head>");
+        out.println("<body style=\"padding: 10px;\">");
+        out.println("<h1>"+ title +"</h1>");
+        out.println("<br/>");
+        out.println("<br/>");
+        out.println("<h2>"+ sous_title +"</h2>");
+        out.println("<br/>");
     }
     
     public static void doHeader(JspWriter out, String title) throws IOException{

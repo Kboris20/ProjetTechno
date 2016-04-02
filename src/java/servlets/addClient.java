@@ -22,9 +22,8 @@ import modele.Client;
 public class addClient extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -35,25 +34,33 @@ public class addClient extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+
         try {
+            HtmlHttpUtils.isAuthenticate(request);
+        } catch (NullPointerException ex) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+
+        try {
+
             Client newCli = new Client();
             newCli.setNom(request.getParameter("nom"));
             newCli.setPrenom(request.getParameter("prenom"));
             newCli.setAdresse(request.getParameter("adresse"));
             newCli.setVille(request.getParameter("ville"));
-            
-            int identifiant = (int)ClientDao.create(newCli);
+
+            int identifiant = (int) ClientDao.create(newCli);
 
             response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + identifiant + "&add=true");
-        } finally {            
+
+        } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -67,8 +74,7 @@ public class addClient extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

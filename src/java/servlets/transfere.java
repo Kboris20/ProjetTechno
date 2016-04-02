@@ -1,27 +1,30 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package servlets;
 
-import dao.ClientDao;
 import dao.CompteDao;
+import exception.InsufficientBalanceException;
+import exception.NegativeAmmountException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
 import modele.Compte;
-import utilities.WebUtilities;
 
 /**
  *
- * @author christop.francill
+ * @author boris.klett
  */
-public class deleteCompteConfirm extends HttpServlet {
+public class transfere extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,35 +36,42 @@ public class deleteCompteConfirm extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, NegativeAmmountException, InsufficientBalanceException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-
+        
         try {
+            Float somme = Float.valueOf(request.getParameter("somme"));
+            String id = request.getParameter("id");
+            String id1 = request.getParameter("id1");
+            String idCli = request.getParameter("idCli");
             Compte cpt = new Compte();
-            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            Compte cptDest = new Compte();
+
+            cpt.setIdentifiant(Integer.valueOf(id));
+            cptDest.setIdentifiant(Integer.valueOf(id1));
             ArrayList<Compte> cptListe = CompteDao.research(cpt);
-            WebUtilities.doHeader(out, "Supprimer un client");
-            if (cptListe.size() > 0) {
-                cpt = cptListe.get(0);
-                String owner = CompteDao.researchOwner(cpt.getIdentifiant());
-                out.println("<h3>Voulez-vous vraiment supprimer le compte " + cpt.getNom() + " de " + owner + " ?</h3>");
-                out.println("<form action=\"deleteCompte\">");
-                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cpt.getIdentifiant() + "\"/>");
-                out.println("<input type=\"hidden\" name=\"cliId\" value=\"" + request.getParameter("idCli") + "\"/>");
-                out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
-                out.println("</form>");
-                out.println("<a href=\"afficherClient?id=" + request.getParameter("idCli") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
-            } else {
-                out.println("<div class=\"alert alert-warning\">");
-                out.println("Aucun compte n'existe avec cet identifiant.");
-                out.println("</div>");
-            }
+            ArrayList<Compte> cptListeDest = CompteDao.research(cptDest);
+            
+            cpt = cptListe.get(0);
+            cptDest = cptListeDest.get(0);
+            
+            cpt.debit(somme);
+            cptDest.credit(somme);
+            
+            /*dans le cardre de l'exercice nous nous permettons de laisser l'opération tel quel mais 
+            normalement l'opération ci-dessous devrait être atomique hors ce n'est pas le cas ici
+            */
+            CompteDao.update(cpt);
+            CompteDao.update(cptDest);
+            
+            response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?trans=ok&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
         } finally {
             out.close();
         }
@@ -79,7 +89,13 @@ public class deleteCompteConfirm extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NegativeAmmountException ex) {
+            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InsufficientBalanceException ex) {
+            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -93,7 +109,13 @@ public class deleteCompteConfirm extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (NegativeAmmountException ex) {
+            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InsufficientBalanceException ex) {
+            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -105,4 +127,5 @@ public class deleteCompteConfirm extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

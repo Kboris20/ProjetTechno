@@ -1,4 +1,4 @@
-/*
+                                                                                       /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -36,6 +36,12 @@ public class deleteCompte extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        try {
+            HtmlHttpUtils.isAuthenticate(request);
+        } catch (NullPointerException ex) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+        
         try {
             Compte cpt = new Compte();
             cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));

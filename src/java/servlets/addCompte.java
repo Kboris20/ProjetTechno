@@ -35,6 +35,13 @@ public class addCompte extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
+        try {
+            HtmlHttpUtils.isAuthenticate(request);
+        } catch (NullPointerException ex) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+        
         try {
             Compte newCompt = new Compte();
             newCompt.setNom(request.getParameter("nom"));

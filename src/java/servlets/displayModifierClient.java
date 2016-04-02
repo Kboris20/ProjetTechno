@@ -22,9 +22,8 @@ import utilities.WebUtilities;
 public class displayModifierClient extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -36,45 +35,51 @@ public class displayModifierClient extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
+            HtmlHttpUtils.isAuthenticate(request);
+        } catch (NullPointerException ex) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+        try {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
             WebUtilities.doHeader(out, "Modifier un client");
-            
-            try{
+
+            try {
                 String modParam = request.getParameter("mod");
-                
-                if(modParam.equals("true")){
+
+                if (modParam.equals("true")) {
                     out.println("<div class=\"alert alert-success\">");
                     out.println("Client modifié.");
                     out.println("</div>");
                 }
-            }catch(Exception ex){}
-            
-            if(cliListe.size()>0){
+            } catch (Exception ex) {
+            }
+
+            if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
                 out.println("<form  id=\"form1\" name=\"form1\" method=\"post\"  action=\"doModifier\">");
-                    out.println("<input type=\"hidden\" name=\"id\" value=\""+ cli.getIdentifiant() +"\"/>");
-                      out.println("<p>");
-                        out.println("<label for=\"nom\">Nom</label>");
-                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\""+ cli.getNom() +"\"/>");
-                      out.println("</p>");
-                      out.println("<p>");
-                        out.println("<label for=\"prenom\">Prénom</label>");
-                        out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\""+ cli.getPrenom() +"\"/>");
-                      out.println("</p>");
-                      out.println("<p>");
-                        out.println("<label for=\"adresse\">Adresse</label>");
-                        out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\""+ cli.getAdresse() +"\"/>");
-                      out.println("</p>");
-                      out.println("<p>");
-                        out.println("<label for=\"ville\">Ville</label>");
-                        out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\""+ cli.getVille() +"\"/>");
-                      out.println("</p>");
-                    //out.println("<input type=\"submit\" id=\"modifier\" value=\"Modifier\"/>");
-                    out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
+                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cli.getIdentifiant() + "\"/>");
+                out.println("<p>");
+                out.println("<label for=\"nom\">Nom</label>");
+                out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cli.getNom() + "\"/>");
+                out.println("</p>");
+                out.println("<p>");
+                out.println("<label for=\"prenom\">Prénom</label>");
+                out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\"" + cli.getPrenom() + "\"/>");
+                out.println("</p>");
+                out.println("<p>");
+                out.println("<label for=\"adresse\">Adresse</label>");
+                out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\"" + cli.getAdresse() + "\"/>");
+                out.println("</p>");
+                out.println("<p>");
+                out.println("<label for=\"ville\">Ville</label>");
+                out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\"" + cli.getVille() + "\"/>");
+                out.println("</p>");
+                //out.println("<input type=\"submit\" id=\"modifier\" value=\"Modifier\"/>");
+                out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
                 out.println("</form>");
-            }else{
+            } else {
                 out.println("<div class=\"alert alert-warning\">");
                 out.println("Aucun client n'existe avec cet identifiant.");
                 out.println("</div>");
@@ -88,8 +93,7 @@ public class displayModifierClient extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -103,8 +107,7 @@ public class displayModifierClient extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

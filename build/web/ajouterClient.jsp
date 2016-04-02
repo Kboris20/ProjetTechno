@@ -4,11 +4,13 @@
     Author     : christop.francill
 --%>
 
+<%@page import="servlets.HtmlHttpUtils"%>
 <%@page import="utilities.WebUtilities"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
     WebUtilities.doHeader(out, "Ajouter un client");
+    if (HtmlHttpUtils.isAuthenticate(request)) {
 %>
         
         <form id="form1" name="form1" method="post" action="addClient">
@@ -35,5 +37,8 @@
             </p>
           </form>
 <%
+         }else{
+        response.sendRedirect(request.getContextPath() + "/login.jsp");
+    }
     WebUtilities.doFooter(out);
 %>

@@ -1,5 +1,8 @@
 package modele;
 
+
+import exception.InsufficientBalanceException;
+import exception.NegativeAmmountException;
 import java.io.Serializable;
 
 public class Compte implements Serializable{
@@ -65,5 +68,55 @@ public class Compte implements Serializable{
 
     public void setTaux(Float taux) {
         this.taux = taux;
+    }
+    
+    /**
+     * 
+     * @param amount le solde du compte
+     * @throws NegativeAmmountException si le solde est positif
+     */
+    
+    public void credit(float amount) throws NegativeAmmountException {
+        if (amount > 0) {
+            this.solde += amount;
+        } else {
+            throw new NegativeAmmountException();
+        }
+    }
+    
+    
+     /**
+     *
+     * @param amount
+     * @throws ch.hearc.ig.odi.serie3.exceptions.NegativeAmmountException
+     * @throws ch.hearc.ig.odi.serie3.exceptions.InsufficientBalanceException
+     */
+    public void debit(Float amount) throws NegativeAmmountException, InsufficientBalanceException {
+        if (this.solde > amount && amount > 0) {
+            this.solde -= amount;
+        } else if (amount < 0) {
+            throw new NegativeAmmountException();
+        } else {
+            throw new InsufficientBalanceException();
+        }
+    }
+
+    /**
+     *
+     * @param amount
+     * @param source
+     * @param target
+     * @throws ch.hearc.ig.odi.serie3.exceptions.NegativeAmmountException
+     * @throws ch.hearc.ig.odi.serie3.exceptions.InsufficientBalanceException
+     */
+    public static void transfer(Float amount, Compte source, Compte target) throws NegativeAmmountException, InsufficientBalanceException {
+        if (source.getSolde() > amount && amount > 0) {
+            source.debit(amount);
+            target.credit(amount);
+        } else if (amount < 0) {
+            throw new NegativeAmmountException();
+        } else {
+            throw new InsufficientBalanceException();
+        }
     }
 }
