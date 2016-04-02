@@ -1,7 +1,7 @@
 <%-- 
-    Document   : ajouterClient
-    Created on : 10 déc. 2012, 11:25:40
-    Author     : christop.francill
+    Document   : rechercheClient
+    Created on : 28 mars 2016, 20:37:48
+    Author     : boris.klett
 --%>
 
 <%@page import="servlets.HtmlHttpUtils"%>
@@ -42,3 +42,4 @@
     }
     WebUtilities.doFooter(out);
 %>
+

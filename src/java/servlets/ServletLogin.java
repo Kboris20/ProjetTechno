@@ -4,29 +4,24 @@
  */
 package servlets;
 
-import dao.ClientDao;
-import dao.CompteDao;
+
+import MemoryUser.Utilisateurs;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import modele.Compte;
-import utilities.WebUtilities;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author christop.francill
+ * @author termine
  */
-public class deleteCompteConfirm extends HttpServlet {
+public class ServletLogin extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -36,41 +31,46 @@ public class deleteCompteConfirm extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        String username = null, password = null;
         try {
-            HtmlHttpUtils.isAuthenticate(request);
-        } catch (NullPointerException ex) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
-        }
 
-        try {
-            Compte cpt = new Compte();
-            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Compte> cptListe = CompteDao.research(cpt);
-            WebUtilities.doHeader(out, "Supprimer un client");
-            if (cptListe.size() > 0) {
-                cpt = cptListe.get(0);
-                String owner = CompteDao.researchOwner(cpt.getIdentifiant());
-                out.println("<h3>Voulez-vous vraiment supprimer le compte " + cpt.getNom() + " de " + owner + " ?</h3>");
-                out.println("<form action=\"deleteCompte\">");
-                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cpt.getIdentifiant() + "\"/>");
-                out.println("<input type=\"hidden\" name=\"cliId\" value=\"" + request.getParameter("idCli") + "\"/>");
-                out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
-                out.println("</form>");
-                out.println("<a href=\"afficherClient?id=" + request.getParameter("idCli") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
-            } else {
-                out.println("<div class=\"alert alert-warning\">");
-                out.println("Aucun compte n'existe avec cet identifiant.");
-                out.println("</div>");
+            HtmlHttpUtils.doHeader("Login Page - Gestion de personnes (CRUD)", out);
+            
+            username = request.getParameter("username");
+            password= request.getParameter("password");
+            boolean errorlogin=false;
+            if (username != null && password != null) {
+                if (!username.equals("") && !password.equals("")) {
+
+
+                      if(Utilisateurs.verifyUser(username, password)){
+                        //CREATION HTTP SESSION
+                        //request.getRequestDispatcher("/index.jsp").forward(request, response);
+                        HttpSession s= request.getSession(true);
+                        s.setAttribute("username", username);
+                        response.sendRedirect(request.getContextPath() + "/index?trans=false");
+                     }else errorlogin=true;
+              }else errorlogin=true;
+            }else errorlogin=true;
+            
+            if(errorlogin){
+                out.println("<p>Erreur d'authentification, veuillez préciser username , password");
+                out.println("<a href='login.jsp'>reessayer</a>");
+                out.println("</body></html>");
             }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -82,9 +82,8 @@ public class deleteCompteConfirm extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -96,9 +95,8 @@ public class deleteCompteConfirm extends HttpServlet {
         processRequest(request, response);
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

@@ -22,9 +22,8 @@ import utilities.WebUtilities;
 public class deleteConfirm extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -36,24 +35,30 @@ public class deleteConfirm extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
+            HtmlHttpUtils.isAuthenticate(request);
+        } catch (NullPointerException ex) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+
+        try {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
             WebUtilities.doHeader(out, "Supprimer un client");
-            if(cliListe.size()>0){
+            if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
-                out.println("<h3>Voulez-vous vraiment supprimer "+ cli.getNom() + " " + cli.getPrenom() +" ?</h3>");
+                out.println("<h3>Voulez-vous vraiment supprimer " + cli.getNom() + " " + cli.getPrenom() + " ?</h3>");
                 out.println("<form action=\"delete\">");
-                    out.println("<input type=\"hidden\" name=\"id\" value=\""+ cli.getIdentifiant() +"\"/>");
-                    out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
+                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cli.getIdentifiant() + "\"/>");
+                out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
                 out.println("</form>");
                 out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
-            }else{
+            } else {
                 out.println("<div class=\"alert alert-warning\">");
                 out.println("Aucun client n'existe avec cet identifiant.");
                 out.println("</div>");
             }
-        } finally {            
+        } finally {
             WebUtilities.doFooter(out);
             out.close();
         }
@@ -61,8 +66,7 @@ public class deleteConfirm extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -76,8 +80,7 @@ public class deleteConfirm extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

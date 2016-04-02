@@ -24,9 +24,8 @@ import utilities.WebUtilities;
 public class doModifierCompte extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -37,26 +36,33 @@ public class doModifierCompte extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+
+        try {
+            HtmlHttpUtils.isAuthenticate(request);
+        } catch (NullPointerException ex) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+        }
+
         WebUtilities.doHeader(out, "Modifier un compte");
         try {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
-            
-            if(cliListe.size()>0){
+
+            if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
-                
+
                 Compte cpt = new Compte();
                 cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-                if(CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()){
+                if (CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()) {
                     cpt.setNom(request.getParameter("nom"));
                     cpt.setSolde(Float.valueOf(request.getParameter("solde")));
                     cpt.setTaux(Float.valueOf(request.getParameter("taux")));
-                    
+
                     CompteDao.update(cpt);
-                    
-                    response.sendRedirect(request.getContextPath() + "/afficherClient?id="+ cli.getIdentifiant() +"&modCpt=true");
-                }else{
+
+                    response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + cli.getIdentifiant() + "&modCpt=true");
+                } else {
                     WebUtilities.doHeader(out, "Modifier un compte");
                     out.println("<div class=\"alert alert-error\">");
                     out.println("Ce compte n'appartient pas au bon client.");
@@ -64,18 +70,17 @@ public class doModifierCompte extends HttpServlet {
                     out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
                     WebUtilities.doFooter(out);
                 }
-            }else{
+            } else {
                 out.println("Aucun client n'existe avec cet identifiant.");
             }
-        } finally {            
+        } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -89,8 +94,7 @@ public class doModifierCompte extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
