@@ -83,7 +83,7 @@ public class allComptes extends HttpServlet {
                                     out.println("<td>" + compt.getNom() + "</td>");
                                     out.println("<td>" + compt.getSolde() + "</td>");
                                     out.println("<td>" + compt.getTaux() + "</td>");
-                                    out.println("<td><a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=" + compt.getIdentifiant() + "\" class=\"btn btn-primary btn-mini\"><i class=\"icon-white icon-plus\"></i>Choisir</a>");
+                                    out.println("<td><a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=" + compt.getIdentifiant() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i>Choisir</a>");
                                     out.println("</tr>");
                                 }
                             }
@@ -101,7 +101,7 @@ public class allComptes extends HttpServlet {
                         out.println("</div>");
                     }
                 } else {
-                    WebUtilities.doHeader(out, "Transfère de compte à compte", "Choisir le compte");
+                    WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un compte", request, "choixCpt", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id1")));
 
                     ArrayList<Compte> listeCpt = new ArrayList<Compte>();
                     listeCpt.addAll(CompteDao.research(new Compte()));
@@ -128,7 +128,7 @@ public class allComptes extends HttpServlet {
                         out.println("Aucun compte n'existe.");
                         out.println("</div>");
                     }
-                    out.println("<a href=\"index?trans=false&id1=" + request.getParameter("id1") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
+                    //out.println("<a href=\"index?trans=false&id1=" + request.getParameter("id1") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
 
                     WebUtilities.doFooter(out);
                     out.close();
@@ -198,7 +198,7 @@ public class allComptes extends HttpServlet {
                                 out.println("<td>" + compt.getTaux() + "</td>");
                                 out.println("<td><a href=\"modifierCompte?id=" + compt.getIdentifiant() + "&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\"></i>Modifier</a>");
                                 out.println("<td><a href=\"deleteCompteConfirm?id=" + compt.getIdentifiant() + "&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\"></i>Supprimer</a>");
-                                out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getIdentifiant() + "&id1=-1&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary btn-mini\"><i class=\"icon-white icon-share\"></i>Transfère</a>");
+                                out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getIdentifiant() + "&id1=-1&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\"></span>Transfère</a>");
                                 out.println("</tr>");
                             }
                             out.println("</table>");
@@ -216,7 +216,7 @@ public class allComptes extends HttpServlet {
                         out.println("</div>");
                     }
                 } else {
-                    WebUtilities.doHeader(out, "Afficher tous les comptes");
+                    WebUtilities.doHeader(out, "Afficher tous les comptes", request, "clientDetail", Integer.valueOf(request.getParameter("id")));
 
                     ArrayList<Compte> listeCpt = new ArrayList<Compte>();
                     listeCpt.addAll(CompteDao.research(new Compte()));

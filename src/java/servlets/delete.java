@@ -46,15 +46,15 @@ public class delete extends HttpServlet {
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
                 if (ClientDao.delete(cli)) {
-                    response.sendRedirect(request.getContextPath() + "/index?del=true");
+                    response.sendRedirect(request.getContextPath() + "/index?trans=false&del=true");
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/index?del=false");
+                    response.sendRedirect(request.getContextPath() + "/index?trans=false&del=false");
                 }
             } else {
-                response.sendRedirect(request.getContextPath() + "/index?del=error1");
+                response.sendRedirect(request.getContextPath() + "/index?trans=false&del=error1");
             }
         } catch (Exception ex) {
-            response.sendRedirect(request.getContextPath() + "/index?del=error2&text=\"" + ex.getMessage() + "\"");
+            response.sendRedirect(request.getContextPath() + "/index?trans=false&del=error2&text=\"" + ex.getMessage() + "\"");
         } finally {
             out.close();
         }

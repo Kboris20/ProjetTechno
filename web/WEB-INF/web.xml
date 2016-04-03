@@ -72,6 +72,14 @@
         <servlet-name>transfere</servlet-name>
         <servlet-class>servlets.transfere</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>welcomeServlet</servlet-name>
+        <servlet-class>servlets.welcomeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletLogout</servlet-name>
+        <servlet-class>servlets.ServletLogout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>listAll</servlet-name>
         <url-pattern>/index</url-pattern>
@@ -144,12 +152,20 @@
         <servlet-name>transfere</servlet-name>
         <url-pattern>/transfere</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>welcomeServlet</servlet-name>
+        <url-pattern>/welcomeServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletLogout</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>index</welcome-file>
+        <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

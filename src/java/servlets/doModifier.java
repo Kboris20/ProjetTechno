@@ -53,10 +53,10 @@ public class doModifier extends HttpServlet {
                 ClientDao.update(cli);
                 response.sendRedirect(request.getContextPath() + "/modifier?id=" + cli.getIdentifiant() + "&mod=true");
             } else {
-                response.sendRedirect(request.getContextPath() + "/index?mod=error1");
+                response.sendRedirect(request.getContextPath() + "/index?trans=false&mod=error1");
             }
         } catch (Exception ex) {
-            response.sendRedirect(request.getContextPath() + "/index?mod=error2&text=\"" + ex.getMessage() + "\"");
+            response.sendRedirect(request.getContextPath() + "/index?trans=false&mod=error2&text=\"" + ex.getMessage() + "\"");
         } finally {
             out.close();
         }

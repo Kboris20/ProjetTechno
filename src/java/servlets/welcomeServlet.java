@@ -1,31 +1,28 @@
-                                                                                       /*
- * To change this template, choose Tools | Templates
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import modele.Compte;
+import utilities.WebUtilities;
 
 /**
  *
- * @author christop.francill
+ * @author boris.klett
  */
-public class deleteCompte extends HttpServlet {
+public class welcomeServlet extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -41,27 +38,41 @@ public class deleteCompte extends HttpServlet {
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-        
+
         try {
-            Compte cpt = new Compte();
-            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Compte> cptListe = CompteDao.research(cpt);
-            if(cptListe.size()>0){
-                cpt = cptListe.get(0);
-                CompteDao.delete(cpt);
-                response.sendRedirect(request.getContextPath() + "/afficherClient?trans=false&id=" + request.getParameter("cliId") + "&del=true");
-            }else{
-                response.sendRedirect(request.getContextPath() + "/afficherClient?trans=false&id=" + request.getParameter("cliId") + "&del=error1");
+            /* TODO output your page here. You may use following sample code. */
+            WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
+            out.println("<hr/>");
+            out.println("<center>");
+            out.println("<br/>");
+            try {
+                if (request.getParameter("nbFois") == null) {
+                    out.println("<h2>Bonjour Mme/M : " + HtmlHttpUtils.getUser(request) + " !</h2>");
+                }
+            } catch (NullPointerException ex) {
             }
-        } finally {            
+            out.println("<table>");
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<h3><b><u>Statistiques</u></b></h3>");
+            out.println("à implémenter");
+            out.println("<br/>");
+            out.println("<br/>");
+            out.println("</td>");
+            out.println("</tr>");
+
+            out.println("</table>");
+            out.println("</center>");
+
+        } finally {
+            WebUtilities.doFooter(out);
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -75,8 +86,7 @@ public class deleteCompte extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -98,4 +108,5 @@ public class deleteCompte extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

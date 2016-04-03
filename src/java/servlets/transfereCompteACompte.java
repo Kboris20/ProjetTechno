@@ -61,7 +61,7 @@ public class transfereCompteACompte extends HttpServlet {
             } catch (Exception ex) {
             }
 
-            WebUtilities.doHeader(out, "Transfère compte à compte");
+            WebUtilities.doHeader(out, "Transfère compte à compte","", request, "transfere", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id")));
             Compte cpt = new Compte();
             cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Compte> cptListe = CompteDao.research(cpt);
@@ -137,10 +137,10 @@ public class transfereCompteACompte extends HttpServlet {
 
                 } else {
                     out.println("<h3>Au compte... </h3>");
-                    out.println("<a href=\"index?idCli=" + request.getParameter("idCli") + "&id1=" + id1 + "&trans=true \"class=\"btn btn-primary btn-mini\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
+                    out.println("<a href=\"index?idCli=" + request.getParameter("idCli") + "&id1=" + id1 + "&trans=true \"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
 
                 }
-                out.println("<a href=\"afficherClient?trans=false&id=" + CompteDao.researchOwnerId(cpt.getIdentifiant()) + " \"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i>Annuler</a>");
+//                out.println("<a href=\"afficherClient?trans=false&id=" + CompteDao.researchOwnerId(cpt.getIdentifiant()) + " \"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i>Annuler</a>");
             } else {
                 out.println("<div class=\"alert alert-warning\">");
                 out.println("Aucun compte n'existe avec cet identifiant.");

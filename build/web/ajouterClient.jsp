@@ -9,7 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    WebUtilities.doHeader(out, "Ajouter un client");
+    WebUtilities.doHeader(out, "Ajouter un client", request, "ajouterClient");
     if (HtmlHttpUtils.isAuthenticate(request)) {
 %>
         
@@ -33,12 +33,12 @@
             <p>
               <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
               <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
-              <a href="index" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour à la liste</a>
+              <!--a href="index?trans=false" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour à la liste</a-->
             </p>
           </form>
 <%
          }else{
         response.sendRedirect(request.getContextPath() + "/login.jsp");
     }
-    WebUtilities.doFooter(out);
+    WebUtilities.doFooter(out, "ajouterClient");
 %>

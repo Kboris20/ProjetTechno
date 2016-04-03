@@ -4,22 +4,20 @@
     Author     : termine
 --%>
 
+<%@page import="utilities.WebUtilities"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
+    "http://www.w3.org/TR/html4/loose.dtd">
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Login page - gestion des personnes (CRUD) </title>
-    </head>
-    <body>
-        <h1> Login page - gestion des personnes (CRUD)</h1>
-      <form method="POST" action="login">
-         username : <input type="text" name="username"><br>
-         password : <input type="password" name="password"><br>
+<%
+    WebUtilities.doHeader(out, "Connection - gestion des personnes (CRUD)", request, "logging");
+%>
+<form method="POST" action="login">
+    username : <input type="text" name="username"><br>
+    password : <input type="password" name="password"><br>
 
-         <input type="submit" value="login">
-      </form>
-    </body>
-</html>
+    <input type="submit" value="Se connecter">
+</form>
+<%
+    WebUtilities.doFooter(out, "logging");
+%>

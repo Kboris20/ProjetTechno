@@ -51,7 +51,7 @@ public class addClient extends HttpServlet {
 
             int identifiant = (int) ClientDao.create(newCli);
 
-            response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + identifiant + "&add=true");
+            response.sendRedirect(request.getContextPath() + "/afficherClient?trans=false&id=" + identifiant + "&add=true");
 
         } finally {
             out.close();

@@ -44,7 +44,7 @@ public class deleteConfirm extends HttpServlet {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
-            WebUtilities.doHeader(out, "Supprimer un client");
+            WebUtilities.doHeader(out, "Supprimer un client", request);
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
                 out.println("<h3>Voulez-vous vraiment supprimer " + cli.getNom() + " " + cli.getPrenom() + " ?</h3>");
@@ -52,7 +52,7 @@ public class deleteConfirm extends HttpServlet {
                 out.println("<input type=\"hidden\" name=\"id\" value=\"" + cli.getIdentifiant() + "\"/>");
                 out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
                 out.println("</form>");
-                out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
+                out.println("<a href=\"index?trans=false\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
             } else {
                 out.println("<div class=\"alert alert-warning\">");
                 out.println("Aucun client n'existe avec cet identifiant.");

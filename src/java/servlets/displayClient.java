@@ -46,7 +46,7 @@ public class displayClient extends HttpServlet {
         String transfere = request.getParameter("trans");
         try {
             if (transfere.equalsIgnoreCase("true")) {
-                WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un compte");
+                WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un compte", request, "choixCpt", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id1")));
 
                 Client cli = new Client();
                 cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
@@ -69,11 +69,11 @@ public class displayClient extends HttpServlet {
                     out.println("</div>");
                 }
                 out.println("<br/><br/>");
-                out.println("<a href=\"index?id1=" + request.getParameter("id1") + "&trans=true \"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
+                //out.println("<a href=\"index?id1=" + request.getParameter("id1") + "&trans=true \"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
 
             } else {
 
-                WebUtilities.doHeader(out, "Afficher un client");
+                WebUtilities.doHeader(out, "Afficher un client", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
                 Client cli = new Client();
                 cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
                 ArrayList<Client> cliListe = new ArrayList<Client>();
@@ -104,7 +104,7 @@ public class displayClient extends HttpServlet {
                     out.println("</div>");
                 }
                 out.println("<br/><br/>");
-                out.println("<a href=\"index?trans=false\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
+                //out.println("<a href=\"index?trans=false\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
 
             }
         } catch (Exception ex) {

@@ -51,7 +51,8 @@ public class listAll extends HttpServlet {
 
         if (request.getParameter("trans").equalsIgnoreCase("true")) {
 
-            WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un client");
+            WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un client", request, "choixCli", Integer.valueOf(request.getParameter("id1")), 0);
+
 
             try {
                 if (listeCli.isEmpty()) {
@@ -80,7 +81,7 @@ public class listAll extends HttpServlet {
                     }
                     out.println("</table>");
                 }
-                out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=-1&idCli=" + CompteDao.researchOwnerId(Integer.valueOf(request.getParameter("id1"))) + "\"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i>Annuler</a>");
+                //out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=-1&idCli=" + CompteDao.researchOwnerId(Integer.valueOf(request.getParameter("id1"))) + "\"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i>Annuler</a>");
             } finally {
                 WebUtilities.doFooter(out);
                 out.close();
@@ -88,7 +89,7 @@ public class listAll extends HttpServlet {
 
         } else {
 
-            WebUtilities.doHeader(out, "Liste des clients");
+            WebUtilities.doHeader(out, "Liste des clients", request, "clients", 0);
 
             try {
                 try {
@@ -161,8 +162,16 @@ public class listAll extends HttpServlet {
                 }
 
                 //out.println("<h3><a href=\"" + request.getContextPath() + "/ajouterClient.jsp\">Ajouter un client</a></h3>");
+                out.println("<table>");
+                out.println("<tr>");
+                out.println("<td>");
                 out.println("<a href=\"ajouterClient.jsp\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Ajouter un client</a>");
-
+                out.println("</td>");
+//                out.println("<td>");
+//                out.println("<a href=\"welcomeServlet?nbFois=1\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Acceuil </a>");
+//                out.println("</td>");
+                out.println("</tr>");
+                out.println("</table>");
             } finally {
                 WebUtilities.doFooter(out);
                 out.close();

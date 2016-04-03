@@ -50,7 +50,7 @@ public class addCompte extends HttpServlet {
                         
             CompteDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
 
-            response.sendRedirect(request.getContextPath() + "/afficherClient?id=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
+            response.sendRedirect(request.getContextPath() + "/afficherClient?trans=false&id=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
         } finally {            
             out.close();
         }

@@ -43,7 +43,7 @@ public class displayModifierClient extends HttpServlet {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
-            WebUtilities.doHeader(out, "Modifier un client");
+            WebUtilities.doHeader(out, "Modifier un client", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
 
             try {
                 String modParam = request.getParameter("mod");
@@ -85,7 +85,7 @@ public class displayModifierClient extends HttpServlet {
                 out.println("</div>");
             }
         } finally {
-            out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
+            // out.println("<a href=\"index?trans=false\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
             WebUtilities.doFooter(out);
             out.close();
         }

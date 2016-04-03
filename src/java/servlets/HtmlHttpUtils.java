@@ -32,5 +32,9 @@ public class HtmlHttpUtils {
     public static boolean isAuthenticate(HttpServletRequest request) {
         return request.getSession(false).getAttribute("username")!=null;
     }
+    
+     public static String getUser(HttpServletRequest request) {
+        return (String) request.getSession(false).getAttribute("username");
+    }
 
 }

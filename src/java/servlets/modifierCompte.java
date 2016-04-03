@@ -44,7 +44,7 @@ public class modifierCompte extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
         
-        WebUtilities.doHeader(out, "Modifier un compte");
+         WebUtilities.doHeader(out, "Modifier un compte", request, "compteMod", Integer.valueOf(request.getParameter("id")));
         try {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
@@ -88,7 +88,7 @@ public class modifierCompte extends HttpServlet {
                 out.println("</div>");
             }
             
-            out.println("<a href=\"afficherClient?id=" + cli.getIdentifiant() + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
+            //out.println("<a href=\"afficherClient?id=" + cli.getIdentifiant() + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
         } finally {
             
             WebUtilities.doFooter(out);

@@ -46,7 +46,7 @@ public class deleteCompteConfirm extends HttpServlet {
             Compte cpt = new Compte();
             cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Compte> cptListe = CompteDao.research(cpt);
-            WebUtilities.doHeader(out, "Supprimer un client");
+            WebUtilities.doHeader(out, "Supprimer un compte", request);
             if (cptListe.size() > 0) {
                 cpt = cptListe.get(0);
                 String owner = CompteDao.researchOwner(cpt.getIdentifiant());
@@ -56,7 +56,7 @@ public class deleteCompteConfirm extends HttpServlet {
                 out.println("<input type=\"hidden\" name=\"cliId\" value=\"" + request.getParameter("idCli") + "\"/>");
                 out.println("<button class=\"btn btn-danger\" type=\"submit\"><i class=\"icon-white icon-trash\"></i> Supprimer</button>");
                 out.println("</form>");
-                out.println("<a href=\"afficherClient?id=" + request.getParameter("idCli") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
+                out.println("<a href=\"afficherClient?trans=false&id=" + request.getParameter("idCli") + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Annuler</a>");
             } else {
                 out.println("<div class=\"alert alert-warning\">");
                 out.println("Aucun compte n'existe avec cet identifiant.");

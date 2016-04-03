@@ -43,7 +43,7 @@ public class transfereConfirm extends HttpServlet {
         }
 
         try {
-            WebUtilities.doHeader(out, "Confirmer le transfère");
+            WebUtilities.doHeader(out, "Confirmer le transfère", request);
             Float somme = Float.valueOf(request.getParameter("somme"));
             String id = request.getParameter("id");
             String id1 = request.getParameter("id1");
