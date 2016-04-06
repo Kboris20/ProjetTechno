@@ -5,7 +5,6 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -49,133 +48,105 @@ public class listAll extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
-        if (request.getParameter("trans").equalsIgnoreCase("true")) {
+        WebUtilities.doHeader(out, "Liste des clients", request, "clients", 0);
 
-            WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un client", request, "choixCli", Integer.valueOf(request.getParameter("id1")), 0);
+        try {
+            if (request.getParameter("dele").equalsIgnoreCase("true")) {
+                out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+                ArrayList<Client> listeCli = new ArrayList<Client>();
+                Client c = new Client();
+                c.setIdentifiant(Integer.valueOf(request.getParameter("id")));
+                listeCli.addAll(ClientDao.research(c));
+                out.println("<b><u>Confirmation</u></b>");
+                out.println("<p>Voulez vous réellement supprimer</p>");
+                out.println("<b> " + listeCli.get(0).getNom() + " " + listeCli.get(0).getPrenom() + "</b>");
+                out.println("<br/>");
+                out.println("<a href=\"delete?id=" + request.getParameter("id") + "\" class=\"btn btn-danger btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span></a>");
+                out.println("</div>");
+            }
+        } catch (Exception ex) {
+        }
 
-
+        try {
             try {
-                if (listeCli.isEmpty()) {
-                    out.println("<div class=\"alert alert-info\">");
-                    out.println("Il n'y a pas de client");
+                String delParam = request.getParameter("del");
+
+                if (delParam.equals("true")) {
+                    out.println("<div class=\"alert alert-success\">");
+                    out.println("Client supprimé.");
                     out.println("</div>");
-                } else {
-                    out.println("<table class=\"table table-hover\" style=\"width: 100%;\">");
-                    out.println("<tr>");
-                    out.println("<td>&nbsp;</td>");
-                    out.println("<td>Nom</td>");
-                    out.println("<td>Prenom</td>");
-                    out.println("<td>Adresse</td>");
-                    out.println("<td>Ville</td>");
-                    out.println("<td>&nbsp;</td>");
-                    out.println("<td>&nbsp;</td>");
-                    out.println("</tr>");
-                    for (Client cli : listeCli) {
-                        out.println("<tr>");
-                        out.println("<td><a href=\"afficherClient?id1=" + request.getParameter("id1") + "&trans=true&id=" + cli.getIdentifiant() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-user\"></i>Choisir</a>");
-                        out.println("<td>" + cli.getNom() + "</td>");
-                        out.println("<td>" + cli.getPrenom() + "</td>");
-                        out.println("<td>" + cli.getAdresse() + "</td>");
-                        out.println("<td>" + cli.getVille() + "</td>");
-                        out.println("</tr>");
-                    }
-                    out.println("</table>");
+                } else if (delParam.equals("false")) {
+                    out.println("<div class=\"alert alert-error\">");
+                    out.println("Suppression impossible !");
+                    out.println("</div>");
+                } else if (delParam.equals("error1")) {
+                    out.println("<div class=\"alert alert-error\">");
+                    out.println("Client introuvable, suppression impossible !");
+                    out.println("</div>");
+                } else if (delParam.equals("error2")) {
+                    out.println("<div class=\"alert alert-error\">");
+                    out.println("Client non suprimé.<br/>");
+                    out.println("Erreur rencontrée: " + request.getParameter("text"));
+                    out.println("</div>");
                 }
-                //out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=-1&idCli=" + CompteDao.researchOwnerId(Integer.valueOf(request.getParameter("id1"))) + "\"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i>Annuler</a>");
-            } finally {
-                WebUtilities.doFooter(out);
-                out.close();
+            } catch (Exception ex) {
             }
 
-        } else {
-
-            WebUtilities.doHeader(out, "Liste des clients", request, "clients", 0);
-
             try {
-                try {
-                    String delParam = request.getParameter("del");
+                String modParam = request.getParameter("mod");
 
-                    if (delParam.equals("true")) {
-                        out.println("<div class=\"alert alert-success\">");
-                        out.println("Client supprimé.");
-                        out.println("</div>");
-                    } else if (delParam.equals("false")) {
-                        out.println("<div class=\"alert alert-error\">");
-                        out.println("Suppression impossible !");
-                        out.println("</div>");
-                    } else if (delParam.equals("error1")) {
-                        out.println("<div class=\"alert alert-error\">");
-                        out.println("Client introuvable, suppression impossible !");
-                        out.println("</div>");
-                    } else if (delParam.equals("error2")) {
-                        out.println("<div class=\"alert alert-error\">");
-                        out.println("Client non suprimé.<br/>");
-                        out.println("Erreur rencontrée: " + request.getParameter("text"));
-                        out.println("</div>");
-                    }
-                } catch (Exception ex) {
-                }
-
-                try {
-                    String modParam = request.getParameter("mod");
-
-                    if (modParam.equals("error1")) {
-                        out.println("<div class=\"alert alert-error\">");
-                        out.println("Client introuvable, modification impossible !");
-                        out.println("</div>");
-                    } else if (modParam.equals("error2")) {
-                        out.println("<div class=\"alert alert-error\">");
-                        out.println("Client non modifié.<br/>");
-                        out.println("Erreur rencontrée: " + request.getParameter("text"));
-                        out.println("</div>");
-                    }
-                } catch (Exception ex) {
-                }
-
-                if (listeCli.isEmpty()) {
-                    out.println("<div class=\"alert alert-info\">");
-                    out.println("Il n'y a pas de client");
+                if (modParam.equals("error1")) {
+                    out.println("<div class=\"alert alert-error\">");
+                    out.println("Client introuvable, modification impossible !");
                     out.println("</div>");
-                } else {
-                    out.println("<table class=\"table table-hover\" style=\"width: 100%;\">");
-                    out.println("<tr>");
-                    out.println("<td>&nbsp;</td>");
-                    out.println("<td>Nom</td>");
-                    out.println("<td>Prenom</td>");
-                    out.println("<td>Adresse</td>");
-                    out.println("<td>Ville</td>");
-                    out.println("<td>&nbsp;</td>");
-                    out.println("<td>&nbsp;</td>");
-                    out.println("</tr>");
-                    for (Client cli : listeCli) {
-                        out.println("<tr>");
-                        out.println("<td><a href=\"afficherClient?trans=false&id=" + cli.getIdentifiant() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\"></i>Voir</a>");
-                        out.println("<td>" + cli.getNom() + "</td>");
-                        out.println("<td>" + cli.getPrenom() + "</td>");
-                        out.println("<td>" + cli.getAdresse() + "</td>");
-                        out.println("<td>" + cli.getVille() + "</td>");
-                        out.println("<td><a href=\"modifier?id=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\"></i>Modifier</a>");
-                        out.println("<td><a href=\"deleteConfirm?id=" + cli.getIdentifiant() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\"></i>Supprimer</a>");
-                        out.println("</tr>");
-                    }
-                    out.println("</table>");
+                } else if (modParam.equals("error2")) {
+                    out.println("<div class=\"alert alert-error\">");
+                    out.println("Client non modifié.<br/>");
+                    out.println("Erreur rencontrée: " + request.getParameter("text"));
+                    out.println("</div>");
                 }
+            } catch (Exception ex) {
+            }
 
-                //out.println("<h3><a href=\"" + request.getContextPath() + "/ajouterClient.jsp\">Ajouter un client</a></h3>");
-                out.println("<table>");
+            if (listeCli.isEmpty()) {
+                out.println("<div class=\"alert alert-info\">");
+                out.println("Il n'y a pas de client");
+                out.println("</div>");
+            } else {
+                out.println("<table class=\"table table-hover\" style=\"width: 100%;\">");
                 out.println("<tr>");
-                out.println("<td>");
-                out.println("<a href=\"ajouterClient.jsp\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Ajouter un client</a>");
-                out.println("</td>");
-//                out.println("<td>");
-//                out.println("<a href=\"welcomeServlet?nbFois=1\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Acceuil </a>");
-//                out.println("</td>");
+                out.println("<td>&nbsp;</td>");
+                out.println("<td>Nom</td>");
+                out.println("<td>Prenom</td>");
+                out.println("<td>Adresse</td>");
+                out.println("<td>Ville</td>");
+                out.println("<td>&nbsp;</td>");
+                out.println("<td>&nbsp;</td>");
                 out.println("</tr>");
+                for (Client cli : listeCli) {
+                    out.println("<tr>");
+                    out.println("<td><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\"></i>Voir</a>");
+                    out.println("<td>" + cli.getNom() + "</td>");
+                    out.println("<td>" + cli.getPrenom() + "</td>");
+                    out.println("<td>" + cli.getAdresse() + "</td>");
+                    out.println("<td>" + cli.getVille() + "</td>");
+                    out.println("<td><a href=\"modifier?id=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\"></i>Modifier</a>");
+                    out.println("<td><a href=\"index?dele=true&id=" + cli.getIdentifiant() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\"></i>Supprimer</a>");
+                    out.println("</tr>");
+                }
                 out.println("</table>");
-            } finally {
-                WebUtilities.doFooter(out);
-                out.close();
             }
+            out.println("<table>");
+            out.println("<tr>");
+            out.println("<td>");
+            out.println("<a href=\"ajouterClient.jsp\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Ajouter un client</a>");
+            out.println("</td>");
+            out.println("</tr>");
+            out.println("</table>");
+        } finally {
+            WebUtilities.doFooter(out);
+            out.close();
         }
 
     }

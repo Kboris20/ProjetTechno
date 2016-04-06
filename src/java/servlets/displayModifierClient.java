@@ -76,7 +76,6 @@ public class displayModifierClient extends HttpServlet {
                 out.println("<label for=\"ville\">Ville</label>");
                 out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\"" + cli.getVille() + "\"/>");
                 out.println("</p>");
-                //out.println("<input type=\"submit\" id=\"modifier\" value=\"Modifier\"/>");
                 out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
                 out.println("</form>");
             } else {
@@ -85,7 +84,6 @@ public class displayModifierClient extends HttpServlet {
                 out.println("</div>");
             }
         } finally {
-            // out.println("<a href=\"index?trans=false\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
             WebUtilities.doFooter(out);
             out.close();
         }

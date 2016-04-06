@@ -61,13 +61,12 @@ public class doModifierCompte extends HttpServlet {
 
                     CompteDao.update(cpt);
 
-                    response.sendRedirect(request.getContextPath() + "/afficherClient?trans=false&id=" + cli.getIdentifiant() + "&modCpt=true");
+                    response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + cli.getIdentifiant() + "&modCpt=true");
                 } else {
-                    WebUtilities.doHeader(out, "Modifier un compte", request,"clientDetail", Integer.parseInt(request.getParameter("id")));
+                    WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
                     out.println("<div class=\"alert alert-error\">");
                     out.println("Ce compte n'appartient pas au bon client.");
                     out.println("</div>");
-                    //out.println("<a href=\"index\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
                     WebUtilities.doFooter(out);
                 }
             } else {

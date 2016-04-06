@@ -4,7 +4,6 @@
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
 import modele.Compte;
 
 /**
@@ -50,7 +48,7 @@ public class addCompte extends HttpServlet {
                         
             CompteDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
 
-            response.sendRedirect(request.getContextPath() + "/afficherClient?trans=false&id=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
+            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
         } finally {            
             out.close();
         }

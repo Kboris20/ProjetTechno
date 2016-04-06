@@ -45,6 +45,8 @@ public class transfereCompteACompte extends HttpServlet {
         }
 
         try {
+
+            WebUtilities.doHeader(out, "Transfère compte à compte", request, "transfere", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id")));
             try {
                 if (request.getParameter("trans").equals("ok")) {
                     out.println("<div class=\"alert alert-success\">");
@@ -62,7 +64,6 @@ public class transfereCompteACompte extends HttpServlet {
             } catch (Exception ex) {
             }
 
-            WebUtilities.doHeader(out, "Transfère compte à compte", "", request, "transfere", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id")));
             Compte cpt = new Compte();
             cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Compte> cptListe = CompteDao.research(cpt);
@@ -97,7 +98,7 @@ public class transfereCompteACompte extends HttpServlet {
                             out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                             out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                             out.println("<b><u>Confirmation</u></b>");
-                            out.println("<p>Souhaitez vous réellement effectuer le transfert pour le montant de ?</p>");
+                            out.println("<p>Souhaitez vous réellement effectuer le transfert pour le montant de:</p>");
                             out.println("<b> " + request.getParameter("somme") + " CHF?</b>");
                             out.println("<br/>");
                             out.println("<a href=\"transfere?somme=" + request.getParameter("somme") + "&id=" + request.getParameter("id") + "&id1=" + request.getParameter("id1") + "&idCli=" + request.getParameter("idCli") + "\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");

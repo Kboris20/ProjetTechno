@@ -13,10 +13,6 @@
         <servlet-class>servlets.displayClient</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>deleteConfirm</servlet-name>
-        <servlet-class>servlets.deleteConfirm</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>delete</servlet-name>
         <servlet-class>servlets.delete</servlet-class>
     </servlet>
@@ -35,10 +31,6 @@
     <servlet>
         <servlet-name>addCompte</servlet-name>
         <servlet-class>servlets.addCompte</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>deleteCompteConfirm</servlet-name>
-        <servlet-class>servlets.deleteCompteConfirm</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>deleteCompte</servlet-name>
@@ -89,10 +81,6 @@
         <url-pattern>/afficherClient</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>deleteConfirm</servlet-name>
-        <url-pattern>/deleteConfirm</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>delete</servlet-name>
         <url-pattern>/delete</url-pattern>
     </servlet-mapping>
@@ -111,10 +99,6 @@
     <servlet-mapping>
         <servlet-name>addCompte</servlet-name>
         <url-pattern>/addCompte</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>deleteCompteConfirm</servlet-name>
-        <url-pattern>/deleteCompteConfirm</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>deleteCompte</servlet-name>
