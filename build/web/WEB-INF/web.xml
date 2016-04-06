@@ -65,10 +65,6 @@
         <servlet-class>servlets.transfereCheck</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>transfereConfirm</servlet-name>
-        <servlet-class>servlets.transfereConfirm</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>transfere</servlet-name>
         <servlet-class>servlets.transfere</servlet-class>
     </servlet>
@@ -143,10 +139,6 @@
     <servlet-mapping>
         <servlet-name>transfereCheck</servlet-name>
         <url-pattern>/transfereCheck</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>transfereConfirm</servlet-name>
-        <url-pattern>/transfereConfirm</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>transfere</servlet-name>

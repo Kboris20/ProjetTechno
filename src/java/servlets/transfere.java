@@ -7,6 +7,8 @@
 package servlets;
 
 import dao.CompteDao;
+import dao.TransactionDao;
+import dao.UtilisateurDao;
 import exception.InsufficientBalanceException;
 import exception.NegativeAmmountException;
 import java.io.IOException;
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Compte;
+import modele.Transaction;
+import modele.Utilisateur;
 
 /**
  *
@@ -53,6 +57,8 @@ public class transfere extends HttpServlet {
             String idCli = request.getParameter("idCli");
             Compte cpt = new Compte();
             Compte cptDest = new Compte();
+            Utilisateur user = UtilisateurDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+            
 
             cpt.setIdentifiant(Integer.valueOf(id));
             cptDest.setIdentifiant(Integer.valueOf(id1));
@@ -61,6 +67,8 @@ public class transfere extends HttpServlet {
             
             cpt = cptListe.get(0);
             cptDest = cptListeDest.get(0);
+            Transaction transaction = new Transaction(cpt, cptDest,somme);
+            TransactionDao.create(transaction, user);
             
             cpt.debit(somme);
             cptDest.credit(somme);

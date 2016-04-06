@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
 import modele.Compte;
 
 /**
@@ -58,7 +57,7 @@ public class transfereCheck extends HttpServlet {
             if (somme > cpt.getSolde()) {
                 response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=true&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
             } else {
-                response.sendRedirect(request.getContextPath() + "/transfereConfirm?somme=" + somme + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+                response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=false&somme=" + somme + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
             }
 
         } finally {

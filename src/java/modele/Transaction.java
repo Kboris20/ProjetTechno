@@ -29,6 +29,12 @@ public class Transaction {
         this.montant = montant;
         this.date = date;
     }
+    
+     public Transaction(Compte compte_debit, Compte compte_credit, float montant) {
+        this.compte_debit = compte_debit;
+        this.compte_credit = compte_credit;
+        this.montant = montant;
+    }
 
     public Integer getId() {
         return id;
