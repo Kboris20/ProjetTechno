@@ -29,8 +29,8 @@ public class WebUtilities {
         out.println("<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />");
         out.println("<meta names=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\" />");
         out.println("</head>");
-        out.println("<body style=\"background-color: #C0C0C0; padding-bottom:30px\">");
-        out.println("<div style=\" position: relative; margin:0px ; background-color: #C0C0C0;\">");
+        out.println("<body style=\"overflow: auto; background-color: #C0C0C0; padding-bottom:30px\">");
+        out.println("<div style=\"margin:0px ; background-color: #C0C0C0;\">");
 
         out.println("<div class=\"row\">");
         out.println("<div style=\"padding-left:30px\" class=\"col-md-6\">");
@@ -47,7 +47,7 @@ public class WebUtilities {
 
     private static void doDivBody(PrintWriter out) {
         out.println("<br/><center>");
-        out.println("<div style=\"width:80%; border-radius: 25px; padding:30px; height:100%; text-align:left; background-color:#f2f2f2\">");
+        out.println("<div style=\"overflow: auto; width:80%; border-radius: 25px; padding:30px; height:100%; text-align:left; background-color:#f2f2f2\">");
     }
 
     public static void doHeader(PrintWriter out, String title, HttpServletRequest request) {

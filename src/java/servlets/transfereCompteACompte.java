@@ -115,6 +115,8 @@ public class transfereCompteACompte extends HttpServlet {
                     if (cptListeDest.size() > 0) {
                         cptDest = cptListeDest.get(0);
                         String ownerDest = CompteDao.researchOwner(cptDest.getIdentifiant());
+                        out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=" + request.getParameter("id") + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les rôles\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
+                        out.println("<br/>");
                         out.println("<h3>Au compte de " + ownerDest + " </h3>");
                         out.println("<table class=\"table table-hover\" style=\"width: 50%;\">");
                         out.println("<tr>");
