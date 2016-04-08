@@ -68,6 +68,10 @@
         <servlet-name>ServletLogout</servlet-name>
         <servlet-class>servlets.ServletLogout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TransfertFromTransfertManag</servlet-name>
+        <servlet-class>servlets.TransfertFromTransfertManag</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>listAll</servlet-name>
         <url-pattern>/index</url-pattern>
@@ -135,6 +139,10 @@
     <servlet-mapping>
         <servlet-name>ServletLogout</servlet-name>
         <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransfertFromTransfertManag</servlet-name>
+        <url-pattern>/TransfertFromTransfertManag</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

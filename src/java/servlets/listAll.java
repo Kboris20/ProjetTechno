@@ -144,6 +144,8 @@ public class listAll extends HttpServlet {
             out.println("</td>");
             out.println("</tr>");
             out.println("</table>");
+            out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
+             
         } finally {
             WebUtilities.doFooter(out);
             out.close();

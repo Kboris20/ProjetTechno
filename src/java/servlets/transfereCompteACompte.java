@@ -221,6 +221,7 @@ public class transfereCompteACompte extends HttpServlet {
                 out.println("Aucun compte n'existe avec cet identifiant.");
                 out.println("</div>");
             }
+               
         } finally {
             WebUtilities.doFooter(out);
             out.close();

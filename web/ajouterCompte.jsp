@@ -9,7 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    WebUtilities.doHeader(out, "Ajouter un compte", request, "ajouterCompte");
+    WebUtilities.doHeader(out, "Ajouter un compte","", request, "ajouterCompte");
     if (HtmlHttpUtils.isAuthenticate(request)) {
         int id = Integer.parseInt(request.getParameter("idCli"));
 %>

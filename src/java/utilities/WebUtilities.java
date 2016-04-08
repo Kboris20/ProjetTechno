@@ -50,10 +50,24 @@ public class WebUtilities {
         out.println("<div style=\"overflow: auto; width:80%; border-radius: 25px; padding:30px; height:100%; text-align:left; background-color:#f2f2f2\">");
     }
 
-    public static void doHeader(PrintWriter out, String title, HttpServletRequest request) {
+    public static void doHeader(PrintWriter out, String title, HttpServletRequest request, String page) {
         doHeader(out, title);
         out.println("</div>");
         doUser(out, request);
+        out.println("</div>");
+        out.println("<br/>");
+
+        out.println("<ul class=\"nav nav-tabs\">");
+        if (page.equalsIgnoreCase("transfertManag")) {
+            out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"transferts\">Transferts</a></li>");
+        } else {
+            out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"transferts\">Transferts</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"TransfertFromTransfertManag?status=deb\">New transfert</a></li>");
+        }
+        out.println("</ul>");
+        out.println("<br/>");
         out.println("</div>");
         doDivBody(out);
     }
@@ -68,7 +82,6 @@ public class WebUtilities {
 
         out.println("<ul class=\"nav nav-tabs\">");
         if (page.equalsIgnoreCase("home")) {
-            out.println("<ul class=\"nav nav-tabs\">");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
             out.println("<li role=\"presentation\"><a href=\"transferes\">Transferts</a></li>");
@@ -163,42 +176,37 @@ public class WebUtilities {
         doDivBody(out);
     }
 
-    public static void doHeader(JspWriter out, String title, HttpServletRequest request, String page) throws IOException {
-        if (page.equalsIgnoreCase("logging")) {
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>" + title + "</title>");
-            out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
-            out.println("</head>");
-            out.println("<body style=\"background-color: #f2f2f2; padding-bottom:30px\">");
-            out.println("<div style=\" position: relative; margin:0px ; background-color: #f2f2f2;\">");
+    public static void doHeader(JspWriter out, String title, String subtitle, HttpServletRequest request, String page) throws IOException {
 
-            out.println("<center>");
-            out.println("<div style=\"text-align:center;\">");
-            out.println("<h1>" + title + "</h1>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>" + title + "</title>");
+
+        out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
+        out.println("<link href=\"theme/css/style.css\" rel=\"stylesheet\" media=\"screen\">");
+        out.println("<!-- Latest compiled and minified CSS -->");
+        out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" integrity=\"sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7\" crossorigin=\"anonymous\">");
+        out.println("<!-- Optional theme -->");
+        out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css\" integrity=\"sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r\" crossorigin=\"anonymous\">");
+        out.println("<!-- Latest compiled and minified JavaScript -->");
+        out.println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js\" integrity=\"sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS\" crossorigin=\"anonymous\"></script>");
+
+        out.println("<meta name=\"viewport\" content=\"width=device-width; initial-scale=0.5; maximum-scale=0.5; user-scalable=0;\" />");
+        out.println("<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />");
+        out.println("<meta names=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\" />");
+        out.println("</head>");
+
+        if (page.equalsIgnoreCase("logging")) {
+            out.println("<body id=\"bodyConnexion\">");
+
+            out.println("<div id=\"divConnexionTitle\">");
+            out.println("<h1 id=\"titleConnexion\"><b>" + title + "</b></h1>");
+            out.println("<h2>" + subtitle + "</h2>");
             out.println("</div>");
 
-            out.println("<hr/><br/>");
-
-            out.println("<div style=\"width:80%; border-radius: 25px; margin:0px; padding:30px; height:100%; text-align:left; background-color:#C0C0C0\">");
+            out.println("<div id=\"divConnexionBody\">");
 
         } else {
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>" + title + "</title>");
-
-            out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
-            out.println("<!-- Latest compiled and minified CSS -->");
-            out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" integrity=\"sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7\" crossorigin=\"anonymous\">");
-            out.println("<!-- Optional theme -->");
-            out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css\" integrity=\"sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r\" crossorigin=\"anonymous\">");
-            out.println("<!-- Latest compiled and minified JavaScript -->");
-            out.println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js\" integrity=\"sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS\" crossorigin=\"anonymous\"></script>");
-
-            out.println("<meta name=\"viewport\" content=\"width=device-width; initial-scale=0.5; maximum-scale=0.5; user-scalable=0;\" />");
-            out.println("<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />");
-            out.println("<meta names=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\" />");
-            out.println("</head>");
             out.println("<body style=\"background-color: #C0C0C0; padding-bottom:30px\">");
             out.println("<div style=\" position: relative; margin:0px ; background-color: #C0C0C0;\">");
 
@@ -238,6 +246,7 @@ public class WebUtilities {
 
     public static void doFooter(JspWriter out, String page) throws IOException {
         if (page.equalsIgnoreCase("logging")) {
+            out.println("</div>");
             out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
             out.println("<script src=\"bootstrap/js/bootstrap.min.js\"></script>");
             out.println("</body>");
