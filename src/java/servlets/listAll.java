@@ -52,7 +52,7 @@ public class listAll extends HttpServlet {
 
         try {
             if (request.getParameter("dele").equalsIgnoreCase("true")) {
-                out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                out.println("<div id=\"popupDelClientListAll\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                 out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                 ArrayList<Client> listeCli = new ArrayList<Client>();
                 Client c = new Client();
@@ -114,7 +114,7 @@ public class listAll extends HttpServlet {
                 out.println("Il n'y a pas de client");
                 out.println("</div>");
             } else {
-                out.println("<table class=\"table table-hover\" style=\"width: 100%;\">");
+                out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
                 out.println("<tr>");
                 out.println("<td>&nbsp;</td>");
                 out.println("<td>Nom</td>");
@@ -137,13 +137,8 @@ public class listAll extends HttpServlet {
                 }
                 out.println("</table>");
             }
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<td>");
             out.println("<a href=\"ajouterClient.jsp\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Ajouter un client</a>");
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</table>");
+          
             out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
              
         } finally {

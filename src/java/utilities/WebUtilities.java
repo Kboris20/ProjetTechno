@@ -18,6 +18,7 @@ public class WebUtilities {
         out.println("<title>" + title + "</title>");
 
         out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
+        out.println("<link href=\"theme/css/style.css\" rel=\"stylesheet\" media=\"screen\">");
         out.println("<!-- Latest compiled and minified CSS -->");
         out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css\" integrity=\"sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7\" crossorigin=\"anonymous\">");
         out.println("<!-- Optional theme -->");
@@ -29,33 +30,32 @@ public class WebUtilities {
         out.println("<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />");
         out.println("<meta names=\"apple-mobile-web-app-status-bar-style\" content=\"black-translucent\" />");
         out.println("</head>");
-        out.println("<body style=\"overflow: auto; background-color: #C0C0C0; padding-bottom:30px\">");
-        out.println("<div style=\"margin:0px ; background-color: #C0C0C0;\">");
+        out.println("<body class=\"bodySite\">");
+
+    }
+
+    private static void doDivBody(PrintWriter out, String title, HttpServletRequest request) {
+        out.println("<center>");
+        out.println("<div class=\"divContainer\">");
+        out.println("<div  class=\"divCommonHeader\">");
 
         out.println("<div class=\"row\">");
-        out.println("<div style=\"padding-left:30px\" class=\"col-md-6\">");
+        out.println("<div id=\"divPageTitle\" class=\"col-md-8;\">");
         out.println("<h1>" + title + "</h1>");
-    }
+        out.println("</div>");
 
-    private static void doUser(PrintWriter out, HttpServletRequest request) {
-        out.println("<div style=\"text-align: right; padding-right:30px\" class=\"col-md-6\">");
-        out.println("<p>Utilisateur: " + HtmlHttpUtils.getUser(request) + "<span class=\"glyphicon glyphicon-user\"></span>,");
-        out.println("<a href=\"" + request.getContextPath() + "/logout\">Deconnecter <span class=\"glyphicon glyphicon-log-out\"></span></a>");
+        out.println("<div id=\"divPageUser\" class=\"col-md-4\">");
+        out.println("<p><span class=\"glyphicon glyphicon-user\" title=\"Utilisateur\"></span> " + HtmlHttpUtils.getUser(request) + ",");
+        out.println("<a href=\"" + request.getContextPath() + "/logout\"><span class=\"glyphicon glyphicon-log-out\" title=\"Déconnection\"></span></a>");
         out.println("</p>");
         out.println("</div>");
-    }
-
-    private static void doDivBody(PrintWriter out) {
-        out.println("<br/><center>");
-        out.println("<div style=\"overflow: auto; width:80%; border-radius: 25px; padding:30px; height:100%; text-align:left; background-color:#f2f2f2\">");
+        out.println("</div>");
+        out.println("<br/>");
     }
 
     public static void doHeader(PrintWriter out, String title, HttpServletRequest request, String page) {
         doHeader(out, title);
-        out.println("</div>");
-        doUser(out, request);
-        out.println("</div>");
-        out.println("<br/>");
+        doDivBody(out, title, request);
 
         out.println("<ul class=\"nav nav-tabs\">");
         if (page.equalsIgnoreCase("transfertManag")) {
@@ -67,18 +67,13 @@ public class WebUtilities {
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"TransfertFromTransfertManag?status=deb\">New transfert</a></li>");
         }
         out.println("</ul>");
-        out.println("<br/>");
         out.println("</div>");
-        doDivBody(out);
+        out.println("<div class=\"divContent\">");
     }
 
     public static void doHeader(PrintWriter out, String title, HttpServletRequest request, String page, Integer id) {
         doHeader(out, title);
-        out.println("</div>");
-        doUser(out, request);
-        out.println("</div>");
-
-        out.println("<br/>");
+        doDivBody(out, title, request);
 
         out.println("<ul class=\"nav nav-tabs\">");
         if (page.equalsIgnoreCase("home")) {
@@ -132,19 +127,13 @@ public class WebUtilities {
 
         }
         out.println("</ul>");
-        out.println("<br/>");
         out.println("</div>");
-        doDivBody(out);
+        out.println("<div class=\"divContent\">");
     }
 
     public static void doHeader(PrintWriter out, String title, HttpServletRequest request, String page, Integer id, Integer id1) {
         doHeader(out, title);
-
-        out.println("</div>");
-        doUser(out, request);
-        out.println("</div>");
-
-        out.println("<br/>");
+        doDivBody(out, title, request);
 
         out.println("<ul class=\"nav nav-tabs\">");
         Compte cpt = new Compte();
@@ -162,18 +151,9 @@ public class WebUtilities {
         out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\">" + cli.getNom() + "_" + cli.getPrenom() + "</a></li>");
         out.println("<li role=\"presentation\" class=\"active\"><a href=\"transfereCompteACompte?id=" + id + "&id1=-1&idCli=" + cli.getIdentifiant() + "\">" + cpte.getNom() + "</a></li>");
         out.println("</ul>");
-        out.println("<br/>");
         out.println("</div>");
-        doDivBody(out);
-    }
+        out.println("<div class=\"divContent\">");
 
-    public static void doHeader(PrintWriter out, String title, String sous_title, HttpServletRequest request) {
-        doHeader(out, title);
-        out.println("<h2>" + sous_title + "</h2>");
-        out.println("</div>");
-        doUser(out, request);
-        out.println("</div>");
-        doDivBody(out);
     }
 
     public static void doHeader(JspWriter out, String title, String subtitle, HttpServletRequest request, String page) throws IOException {
@@ -207,35 +187,35 @@ public class WebUtilities {
             out.println("<div id=\"divConnexionBody\">");
 
         } else {
-            out.println("<body style=\"background-color: #C0C0C0; padding-bottom:30px\">");
-            out.println("<div style=\" position: relative; margin:0px ; background-color: #C0C0C0;\">");
+            out.println("<body class=\"bodySite\">");
+            out.println("<center>");
+            out.println("<div class=\"divContainer\">");
+            out.println("<div class=\"divCommonHeader\">");
 
             out.println("<div class=\"row\">");
-            out.println("<div style=\"padding-left:30px\" class=\"col-md-6\">");
+            out.println("<div id=\"divPageTitleForm\" class=\"col-md-8\">");
             out.println("<h1>" + title + "</h1>");
             out.println("</div>");
-            out.println("<div style=\"text-align: right; padding-right:30px\" class=\"col-md-6\">");
-            out.println("<p>Utilisateur: " + HtmlHttpUtils.getUser(request) + "<span class=\"glyphicon glyphicon-user\"></span>,");
-            out.println("<a href=\"" + request.getContextPath() + "/logout\">Deconnecter <span class=\"glyphicon glyphicon-log-out\"></span></a>");
+
+            out.println("<div id=\"divPageUserForm\" class=\"col-md-4\">");
+            out.println("<p><span class=\"glyphicon glyphicon-user\" title=\"Utilisateur\"></span> " + HtmlHttpUtils.getUser(request) + ",");
+            out.println("<a href=\"" + request.getContextPath() + "/logout\"><span class=\"glyphicon glyphicon-log-out\" title=\"Déconnection\"></span></a>");
             out.println("</p>");
             out.println("</div>");
-            out.println("<br/>");
+            out.println("</div>");
             out.println("<br/>");
             out.println("<ul class=\"nav nav-tabs\">");
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
             out.println("</ul>");
-            out.println("<br/>");
             out.println("</div>");
-
-            out.println("<br/><center>");
-
-            out.println("<div style=\"width:80%; border-radius: 25px; margin:0px; padding:30px; height:100%; text-align:left; background-color:#f2f2f2\">");
+            out.println("<div class=\"divContent\">");
         }
     }
 
     // Les footers
     public static void doFooter(PrintWriter out) {
+        out.println("</div>");
         out.println("</center>");
         out.println("</div>");
         out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
@@ -252,6 +232,7 @@ public class WebUtilities {
             out.println("</body>");
             out.println("</html>");
         } else {
+            out.println("</div>");
             out.println("</center>");
             out.println("</div>");
             out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");

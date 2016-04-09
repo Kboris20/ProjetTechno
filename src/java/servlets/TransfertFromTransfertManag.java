@@ -66,8 +66,22 @@ public class TransfertFromTransfertManag extends HttpServlet {
             }
 
             try {
+                if (request.getParameter("error").equals("false")) {
+                    out.println("<div id=\"popupErrorTransfCompte\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                    out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+                    out.println("<b><u>Confirmation</u></b>");
+                    out.println("<p>Souhaitez vous réellement effectuer le transfert pour le montant de:</p>");
+                    out.println("<b> " + request.getParameter("somme") + " CHF?</b>");
+                    out.println("<br/>");
+                    out.println("<a href=\"transfere?somme=" + request.getParameter("somme") + "&id=" + request.getParameter("idCompteDeb") + "&id1=" + request.getParameter("idCompteCred") + "&idCli=0\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
+                    out.println("</div>");
+                }
+            } catch (Exception ex) {
+            }
+
+            try {
                 if (request.getParameter("transcmpt").equalsIgnoreCase("true")) {
-                    out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                    out.println("<div id=\"popupChoixDesClientsTransf\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                     out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                     ArrayList<Client> listeCli = new ArrayList<Client>();
                     listeCli.addAll(ClientDao.researchAll());
@@ -76,7 +90,7 @@ public class TransfertFromTransfertManag extends HttpServlet {
 
                     if (!listeCli.isEmpty()) {
                         for (Client cli : listeCli) {
-                            out.println("<a href=\"TransfertFromTransfertManag?status="+request.getParameter("status")+"&debOrCred=" + request.getParameter("debOrCred") + "&cliDest=" + cli.getIdentifiant() + "&idCompteDeb=" + request.getParameter("idCompteDeb") + "&idCompteCred=" + request.getParameter("idCompteCred") + "\" class=\"list-group-item\">" + cli.getNom() + " " + cli.getPrenom() + "</a>");
+                            out.println("<a href=\"TransfertFromTransfertManag?status=" + request.getParameter("status") + "&debOrCred=" + request.getParameter("debOrCred") + "&cliDest=" + cli.getIdentifiant() + "&idCompteDeb=" + request.getParameter("idCompteDeb") + "&idCompteCred=" + request.getParameter("idCompteCred") + "\" class=\"list-group-item\">" + cli.getNom() + " " + cli.getPrenom() + "</a>");
 
                         }
                     }
@@ -88,7 +102,7 @@ public class TransfertFromTransfertManag extends HttpServlet {
 
             try {
                 if (request.getParameter("cliDest") != null) {
-                    out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                    out.println("<div id=\"popupChoixDesComptesTransf\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                     out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                     Client cli = new Client();
                     cli.setIdentifiant(Integer.parseInt(request.getParameter("cliDest")));
@@ -125,8 +139,6 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 }
             } catch (Exception ex) {
             }
-            
-            
 
             Integer idCompteDeb;
             Integer idCompteCred;
@@ -176,10 +188,18 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 out.println("<b>Nom: " + compteCred.getNom() + ", solde: " + compteCred.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteCred) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
-                out.println("<a href=\"transfereCheck?id1=" + idCompteDeb + "&id=" + idCompteCred + "\">");
-                out.println("<button class=\"btn btn-default btn-sm\"><span class=\"glyphicon glyphicon-transfer\"></span> Transférer</button>");
-                out.println("</a>");
+
+                out.println("<form method=\"GET\" action=\"transfereCheck\"");
+                out.println("<label for=\"montant\">Montant:  CHF </label>");
+                out.println("<input type=\"number\" name=\"montant\" id=\"montant\" value=\"00\"/>.");
+                out.println("<input type=\"number\" name=\"centimes\" id=\"centimes\" value=\"00\"/>");
+                out.println("<input type=\"hidden\" name=\"id1\" value=\"" + idCompteCred + "\"/>");
+                out.println("<input type=\"hidden\" name=\"id\" value=\"" + idCompteDeb + "\"/>");
+                out.println("<input type=\"hidden\" name=\"idCli\" value=\"0\"/>");
                 out.println("<br/>");
+                out.println("<br/>");
+                out.println("<button type=\"submit\" class=\"btn btn-default btn-sm\"><span class=\"glyphicon glyphicon-transfer\"></span> Transférer</button>");
+                out.println("</form>");
             }
         } finally {
             WebUtilities.doFooter(out);

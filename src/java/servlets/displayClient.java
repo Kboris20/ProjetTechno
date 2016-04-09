@@ -69,7 +69,7 @@ public class displayClient extends HttpServlet {
 
                 try {
                     if (request.getParameter("dele").equalsIgnoreCase("true")) {
-                        out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                        out.println("<div id=\"popupDeleteClientDisplayClient\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                         out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                         ArrayList<Compte> listeCmpt = new ArrayList<Compte>();
                         Compte c = new Compte();

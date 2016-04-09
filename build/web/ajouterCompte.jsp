@@ -21,7 +21,7 @@
             <td>
                 <label for="nom">Nom</label>
             </td>
-            <td style="text-align:center">
+            <td>
                 <input type="text" name="nom" id="nom" />
             </td>
         <br/>
@@ -31,7 +31,7 @@
             <td>
                 <label for="solde">Solde</label>
             </td>
-            <td style="text-align:center">
+            <td>
                 <input type="text" name="solde" id="solde" />
             </td>
         <br/>
@@ -40,7 +40,7 @@
             <td>
                 <label for="taux">Taux</label>
             </td>
-            <td style="text-align:center">
+            <td>
                 <input type="text" name="taux" id="taux" />
             </td>
 

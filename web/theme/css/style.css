@@ -6,7 +6,6 @@
 **/
 #bodyConnexion{
     background-image: url("http://localhost:8080/crud/theme/img/imgconnexion.jpg" );
-    //background-color: #f2f2f2; 
     padding:4%
 
 }
@@ -50,15 +49,6 @@
     margin-right: auto
 }
 
-/**
-*########################################################################
-**/
-
-/**
-*######################################################################
-*Common
-*########################################################################
-**/
 
 table{
     margin: auto;
@@ -75,4 +65,79 @@ table{
     font-style:oblique;
 }
 
+/**
+*########################################################################
+**/
+
+/**
+*######################################################################
+*Common pages
+*########################################################################
+**/
+
+.bodySite{
+
+    background-image: url("http://localhost:8080/crud/theme/img/imgpages.jpg" ); 
+    padding-bottom:5%;
+    padding-top:5%;
+}
+
+.divContainer{
+    width:80%;
+}
+
+.divCommonHeader { 
+    margin:0% ; 
+    border-radius: 25px; 
+    opacity: 0.97;
+    background-color: #e6e6e6;
+}
+
+#divPageTitle, #divPageTitleForm{
+    text-align:left; 
+    padding-left:3%;
+    float: left;
+}
+
+#divPageUser, #divPageUserForm{
+    text-align: right; 
+    padding-top:2%;
+    padding-right:3%;
+    float: right;
+}
+
+.divContent {
+    text-align:left; 
+    padding:5%; 
+    text-align:left; 
+    background-color:#f2f2f2;
+    opacity: 0.99;
+}
+
+
+
+#popupCompteTransferCompte, #popupChoixDesComptesTransf, #popupChoixCliTransfCompte, #popupChoixDesClientsTransf, #popupDeleteClientDisplayClient, #popupDelClientListAll, #popupErrorTransfCompte{
+    border: 1px; 
+    border-radius: 25px;
+}
+
+#tableComptesAllComptes, #tableClientAllComptes, #tableCompteTransfertCompteaCompte, #tableCompteTransfertCompteACompte {
+    width: 50%;
+}
+
+.trCompte {
+    border-top:2px solid;
+}
+
+#tableClientsListAll{
+    width: 100%;
+}
+
+#centimes, #montant{
+    height:30px;
+    width:80px;
+}
+/**
+*########################################################################
+**/
 

@@ -88,7 +88,7 @@ public class allComptes extends HttpServlet {
                     out.println("<br/>");
                     if (cli.getListeCompte().size() > 0) {
                         out.println("<form action=\"deleteMultiCompteConfirm\">");
-                        out.println("<table class=\"table table-hover inset\" style=\"width: 50%;\">");
+                        out.println("<table class=\"table table-hover inset\" id=\"tableClientAllComptes\">");
                         out.println("<tr>");
                         out.println("<td></td>");
                         out.println("<td>Nom</td>");
@@ -98,7 +98,7 @@ public class allComptes extends HttpServlet {
                         out.println("<td>&nbsp;</td>");
                         out.println("</tr>");
                         for (Compte compt : cli.getListeCompte()) {
-                            out.println("<tr style=\"border-top:2px solid\">");
+                            out.println("<tr class=\"trCompte\">");
 
                             out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getIdentifiant() + "&id1=-1&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a></td>");
                             out.println("<td>" + compt.getNom() + "</td>");
@@ -129,7 +129,7 @@ public class allComptes extends HttpServlet {
                 listeCpt.addAll(CompteDao.research(new Compte()));
 
                 if (listeCpt.size() > 0) {
-                    out.println("<table class=\"table table-hover\" style=\"width: 50%;\">");
+                    out.println("<table class=\"table table-hover\" id=\"tableComptesAllComptes\">");
                     out.println("<tr>");
                     out.println("<td>Nom</td>");
                     out.println("<td>Solde</td>");

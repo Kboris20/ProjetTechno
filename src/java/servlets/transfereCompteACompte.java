@@ -75,7 +75,7 @@ public class transfereCompteACompte extends HttpServlet {
                 cpt = cptListe.get(0);
                 String owner = CompteDao.researchOwner(cpt.getIdentifiant());
                 out.println("<h3>Transfère du compte de " + owner + " </h3>");
-                out.println("<table class=\"table table-hover\" style=\"width: 50%;\">");
+                out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteaCompte\">");
                 out.println("<tr>");
                 out.println("<td>Nom</td>");
                 out.println("<td>Solde</td>");
@@ -95,7 +95,7 @@ public class transfereCompteACompte extends HttpServlet {
                 if (Integer.valueOf(request.getParameter("id1")) > -1) {
                     try {
                         if (request.getParameter("error").equals("false")) {
-                            out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                            out.println("<div id=\"popupErrorTransfCompte\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                             out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                             out.println("<b><u>Confirmation</u></b>");
                             out.println("<p>Souhaitez vous réellement effectuer le transfert pour le montant de:</p>");
@@ -118,7 +118,7 @@ public class transfereCompteACompte extends HttpServlet {
                         out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=" + request.getParameter("id") + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les rôles\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
                         out.println("<br/>");
                         out.println("<h3>Au compte de " + ownerDest + " </h3>");
-                        out.println("<table class=\"table table-hover\" style=\"width: 50%;\">");
+                        out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteACompte\">");
                         out.println("<tr>");
                         out.println("<td>Nom</td>");
                         out.println("<td>Solde</td>");
@@ -135,10 +135,10 @@ public class transfereCompteACompte extends HttpServlet {
                         out.println("</table>");
                         out.println("<br/>");
 
-                        out.println("<form method=\"POST\" action=\"transfereCheck\"");
+                        out.println("<form method=\"GET\" action=\"transfereCheck\"");
                         out.println("<label for=\"montant\">Montant:  CHF </label>");
-                        out.println("<input type=\"number\" name=\"montant\" id=\"montant\" value=\"00\" style=\"height:30px;width:80px;\"/>.");
-                        out.println("<input type=\"number\" name=\"centimes\" id=\"centimes\" value=\"00\" style=\"height:30px;width:80px;\"/>");
+                        out.println("<input type=\"number\" name=\"montant\" id=\"montant\" value=\"00\"/>.");
+                        out.println("<input type=\"number\" name=\"centimes\" id=\"centimes\" value=\"00\"/>");
                         out.println("<input type=\"hidden\" name=\"id1\" value=\"" + request.getParameter("id1") + "\"/>");
                         out.println("<input type=\"hidden\" name=\"id\" value=\"" + request.getParameter("id") + "\"/>");
                         out.println("<input type=\"hidden\" name=\"idCli\" value=\"" + request.getParameter("idCli") + "\"/>");
@@ -158,7 +158,7 @@ public class transfereCompteACompte extends HttpServlet {
 
                     try {
                         if (request.getParameter("transcli").equalsIgnoreCase("true")) {
-                            out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                            out.println("<div id=\"popupChoixCliTransfCompte\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                             out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                             ArrayList<Client> listeCli = new ArrayList<Client>();
                             listeCli.addAll(ClientDao.researchAll());
@@ -179,7 +179,7 @@ public class transfereCompteACompte extends HttpServlet {
 
                     try {
                         if (request.getParameter("cliDest") != null) {
-                            out.println("<div style=\"border: 1px; border-radius: 25px\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                            out.println("<div id=\"popupCompteTransferCompte\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
                             out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                             Client cli = new Client();
                             cli.setIdentifiant(Integer.parseInt(request.getParameter("cliDest")));
@@ -201,7 +201,7 @@ public class transfereCompteACompte extends HttpServlet {
                                 if (!comptListe.isEmpty()) {
 
                                     for (Compte compte : comptListe) {
-                                        out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id") + "&id1=" + compte.getIdentifiant() + "\" class=\"list-group-item\">Compte: " + compte.getNom() + ", Solde: " + compte.getSolde() + "</a>");
+                                        out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id") + "&id1=" + compte.getIdentifiant() + "&idCli=" + request.getParameter("idCli") + "\" class=\"list-group-item\">Compte: " + compte.getNom() + ", Solde: " + compte.getSolde() + "</a>");
 
                                     }
                                 } else {
@@ -221,7 +221,7 @@ public class transfereCompteACompte extends HttpServlet {
                 out.println("Aucun compte n'existe avec cet identifiant.");
                 out.println("</div>");
             }
-               
+
         } finally {
             WebUtilities.doFooter(out);
             out.close();
