@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlets;
 
 import dao.CompteDao;
+import dao.TransactionDao;
+import dao.UtilisateurDao;
 import exception.InsufficientBalanceException;
 import exception.NegativeAmmountException;
 import java.io.IOException;
@@ -19,6 +20,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Compte;
+import modele.Transaction;
+import modele.Utilisateur;
 
 /**
  *
@@ -39,39 +42,49 @@ public class transfere extends HttpServlet {
             throws ServletException, IOException, NegativeAmmountException, InsufficientBalanceException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-        
+
         try {
             Float somme = Float.valueOf(request.getParameter("somme"));
             String id = request.getParameter("id");
             String id1 = request.getParameter("id1");
-            String idCli = request.getParameter("idCli");
+            Integer idCli = Integer.valueOf(request.getParameter("idCli"));
             Compte cpt = new Compte();
             Compte cptDest = new Compte();
+            Utilisateur user = UtilisateurDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
 
             cpt.setIdentifiant(Integer.valueOf(id));
             cptDest.setIdentifiant(Integer.valueOf(id1));
             ArrayList<Compte> cptListe = CompteDao.research(cpt);
             ArrayList<Compte> cptListeDest = CompteDao.research(cptDest);
-            
+
             cpt = cptListe.get(0);
             cptDest = cptListeDest.get(0);
-            
+            Transaction transaction = new Transaction(cpt, cptDest, somme);
+            TransactionDao.create(transaction, user);
+
             cpt.debit(somme);
             cptDest.credit(somme);
-            
+
             /*dans le cardre de l'exercice nous nous permettons de laisser l'opération tel quel mais 
-            normalement l'opération ci-dessous devrait être atomique hors ce n'est pas le cas ici
-            */
+             normalement l'opération ci-dessous devrait être atomique hors ce n'est pas le cas ici
+             */
             CompteDao.update(cpt);
             CompteDao.update(cptDest);
-            
-            response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?trans=ok&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+
+            if (idCli == 0) {
+                response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?trans=ok&status=allOk&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
+            } else {
+
+                response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?trans=ok&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+
+            }
+
         } finally {
             out.close();
         }

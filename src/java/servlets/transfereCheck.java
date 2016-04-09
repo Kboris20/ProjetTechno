@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
 import modele.Compte;
 
 /**
@@ -35,30 +34,39 @@ public class transfereCheck extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-        
+
         try {
             String montant = request.getParameter("montant");
             String centimes = request.getParameter("centimes");
             String id = request.getParameter("id");
             String id1 = request.getParameter("id1");
-            String idCli = request.getParameter("idCli");
+            Integer idCli = Integer.valueOf(request.getParameter("idCli"));
             Compte cpt = new Compte();
             Float somme = Float.valueOf(montant + "." + centimes);
 
             cpt.setIdentifiant(Integer.valueOf(id));
             ArrayList<Compte> cptListe = CompteDao.research(cpt);
             cpt = cptListe.get(0);
+            if (idCli == 0) {
+                if (somme > cpt.getSolde()) {
+                    response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=true&status=allOk&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=false&status=allOk&somme=" + somme + "&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
 
-            if (somme > cpt.getSolde()) {
-                response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=true&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+                }
             } else {
-                response.sendRedirect(request.getContextPath() + "/transfereConfirm?somme=" + somme + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+
+                if (somme > cpt.getSolde()) {
+                    response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=true&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=false&somme=" + somme + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+                }
             }
 
         } finally {

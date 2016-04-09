@@ -13,10 +13,6 @@
         <servlet-class>servlets.displayClient</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>deleteConfirm</servlet-name>
-        <servlet-class>servlets.deleteConfirm</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>delete</servlet-name>
         <servlet-class>servlets.delete</servlet-class>
     </servlet>
@@ -35,10 +31,6 @@
     <servlet>
         <servlet-name>addCompte</servlet-name>
         <servlet-class>servlets.addCompte</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>deleteCompteConfirm</servlet-name>
-        <servlet-class>servlets.deleteCompteConfirm</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>deleteCompte</servlet-name>
@@ -65,10 +57,6 @@
         <servlet-class>servlets.transfereCheck</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>transfereConfirm</servlet-name>
-        <servlet-class>servlets.transfereConfirm</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>transfere</servlet-name>
         <servlet-class>servlets.transfere</servlet-class>
     </servlet>
@@ -84,6 +72,10 @@
         <servlet-name>gestionTransaction</servlet-name>
         <servlet-class>servlets.gestionTransaction</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>TransfertFromTransfertManag</servlet-name>
+        <servlet-class>servlets.TransfertFromTransfertManag</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>listAll</servlet-name>
         <url-pattern>/index</url-pattern>
@@ -95,10 +87,6 @@
     <servlet-mapping>
         <servlet-name>displayClient</servlet-name>
         <url-pattern>/afficherClient</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>deleteConfirm</servlet-name>
-        <url-pattern>/deleteConfirm</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>delete</servlet-name>
@@ -119,10 +107,6 @@
     <servlet-mapping>
         <servlet-name>addCompte</servlet-name>
         <url-pattern>/addCompte</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>deleteCompteConfirm</servlet-name>
-        <url-pattern>/deleteCompteConfirm</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>deleteCompte</servlet-name>
@@ -149,10 +133,6 @@
         <url-pattern>/transfereCheck</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>transfereConfirm</servlet-name>
-        <url-pattern>/transfereConfirm</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>transfere</servlet-name>
         <url-pattern>/transfere</url-pattern>
     </servlet-mapping>
@@ -167,6 +147,10 @@
     <servlet-mapping>
         <servlet-name>gestionTransaction</servlet-name>
         <url-pattern>/gestionTransaction</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransfertFromTransfertManag</servlet-name>
+        <url-pattern>/TransfertFromTransfertManag</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

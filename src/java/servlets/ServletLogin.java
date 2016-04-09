@@ -54,9 +54,7 @@ public class ServletLogin extends HttpServlet {
             }else errorlogin=true;
             
             if(errorlogin){
-                out.println("<p>Erreur d'authentification, veuillez préciser username , password");
-                out.println("<a href='login.jsp'>reessayer</a>");
-                out.println("</body></html>");
+                response.sendRedirect(request.getContextPath() + "/login.jsp?error=true");
             }
 
 

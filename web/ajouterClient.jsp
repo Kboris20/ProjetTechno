@@ -9,7 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    WebUtilities.doHeader(out, "Ajouter un client", request, "ajouterClient");
+    WebUtilities.doHeader(out, "Ajouter un client","", request, "ajouterClient");
     if (HtmlHttpUtils.isAuthenticate(request)) {
 %>
         

@@ -6,10 +6,8 @@
 
 package servlets;
 
-import dao.ClientDao;
-import dao.CompteDao;
-import modele.Client;
-import modele.Compte;
+import dao.UtilisateurDao;
+import modele.Utilisateur;
 
 /**
  *
@@ -18,12 +16,9 @@ import modele.Compte;
 public class Test {
     
     public static void main(String[] args){
-    Compte c = new Compte();
-    c.setNom("Tst");
-    c.setSolde(new Float(3000.5));
-    c.setTaux(new Float(0.5));
+    Utilisateur u = UtilisateurDao.researchByUsername("boris").get(0);
     
-        System.out.println(CompteDao.create(c, 1));
+        System.out.println(u.getIdentifiant()+", "+u.getUsername()+", "+u.getPwd());
     }
     
 }

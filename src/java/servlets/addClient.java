@@ -7,8 +7,6 @@ package servlets;
 import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +49,7 @@ public class addClient extends HttpServlet {
 
             int identifiant = (int) ClientDao.create(newCli);
 
-            response.sendRedirect(request.getContextPath() + "/afficherClient?trans=false&id=" + identifiant + "&add=true");
+            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + identifiant + "&add=true");
 
         } finally {
             out.close();
