@@ -71,7 +71,7 @@ public class WebUtilities {
             out.println("<ul class=\"nav nav-tabs\">");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index?trans=false\">Clients</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"transferes\">Transferts</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
         } else if (page.equalsIgnoreCase("clients")) {
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
