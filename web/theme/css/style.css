@@ -5,7 +5,7 @@
 *########################################################################
 **/
 #bodyConnexion{
-    background-image: url("http://localhost:8080/crud/theme/img/imgconnexion.jpg" );
+    background-image: url("http://localhost:8080/crud/theme/img/imgconnexion2.jpg" );
     padding:4%
 
 }
@@ -17,8 +17,8 @@
 
 #divConnexionTitle{
     text-align:center;
-    width: 50%;
-    float: right
+    width: 100%;
+/*    float: right*/
 
 }
 #imgStyle{
@@ -27,8 +27,9 @@
 }
 
 #divConnexionBody{
-    float: left;
-    opacity: 0.50;
+    //float: left;
+    margin: auto;
+    opacity: 0.88;
     width:40%; 
     padding-left:0.5%;
     padding-right:0.5%;
