@@ -47,8 +47,11 @@ public class gestionTransaction extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
-        WebUtilities.doHeader(out, "Liste des transactions", request, "transactions");
+        WebUtilities.doHeader(out, "Liste des transactions", request, "transactions",0);
+
         try {
+            
+            out.println("<a href=\"TransfertFromTransfertManag\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Nouvelle transaction</a>");
             if (listeTra.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");
@@ -71,17 +74,19 @@ public class gestionTransaction extends HttpServlet {
                 }
                 out.println("</table>");
             }
-            //out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=-1&idCli=" + CompteDao.researchOwnerId(Integer.valueOf(request.getParameter("id1"))) + "\"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i>Annuler</a>");
+
         } finally {
             WebUtilities.doFooter(out);
             out.close();
         }
+
         WebUtilities.doFooter(out);
+
         out.close();
 
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
