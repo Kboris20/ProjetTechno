@@ -47,7 +47,7 @@ public class gestionTransaction extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
-        WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un client", request, "choixCli", Integer.valueOf(request.getParameter("id1")), 0);
+        WebUtilities.doHeader(out, "Liste des transactions", request, "transactions");
         try {
             if (listeTra.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
