@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import dao.TransactionAdvancedDao;
 import dao.TransactionDao;
 import static dao.UtilisateurDao.researchByUsername;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Transaction;
+import modele.TransactionAdvanced;
 import modele.Utilisateur;
 import utilities.WebUtilities;
 
@@ -25,6 +27,7 @@ import utilities.WebUtilities;
 public class gestionTransaction extends HttpServlet {
 
     private ArrayList<Transaction> listeTra;
+    private ArrayList<TransactionAdvanced> listeTraJoin;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,11 +42,14 @@ public class gestionTransaction extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
+        
+        Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);       
+        
         listeTra = new ArrayList<Transaction>();
-        Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
-        listeTra.addAll(TransactionDao.researchAll());        
-
+        listeTra.addAll(TransactionDao.researchAll());
+        listeTraJoin = new ArrayList<TransactionAdvanced>();
+        listeTraJoin.addAll(TransactionAdvancedDao.researchByUser(current_user));
+        
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
@@ -54,22 +60,26 @@ public class gestionTransaction extends HttpServlet {
 
         try {
             out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
-            if (listeTra.isEmpty()) {
+            if (listeTraJoin.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");
                 out.println("</div>");
             } else {
                 out.println("<table class=\"table table-hover\" style=\"width: 100%;\">");
                 out.println("<tr>");
-                out.println("<td>Compte débité</td>");
-                out.println("<td>Compte crédité</td>");
-                out.println("<td>Montant</td>");
-                out.println("<td>Date</td>");
+                out.println("<td class=\"listRow\">Client débit</td>");
+                out.println("<td class=\"listRow\">Compte débité</td>");
+                out.println("<td class=\"listRow\">Client crédit</td>");
+                out.println("<td class=\"listRow\">Compte crédit</td>");
+                out.println("<td class=\"listRow\">Montant</td>");
+                out.println("<td class=\"listRow\">Date</td>");
                 out.println("</tr>");
-                for (Transaction tra : listeTra) {
+                for (TransactionAdvanced tra : listeTraJoin) {
                     out.println("<tr>");
-                    out.println("<td>" + tra.getCompte_credit().getNom() + "</td>");
-                    out.println("<td>" + tra.getCompte_debit().getNom() + "</td>");
+                    out.println("<td>" + tra.getClient_debit()+ "</td>");
+                    out.println("<td>" + tra.getCompte_debit()+ "</td>");
+                    out.println("<td>" + tra.getClient_credit() + "</td>");
+                    out.println("<td>" + tra.getCompte_credit() + "</td>");
                     out.println("<td>" + tra.getMontant() + "</td>");
                     out.println("<td>" + tra.getDate() + "</td>");
                     out.println("</tr>");
