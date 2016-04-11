@@ -6,6 +6,7 @@
 package servlets;
 
 import dao.TransactionDao;
+import static dao.UtilisateurDao.researchByUsername;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Transaction;
+import modele.Utilisateur;
 import utilities.WebUtilities;
 
 /**
@@ -39,7 +41,8 @@ public class gestionTransaction extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         listeTra = new ArrayList<Transaction>();
-        listeTra.addAll(TransactionDao.researchAll());
+        Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+        listeTra.addAll(TransactionDao.researchByUser(current_user));        
 
         try {
             HtmlHttpUtils.isAuthenticate(request);
@@ -51,7 +54,7 @@ public class gestionTransaction extends HttpServlet {
 
         try {
             
-            out.println("<a href=\"TransfertFromTransfertManag\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Nouvelle transaction</a>");
+            out.println("<a href=\"TransfertFromTransfertManag?transcmpt=true\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Nouvelle transaction</a>");
             if (listeTra.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");
