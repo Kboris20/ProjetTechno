@@ -42,7 +42,7 @@ public class gestionTransaction extends HttpServlet {
 
         listeTra = new ArrayList<Transaction>();
         Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
-        listeTra.addAll(TransactionDao.researchByUser(current_user));        
+        listeTra.addAll(TransactionDao.researchAll());        
 
         try {
             HtmlHttpUtils.isAuthenticate(request);
@@ -53,8 +53,7 @@ public class gestionTransaction extends HttpServlet {
         WebUtilities.doHeader(out, "Liste des transactions", request, "transactions",0);
 
         try {
-            
-            out.println("<a href=\"TransfertFromTransfertManag?transcmpt=true\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Nouvelle transaction</a>");
+            out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
             if (listeTra.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");

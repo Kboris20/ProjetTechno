@@ -63,7 +63,7 @@ public class WebUtilities {
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"transferts\">Transferts</a></li>");
         } else {
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"transferts\">Transferts</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"TransfertFromTransfertManag?status=deb\">New transfert</a></li>");
         }
         out.println("</ul>");
