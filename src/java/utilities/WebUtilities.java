@@ -63,7 +63,7 @@ public class WebUtilities {
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"transferts\">Transferts</a></li>");
         } else {
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"transferts\">Transferts</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"TransfertFromTransfertManag?status=deb\">New transfert</a></li>");
         }
         out.println("</ul>");
@@ -80,8 +80,6 @@ public class WebUtilities {
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index?trans=false\">Clients</a></li>");
             out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"transferes\">Transferts</a></li>");
         } else if (page.equalsIgnoreCase("clients")) {
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
@@ -127,6 +125,10 @@ public class WebUtilities {
             out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\">" + cli.getNom() + "_" + cli.getPrenom() + "</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getIdentifiant() + "\">" + cpte.getNom() + "</a></li>");
 
+        } else if (page.equalsIgnoreCase("transactions")) {
+            out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"index?trans=false\">Clients</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"gestionTransaction\">Transferts</a></li>");
         }
         out.println("</ul>");
         out.println("</div>");

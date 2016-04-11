@@ -6,6 +6,7 @@
 package servlets;
 
 import dao.TransactionDao;
+import static dao.UtilisateurDao.researchByUsername;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Transaction;
+import modele.Utilisateur;
 import utilities.WebUtilities;
 
 /**
@@ -39,7 +41,8 @@ public class gestionTransaction extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         listeTra = new ArrayList<Transaction>();
-        listeTra.addAll(TransactionDao.researchAll());
+        Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+        listeTra.addAll(TransactionDao.researchAll());        
 
         try {
             HtmlHttpUtils.isAuthenticate(request);
@@ -47,8 +50,10 @@ public class gestionTransaction extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
-        WebUtilities.doHeader(out, "Transfère compte à compte", "Choisir un client", request, "choixCli", Integer.valueOf(request.getParameter("id1")), 0);
+        WebUtilities.doHeader(out, "Liste des transactions", request, "transactions",0);
+
         try {
+            out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
             if (listeTra.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");
@@ -71,17 +76,19 @@ public class gestionTransaction extends HttpServlet {
                 }
                 out.println("</table>");
             }
-            //out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=-1&idCli=" + CompteDao.researchOwnerId(Integer.valueOf(request.getParameter("id1"))) + "\"class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i>Annuler</a>");
+
         } finally {
             WebUtilities.doFooter(out);
             out.close();
         }
+
         WebUtilities.doFooter(out);
+
         out.close();
 
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

@@ -67,9 +67,10 @@ public class TransactionDao {
             while (rs.next()) {
                 Integer id = rs.getInt("numero");
                 Compte cmpt_deb = new Compte();
-                cmpt_deb.setIdentifiant(rs.getInt("num_compte_deb"));
                 Compte cmpt_cred = new Compte();
-                cmpt_deb.setIdentifiant(rs.getInt("num_compte_cred"));
+                                
+                cmpt_deb.setIdentifiant(rs.getInt("num_compte_deb"));//CompteDao.researchById(rs.getInt("num_compte_deb"));
+                cmpt_cred.setIdentifiant(rs.getInt("num_compte_cred"));//CompteDao.researchById(rs.getInt("num_compte_cred"));
                 float montant = rs.getFloat("montant");
                 Date date = rs.getDate("date_trans");
                            
@@ -91,6 +92,57 @@ public class TransactionDao {
 
         }
     }
+    
+        /*public static ArrayList<Transaction> researchWithAccountNameByUser(Utilisateur user) {
+        ArrayList<Transaction> listTr = new ArrayList<Transaction>();
+        Connection cnx = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            cnx = OracleConnections.getConnection();
+
+            String query = "select t.numero as numero, c1.nom as nom_compte_debit, c2.nom as nom_compte_credit, t.montant as montant, t.date_trans as date "
+                    + "from transfert t where t.num_employe = ? "
+                    + "inner join compte c1 "
+                    + "on t.num_compte_deb = c1.numero "
+                    + "inner join compte c2 "
+                    + "on t.num_compte_cred = c2.numero";
+            pstmt = cnx.prepareStatement(query);
+            pstmt.setInt(1,user.getIdentifiant());
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                
+                Integer id = rs.getInt("numero");
+                
+                Compte cmpt_deb = new Compte();
+                cmpt_deb.setNom(rs.getString("nom_compte_debit"));
+                Compte cmpt_cred = new Compte();
+                cmpt_cred.setNom(rs.getString("nom_compte_credit"));
+                
+                float montant = rs.getFloat("montant");
+                Date date = rs.getDate("date_trans");
+                           
+                Transaction transaction = new Transaction(id,cmpt_deb,cmpt_cred,montant,date);
+                           
+                listTr.add(transaction);                
+            }
+            return listTr;
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return null;
+        } finally {
+            try {
+                rs.close();
+                pstmt.close();
+                cnx.close();
+            } catch (SQLException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
+
+        }
+    }*/
 
     public static ArrayList<Transaction> researchByUser(Utilisateur user) {
         ArrayList<Transaction> listTr = new ArrayList<Transaction>();
@@ -108,14 +160,13 @@ public class TransactionDao {
 
             while (rs.next()) {
                 Integer id = rs.getInt("numero");
-                Compte cmpt_deb = new Compte();
-                cmpt_deb.setIdentifiant(rs.getInt("num_compte_deb"));
-                Compte cmpt_cred = new Compte();
-                cmpt_deb.setIdentifiant(rs.getInt("num_compte_cred"));
+                Compte cmpt_deb = CompteDao.researchById(rs.getInt("num_compte_deb"));
+                Compte cmpt_cred = CompteDao.researchById(rs.getInt("num_compte_cred"));
                 float montant = rs.getFloat("montant");
                 Date date = rs.getDate("date_trans");
                            
                 Transaction transaction = new Transaction(id,cmpt_deb,cmpt_cred,montant,date);
+                           
                 listTr.add(transaction);                
             }
             return listTr;

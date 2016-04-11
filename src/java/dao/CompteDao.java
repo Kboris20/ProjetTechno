@@ -19,19 +19,20 @@ import oracle.jdbc.OracleTypes;
  * @author christop.francill
  */
 public class CompteDao {
-    public static long create(Compte cpt,int client_numero){
+
+    public static long create(Compte cpt, int client_numero) {
         Connection c = null;
         OraclePreparedStatement pstmt = null;
         ResultSet rs = null;
-        
+
         long rId = -1;
-        
-        try{
+
+        try {
             c = OracleConnections.getConnection();
-            
+
             StringBuilder sql = new StringBuilder("insert into compte(nom,solde,taux,numero_client) values (?,?,?,?) returning numero into ?");
             pstmt = (OraclePreparedStatement) c.prepareStatement(sql.toString());
-            
+
             pstmt.setString(1, cpt.getNom());
             pstmt.setFloat(2, cpt.getSolde());
             pstmt.setFloat(3, cpt.getTaux());
@@ -39,32 +40,32 @@ public class CompteDao {
             pstmt.registerReturnParameter(5, OracleTypes.NUMBER);
             pstmt.executeUpdate();
             c.commit();
-            
+
             rs = pstmt.getReturnResultSet();
-            while(rs.next()){
+            while (rs.next()) {
                 rId = rs.getLong(1);
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Error INSERT: " + ex.getMessage());
-        }finally{
-            try{
+        } finally {
+            try {
                 pstmt.close();
                 c.close();
-            }catch(SQLException ex){
+            } catch (SQLException ex) {
                 System.out.println("Error INSERT CLOSE: " + ex.getMessage());
             }
         }
-        
+
         return rId;
     }
-    
-    public static ArrayList<Compte> research(int client_numero){
+
+    public static ArrayList<Compte> research(int client_numero) {
         ArrayList<Compte> listCpt = new ArrayList<Compte>();
-        
+
         Connection cnx = null;
         Statement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             cnx = OracleConnections.getConnection();
 
@@ -97,16 +98,53 @@ public class CompteDao {
 
         }
     }
-    
-    public static ArrayList<Compte> research(Compte cpt){
+
+    public static Compte researchById(int cpt_id) {
+        Connection cnx = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            cnx = OracleConnections.getConnection();
+
+            String query = "select numero, nom, solde, taux from compte where numero = ?";
+            pstmt = cnx.prepareStatement(query);
+            pstmt.setInt(1,cpt_id);
+            rs = pstmt.executeQuery();
+
+            int numero = rs.getInt("numero");
+            String nom = rs.getString("nom");
+            float solde = rs.getFloat("solde");
+            float taux = rs.getFloat("taux");
+            
+            Compte compte = new Compte(numero,nom,solde,taux);            
+            
+            return compte;
+            
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return null;
+        } finally {
+            try {
+                rs.close();
+                pstmt.close();
+                cnx.close();
+            } catch (SQLException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
+
+        }
+    }
+
+    public static ArrayList<Compte> research(Compte cpt) {
         ArrayList<Compte> listCpt = new ArrayList<Compte>();
-        
+
         boolean and = false;
-        
+
         Connection cnx = null;
         Statement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             cnx = OracleConnections.getConnection();
 
@@ -148,8 +186,7 @@ public class CompteDao {
                     sql.append("'");
                 }
             }
-            
-            
+
             stmt = cnx.createStatement();
 
             rs = stmt.executeQuery(sql.toString());
@@ -177,8 +214,8 @@ public class CompteDao {
 
         }
     }
-    
-    public static void update(Compte cpt){
+
+    public static void update(Compte cpt) {
         Connection cnx = null;
         PreparedStatement pstmt = null;
 
@@ -205,8 +242,8 @@ public class CompteDao {
             }
         }
     }
-    
-    public static void delete(Compte cpt){
+
+    public static void delete(Compte cpt) {
         Connection cnx = null;
         PreparedStatement pstmt = null;
 
@@ -235,11 +272,11 @@ public class CompteDao {
         Connection cnx = null;
         Statement stmt = null;
         ResultSet rs = null;
-        
+
         String result = "";
         StringBuilder sql = new StringBuilder();
         System.out.println(cptId);
-        try{
+        try {
             cnx = OracleConnections.getConnection();
             sql = new StringBuilder("select c.nom, c.prenom from client c inner join compte cpt on cpt.numero_client=c.numero where cpt.numero=" + cptId);
             System.out.println("SQL Query: " + sql.toString());
@@ -248,11 +285,11 @@ public class CompteDao {
             rs = stmt.executeQuery(sql.toString());
 
             while (rs.next()) {
-                result = rs.getString("nom")+ " " +rs.getString("prenom");
+                result = rs.getString("nom") + " " + rs.getString("prenom");
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error SELECT SQL owner: " + ex.getMessage());
-        }finally{
+        } finally {
             try {
                 rs.close();
                 stmt.close();
@@ -263,19 +300,18 @@ public class CompteDao {
             }
             return null;
         }
-        
-        
+
     }
-    
+
     public static int researchOwnerId(int cptId) {
         Connection cnx = null;
         Statement stmt = null;
         ResultSet rs = null;
-        
+
         int result = -1;
         StringBuilder sql = new StringBuilder();
         System.out.println(cptId);
-        try{
+        try {
             cnx = OracleConnections.getConnection();
             sql = new StringBuilder("select c.numero as id from client c inner join compte cpt on cpt.numero_client=c.numero where cpt.numero=" + cptId);
             System.out.println("SQL Query: " + sql.toString());
@@ -286,9 +322,9 @@ public class CompteDao {
             while (rs.next()) {
                 result = rs.getInt("id");
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("Error SELECT SQL owner: " + ex.getMessage());
-        }finally{
+        } finally {
             try {
                 rs.close();
                 stmt.close();
@@ -299,7 +335,6 @@ public class CompteDao {
             }
             return -1;
         }
-        
-        
+
     }
 }
