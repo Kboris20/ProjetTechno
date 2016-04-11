@@ -68,7 +68,7 @@ public class CompteDao {
         try {
             cnx = OracleConnections.getConnection();
 
-            String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero);
+            String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero)+" order by nom";
 
             stmt = cnx.createStatement();
 

@@ -24,6 +24,8 @@ import utilities.WebUtilities;
  */
 public class allComptes extends HttpServlet {
 
+    private Integer nombreComptes;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -90,21 +92,24 @@ public class allComptes extends HttpServlet {
                         out.println("<form action=\"deleteMultiCompteConfirm\">");
                         out.println("<table class=\"table table-hover inset\" id=\"tableClientAllComptes\">");
                         out.println("<tr>");
-                        out.println("<td></td>");
-                        out.println("<td>Nom</td>");
-                        out.println("<td>Solde</td>");
-                        out.println("<td>Taux</td>");
+                        out.println("<td>&nbsp;</td>");
+                        out.println("<td class=\"listRow\">Nom</td>");
+                        out.println("<td class=\"listRow\">Solde</td>");
+                        out.println("<td class=\"listRow\">Taux</td>");
+                        out.println("<td>&nbsp;</td>");
                         out.println("<td>&nbsp;</td>");
                         out.println("<td>&nbsp;</td>");
                         out.println("</tr>");
+                        nombreComptes = 0;
                         for (Compte compt : cli.getListeCompte()) {
                             out.println("<tr class=\"trCompte\">");
 
-                            out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getIdentifiant() + "&id1=-1&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a></td>");
+                            out.println("<td>" + ++nombreComptes + "</td>");
                             out.println("<td>" + compt.getNom() + "</td>");
                             out.println("<td>" + compt.getSolde() + "</td>");
                             out.println("<td>" + compt.getTaux() + "</td>");
-                            out.println("<td><a href=\"modifierCompte?id=" + compt.getIdentifiant() + "&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                            out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getIdentifiant() + "&id1=-1&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a>");
+                            out.println("<a href=\"modifierCompte?id=" + compt.getIdentifiant() + "&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
                             out.println("<a href=\"afficherClient?id=" + compt.getIdentifiant() + "&idCli=" + cli.getIdentifiant() + "&dele=true\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
                             out.println("</tr>");
                         }
@@ -131,10 +136,10 @@ public class allComptes extends HttpServlet {
                 if (listeCpt.size() > 0) {
                     out.println("<table class=\"table table-hover\" id=\"tableComptesAllComptes\">");
                     out.println("<tr>");
-                    out.println("<td>Nom</td>");
-                    out.println("<td>Solde</td>");
-                    out.println("<td>Taux</td>");
-                    out.println("<td>Client</td>");
+                    out.println("<td class=\"listRow\">Nom</td>");
+                    out.println("<td class=\"listRow\">Solde</td>");
+                    out.println("<td class=\"listRow\">Taux</td>");
+                    out.println("<td class=\"listRow\">Client</td>");
                     out.println("</tr>");
                     for (Compte cpt : listeCpt) {
                         out.println("<tr>");

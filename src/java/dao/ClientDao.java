@@ -70,7 +70,7 @@ public class ClientDao {
             cnx = OracleConnections.getConnection();
 
             //String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero);
-            StringBuilder sql = new StringBuilder("select numero, nom, prenom, adresse, ville from client");
+            StringBuilder sql = new StringBuilder("select numero, nom, prenom, adresse, ville from client order by nom, prenom, adresse, ville");
         stmt = cnx.createStatement();
 
             rs = stmt.executeQuery(sql.toString());
