@@ -138,6 +138,12 @@ table{
     height:30px;
     width:80px;
 }
+
+.listRow{
+    font-family:georgia, serif;
+    font-size: 100%;
+    font-weight: bold;
+}
 /**
 *########################################################################
 **/

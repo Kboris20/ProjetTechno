@@ -22,6 +22,7 @@ import utilities.WebUtilities;
 public class listAll extends HttpServlet {
 
     private ArrayList<Client> listeCli;
+    private Integer nombreClient;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -109,38 +110,45 @@ public class listAll extends HttpServlet {
             } catch (Exception ex) {
             }
 
+            out.println("<div class=\"panel panel-default\">");
+            out.println("<div class=\"panel-heading\">");
+            out.println("<a href=\"ajouterClient.jsp\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Ajouter un client\"></i></a>");
+            out.println("</div>");
+
+            out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
+            out.println("<tr>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td class=\"listRow\">Nom</td>");
+            out.println("<td class=\"listRow\">Prenom</td>");
+            out.println("<td class=\"listRow\">Adresse</td>");
+            out.println("<td class=\"listRow\">Ville</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("</tr>");
+
             if (listeCli.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Il n'y a pas de client");
                 out.println("</div>");
             } else {
-                out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
-                out.println("<tr>");
-                out.println("<td>&nbsp;</td>");
-                out.println("<td>Nom</td>");
-                out.println("<td>Prenom</td>");
-                out.println("<td>Adresse</td>");
-                out.println("<td>Ville</td>");
-                out.println("<td>&nbsp;</td>");
-                out.println("<td>&nbsp;</td>");
-                out.println("</tr>");
+                nombreClient = 0;
                 for (Client cli : listeCli) {
                     out.println("<tr>");
-                    out.println("<td><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\"></i>Voir</a>");
+                    out.println("<td>" + ++nombreClient + "</td>");
                     out.println("<td>" + cli.getNom() + "</td>");
                     out.println("<td>" + cli.getPrenom() + "</td>");
                     out.println("<td>" + cli.getAdresse() + "</td>");
                     out.println("<td>" + cli.getVille() + "</td>");
-                    out.println("<td><a href=\"modifier?id=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\"></i>Modifier</a>");
-                    out.println("<td><a href=\"index?dele=true&id=" + cli.getIdentifiant() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\"></i>Supprimer</a>");
+                    out.println("<td><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\" title=\"Détailler\"></i></a>");
+                    out.println("<td><a href=\"modifier?id=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                    out.println("<td><a href=\"index?dele=true&id=" + cli.getIdentifiant() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a>");
                     out.println("</tr>");
                 }
-                out.println("</table>");
+
             }
-            out.println("<a href=\"ajouterClient.jsp\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i> Ajouter un client</a>");
-          
-            out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
-             
+            out.println("</table>");
+            out.println("</div>");
         } finally {
             WebUtilities.doFooter(out);
             out.close();

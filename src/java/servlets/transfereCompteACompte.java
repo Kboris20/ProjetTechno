@@ -77,9 +77,9 @@ public class transfereCompteACompte extends HttpServlet {
                 out.println("<h3>Transfère du compte de " + owner + " </h3>");
                 out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteaCompte\">");
                 out.println("<tr>");
-                out.println("<td>Nom</td>");
-                out.println("<td>Solde</td>");
-                out.println("<td>Taux</td>");
+                out.println("<td class=\"listRow\">Nom</td>");
+                out.println("<td class=\"listRow\">Solde</td>");
+                out.println("<td class=\"listRow\">Taux</td>");
                 out.println("<td>&nbsp;</td>");
                 out.println("<td>&nbsp;</td>");
                 out.println("</tr>");
@@ -120,9 +120,9 @@ public class transfereCompteACompte extends HttpServlet {
                         out.println("<h3>Au compte de " + ownerDest + " </h3>");
                         out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteACompte\">");
                         out.println("<tr>");
-                        out.println("<td>Nom</td>");
-                        out.println("<td>Solde</td>");
-                        out.println("<td>Taux</td>");
+                        out.println("<td class=\"listRow\">Nom</td>");
+                        out.println("<td class=\"listRow\">Solde</td>");
+                        out.println("<td class=\"listRow\">Taux</td>");
                         out.println("<td>&nbsp;</td>");
                         out.println("<td>&nbsp;</td>");
                         out.println("</tr>");
