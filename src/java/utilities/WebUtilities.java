@@ -127,7 +127,6 @@ public class WebUtilities {
 
         } else if (page.equalsIgnoreCase("transactions")) {
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"index?trans=false\">Clients</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"gestionTransaction\">Transferts</a></li>");
         }
         out.println("</ul>");

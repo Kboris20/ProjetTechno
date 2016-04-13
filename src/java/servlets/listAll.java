@@ -140,9 +140,11 @@ public class listAll extends HttpServlet {
                     out.println("<td>" + cli.getPrenom() + "</td>");
                     out.println("<td>" + cli.getAdresse() + "</td>");
                     out.println("<td>" + cli.getVille() + "</td>");
+                    out.println("<td></td>");
+                    out.println("<td></td>");
                     out.println("<td><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\" title=\"Détailler\"></i></a>");
-                    out.println("<td><a href=\"modifier?id=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
-                    out.println("<td><a href=\"index?dele=true&id=" + cli.getIdentifiant() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a>");
+                    out.println("<a href=\"modifier?id=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                    out.println("<a href=\"index?dele=true&id=" + cli.getIdentifiant() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
                     out.println("</tr>");
                 }
 
