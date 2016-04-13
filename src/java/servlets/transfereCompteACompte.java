@@ -74,10 +74,10 @@ public class transfereCompteACompte extends HttpServlet {
             if (cptListe.size() > 0) {
                 cpt = cptListe.get(0);
                 String owner = CompteDao.researchOwner(cpt.getIdentifiant());
-                out.println("<h3>Transfère du compte de " + owner + " </h3>");
+                out.println("<h3>Compte débité appartenant à Mme/M. " + owner + " </h3>");
                 out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteaCompte\">");
                 out.println("<tr>");
-                out.println("<td class=\"listRow\">Nom</td>");
+                out.println("<td class=\"listRow\">Compte</td>");
                 out.println("<td class=\"listRow\">Solde</td>");
                 out.println("<td class=\"listRow\">Taux</td>");
                 out.println("<td>&nbsp;</td>");
@@ -117,10 +117,10 @@ public class transfereCompteACompte extends HttpServlet {
                         String ownerDest = CompteDao.researchOwner(cptDest.getIdentifiant());
                         out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=" + request.getParameter("id") + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les rôles\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
                         out.println("<br/>");
-                        out.println("<h3>Au compte de " + ownerDest + " </h3>");
+                        out.println("<h3>Compte crédité appartenant à Mme/M. " + ownerDest + " </h3>");
                         out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteACompte\">");
                         out.println("<tr>");
-                        out.println("<td class=\"listRow\">Nom</td>");
+                        out.println("<td class=\"listRow\">Compte</td>");
                         out.println("<td class=\"listRow\">Solde</td>");
                         out.println("<td class=\"listRow\">Taux</td>");
                         out.println("<td>&nbsp;</td>");
@@ -153,7 +153,7 @@ public class transfereCompteACompte extends HttpServlet {
                     }
 
                 } else {
-                    out.println("<h3>Au compte... </h3>");
+                    out.println("<h3>Compte à créditer... </h3>");
                     out.println("<a href=\"transfereCompteACompte?transcli=true&id=" + request.getParameter("id") + "&id1=-1&idCli=" + request.getParameter("idCli") + "\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
 
                     try {

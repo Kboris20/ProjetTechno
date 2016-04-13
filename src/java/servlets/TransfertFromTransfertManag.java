@@ -159,10 +159,10 @@ public class TransfertFromTransfertManag extends HttpServlet {
 
                 idCompteDeb = Integer.valueOf(request.getParameter("idCompteDeb"));
                 out.println("<br/>");
-                out.println("<h3>Le compte à débiter: </h3>");
+                out.println("<h3>Le compte débité </h3>");
                 compte.setIdentifiant(idCompteDeb);
                 compteDeb = CompteDao.research(compte).get(0);
-                out.println("<b>Nom: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteDeb) + "</b>");
+                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteDeb) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
                 out.println("<h3>Veuillez entrer le compte à créditer: </h3>");
@@ -173,19 +173,19 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 idCompteDeb = Integer.valueOf(request.getParameter("idCompteDeb"));
                 idCompteCred = Integer.valueOf(request.getParameter("idCompteCred"));
                 out.println("<br/>");
-                out.println("<h3>Le compte à débiter: </h3>");
+                out.println("<h3>Le compte débité </h3>");
                 compte.setIdentifiant(idCompteDeb);
                 compteDeb = CompteDao.research(compte).get(0);
-                out.println("<b>Nom: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteDeb) + "</b>");
+                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteDeb) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
                 out.println("<a href=\"TransfertFromTransfertManag?status=allOk&idCompteDeb=" + idCompteCred + "&idCompteCred=" + idCompteDeb + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les comptes\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
                 out.println("<br/>");
                 out.println("<br/>");
-                out.println("<h3>Le compte à créditer: </h3>");
+                out.println("<h3>Le compte crédité </h3>");
                 compte.setIdentifiant(idCompteCred);
                 compteCred = CompteDao.research(compte).get(0);
-                out.println("<b>Nom: " + compteCred.getNom() + ", solde: " + compteCred.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteCred) + "</b>");
+                out.println("<b>Compte: " + compteCred.getNom() + ", solde: " + compteCred.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteCred) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
 

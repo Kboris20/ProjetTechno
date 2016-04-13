@@ -86,20 +86,25 @@ public class allComptes extends HttpServlet {
                         }
                     } catch (Exception ex) {
                     }
+
+                    out.println("<div class=\"panel panel-default\">");
+                    out.println("<div class=\"panel-heading\">");
                     out.println("<a href=\"ajouterCompte.jsp?idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
+                    out.println("</div>");
+
                     out.println("<br/>");
                     if (cli.getListeCompte().size() > 0) {
                         out.println("<form action=\"deleteMultiCompteConfirm\">");
                         out.println("<table class=\"table table-hover inset\" id=\"tableClientAllComptes\">");
-                        out.println("<tr>");
-                        out.println("<td>&nbsp;</td>");
-                        out.println("<td class=\"listRow\">Nom</td>");
-                        out.println("<td class=\"listRow\">Solde</td>");
-                        out.println("<td class=\"listRow\">Taux</td>");
-                        out.println("<td>&nbsp;</td>");
-                        out.println("<td>&nbsp;</td>");
-                        out.println("<td>&nbsp;</td>");
-                        out.println("</tr>");
+                        out.println("<thead>");
+                        out.println("<th>&nbsp;</td>");
+                        out.println("<th class=\"listRow\">Compte</td>");
+                        out.println("<th class=\"listRow\">Solde</td>");
+                        out.println("<th class=\"listRow\">Taux</td>");
+                        out.println("<th>&nbsp;</td>");
+                        out.println("<th>&nbsp;</td>");
+                        out.println("<th>&nbsp;</td>");
+                        out.println("</thead>");
                         nombreComptes = 0;
                         for (Compte compt : cli.getListeCompte()) {
                             out.println("<tr class=\"trCompte\">");
@@ -114,7 +119,7 @@ public class allComptes extends HttpServlet {
                             out.println("</tr>");
                         }
                         out.println("</table>");
-                        out.println("");
+                        out.println("</div>");
                         out.println("</form>");
                     } else {
                         out.println("<div class=\"alert\">");

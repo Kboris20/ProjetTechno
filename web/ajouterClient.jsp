@@ -9,35 +9,61 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    WebUtilities.doHeader(out, "Ajouter un client","", request, "ajouterClient");
+    WebUtilities.doHeader(out, "Ajouter un client", "", request, "ajouterClient");
     if (HtmlHttpUtils.isAuthenticate(request)) {
 %>
-        
+
+<div class="row">
+    <div class="col-sm-8">
         <form id="form1" name="form1" method="post" action="addClient">
+
+            <table>
+                <tr>
+                    <td>
+                        <label for="nom">Nom</label>
+                    </td>
+                    <td> 
+                        <input type="text" name="nom" id="nom" class="form-control" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="prenom">Prénom</label>
+                    </td>
+                    <td>
+                        <input type="text" name="prenom" id="prenom" class="form-control" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="adresse">Adresse</label>
+                    </td>
+                    <td>
+                        <input type="text" name="adresse" id="adresse"  class="form-control" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="ville">Ville</label>
+                    </td>
+                    <td>              
+                        <input type="text" name="ville" id="ville" class="form-control" required/>
+                    </td>
+                </tr>
+            </table>
             <p>
-              <label for="nom">Nom</label>
-              <input type="text" name="nom" id="nom" />
+                <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
+                <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
+                <!--a href="index?trans=false" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour à la liste</a-->
             </p>
-            <p>
-              <label for="prenom">Prénom</label>
-              <input type="text" name="prenom" id="prenom" />
-            </p>
-            <p>
-              <label for="adresse">Adresse</label>
-              <input type="text" name="adresse" id="adresse" />
-            </p>
-            <p>
-              <label for="ville">Ville</label>
-              <input type="text" name="ville" id="ville" />
-            </p>
-            <p>
-              <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
-              <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
-              <!--a href="index?trans=false" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour à la liste</a-->
-            </p>
-          </form>
+        </form>
+    </div>
+    <div class="col-sm-4">
+        <img src="http://localhost:8080/crud/theme/img/nouveau_client1.png" alt="image nouveau client"/>
+    </div>
+</div>
 <%
-         }else{
+    } else {
         response.sendRedirect(request.getContextPath() + "/login.jsp");
     }
     WebUtilities.doFooter(out, "ajouterClient");

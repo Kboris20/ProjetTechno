@@ -24,7 +24,7 @@
     <h3 class="h3 form-signin-heading"><span class="glyphicon glyphicon-user"></span> S'identifier</h3>
     <hr/>
     <br/>
-    <table>
+    <table class="tablePageConnection">
         <tr>
         <label for="username" class="sr-only">Nom d'utilisateur</label>
         <td class="td"><input type="text" id="username" name="username" class="form-control" placeholder="Nom d'utilisateur" required autofocus></td>
