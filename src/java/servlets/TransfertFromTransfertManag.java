@@ -162,7 +162,7 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 out.println("<h3>Le compte débité </h3>");
                 compte.setIdentifiant(idCompteDeb);
                 compteDeb = CompteDao.research(compte).get(0);
-                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteDeb) + "</b>");
+                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire Mme/M. : " + CompteDao.researchOwner(idCompteDeb) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
                 out.println("<h3>Veuillez entrer le compte à créditer: </h3>");
@@ -176,7 +176,7 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 out.println("<h3>Le compte débité </h3>");
                 compte.setIdentifiant(idCompteDeb);
                 compteDeb = CompteDao.research(compte).get(0);
-                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteDeb) + "</b>");
+                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire Mme/M. : " + CompteDao.researchOwner(idCompteDeb) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
                 out.println("<a href=\"TransfertFromTransfertManag?status=allOk&idCompteDeb=" + idCompteCred + "&idCompteCred=" + idCompteDeb + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les comptes\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
@@ -185,7 +185,7 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 out.println("<h3>Le compte crédité </h3>");
                 compte.setIdentifiant(idCompteCred);
                 compteCred = CompteDao.research(compte).get(0);
-                out.println("<b>Compte: " + compteCred.getNom() + ", solde: " + compteCred.getSolde() + ", propriétaire: " + CompteDao.researchOwner(idCompteCred) + "</b>");
+                out.println("<b>Compte: " + compteCred.getNom() + ", solde: " + compteCred.getSolde() + ", propriétaire Mme/M. : " + CompteDao.researchOwner(idCompteCred) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
 
