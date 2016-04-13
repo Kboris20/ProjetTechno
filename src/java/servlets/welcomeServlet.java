@@ -42,6 +42,7 @@ public class welcomeServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
             out.println("<hr/>");
+            
             out.println("<center>");
             out.println("<br/>");
             try {
@@ -50,19 +51,63 @@ public class welcomeServlet extends HttpServlet {
                 }
             } catch (NullPointerException ex) {
             }
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<td>");
+            
             out.println("<h3><b><u>Statistiques</u></b></h3>");
-            out.println("à implémenter");
-            out.println("<br/>");
-            out.println("<br/>");
-            out.println("</td>");
-            out.println("</tr>");
-
-            out.println("</table>");
+            out.println("<div class=\"row\">");
+            
+            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<h3>Bar Chart</h3>");
+            out.println("<canvas id=\"canvas\" height=\"450\" width=\"600\"></canvas>");
+            out.println("<script>");
+            out.println("var randomScalingFactor = function(){ return Math.round(Math.random()*100)};");
+            out.println("var barChartData = {");
+            out.println("labels : [\"January\",\"February\",\"March\",\"April\",\"May\",\"June\",\"July\"],");
+            out.println("datasets : [ {");
+            out.println("fillColor : \"rgba(297,125,49,1)\",");
+            out.println("strokeColor : \"rgba(0,0,0,1)\",");
+            out.println("highlightFill: \"rgba(220,220,220,0.75)\",");
+            out.println("highlightStroke: \"rgba(0,0,0,1)\",");
+            out.println("data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()] },");
+            out.println("{");
+            out.println("fillColor : \"rgba(217,217,217,1)\",");
+            out.println("strokeColor : \"rgba(0,0,0,1)\",");
+            out.println("highlightFill : \"rgba(165,165,165,1)\",");
+            out.println("highlightStroke : \"rgbargba(0,0,0,1)\",");
+            out.println("data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()] } ] }");
+            out.println("</script>");
+            out.println("</div>");
+            
+            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<h3>Pie Chart</h3>");
+            out.println("<canvas id=\"chart-area\" width=\"300\" height=\"300\"/>");
+            out.println("<script>");
+            out.println("var pieData = [ {");
+            out.println("value: 300,");
+            out.println("color:\"#ff1800\",");
+            out.println("highlight: \"#ffa49a\",");
+            out.println("label: \"Red\" },");
+            out.println("{");
+            out.println("value: 50,");
+            out.println("color: \"#00960b\",");
+            out.println("highlight: \"#80d286\",");
+            out.println("label: \"Green\" },");
+            out.println("{");
+            out.println("value: 100,");
+            out.println("color: \"#ed7d31\",");
+            out.println("highlight: \"#ecad83\",");
+            out.println("label: \"Orange\" } ];");
+            
+            out.println("window.onload = function(){");
+            out.println("var ctx = document.getElementById(\"chart-area\").getContext(\"2d\");");
+            out.println("window.myPie = new Chart(ctx).Pie(pieData);");
+            out.println("var ctx = document.getElementById(\"canvas\").getContext(\"2d\");");
+            out.println("window.myBar = new Chart(ctx).Bar(barChartData, { responsive : true }); };");
+            out.println("</script>");
+            out.println(" </div>");
+                    
             out.println("</center>");
-
+            out.println(" </div>");
+            
         } finally {
             WebUtilities.doFooter(out);
             out.close();
