@@ -22,7 +22,6 @@ import utilities.WebUtilities;
  */
 public class WelcomeServlet extends HttpServlet {
     public static ArrayList<Client> listeCli;
-    private Integer nombreClient;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

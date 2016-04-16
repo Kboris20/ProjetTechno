@@ -87,6 +87,10 @@
     width:80%;
 }
 
+#form1{
+    margin:auto;
+}
+
 .divCommonHeader { 
     margin:0% ; 
     border-radius: 25px; 

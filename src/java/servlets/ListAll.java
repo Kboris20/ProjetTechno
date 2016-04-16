@@ -112,7 +112,22 @@ public class ListAll extends HttpServlet {
 
             out.println("<div class=\"panel panel-default\">");
             out.println("<div class=\"panel-heading\">");
-            out.println("<a href=\"ajouterClient.jsp\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Ajouter un client\"></i></a>");
+            out.println("<a class=\"btn btn-primary addC\"><i class=\"icon-white icon-plus\" title=\"Ajouter un client\"></i></a>");
+            out.println("<div class=\"add\">\n"
+                    + "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"addClient\">"
+                    + "<table><tr>"
+                    + "<td><button title=\"Sauvegarder\" type=\"submit\"><span class=\"glyphicon glyphicon-ok\"></span></button>"
+                    + "<a class=\"retour\"><span class=\"glyphicon glyphicon-share-alt\" title=\"Annuler\"></span></a></td>"
+                    + "</tr><tr>"
+                    + "<td><input type=\"text\" name=\"nom\" placeholder=\"Nom\" required/></td>"
+                    + "<td><input type=\"text\" name=\"prenom\" placeholder=\"Prenom\" required/></td>"
+                    + "<td><input type=\"text\" name=\"adresse\" placeholder=\"Adresse\" required/></td>"
+                    + "<td><input type=\"text\" name=\"ville\" placeholder=\"Ville\" required/></td>"
+                    + "<td><img src=\"http://localhost:8080/crud/theme/img/nouveau_client1.png\" alt=\"image nouveau client\"/></td>"
+                    
+                    + "</tr></table></form>"
+                    + "</div>");
+
             out.println("</div>");
 
             out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
