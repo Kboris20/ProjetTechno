@@ -59,7 +59,7 @@ public class GestionTransaction extends HttpServlet {
         WebUtilities.doHeader(out, "Liste des transactions", request, "transactions",0);
 
         try {
-            out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
+            out.println("<a href=\"TransfertFromTransfertManag?status=deb&idCompteDeb=-1&idCompteCred=-1\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
             if (listeTraJoin.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");
