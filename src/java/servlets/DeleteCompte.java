@@ -1,10 +1,10 @@
-/*
+                                                                                       /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package servlets;
 
-import dao.ClientDao;
+import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -12,17 +12,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
+import modele.Compte;
 
 /**
  *
  * @author christop.francill
  */
-public class doModifier extends HttpServlet {
+public class DeleteCompte extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -33,38 +34,32 @@ public class doModifier extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-
+        
         try {
-            Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Client> cliListe = ClientDao.research(cli);
-            if (cliListe.size() > 0) {
-                cli = cliListe.get(0);
-                cli.setNom(request.getParameter("nom"));
-                cli.setPrenom(request.getParameter("prenom"));
-                cli.setAdresse(request.getParameter("adresse"));
-                cli.setVille(request.getParameter("ville"));
-                ClientDao.update(cli);
-                response.sendRedirect(request.getContextPath() + "/modifier?id=" + cli.getIdentifiant() + "&mod=true");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/index?mod=error1");
+            Compte cpt = new Compte();
+            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Compte> cptListe = CompteDao.research(cpt);
+            if(cptListe.size()>0){
+                cpt = cptListe.get(0);
+                CompteDao.delete(cpt);
+                response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=true");
+            }else{
+                response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=error1");
             }
-        } catch (Exception ex) {
-            response.sendRedirect(request.getContextPath() + "/index?mod=error2&text=\"" + ex.getMessage() + "\"");
-        } finally {
+        } finally {            
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -78,7 +73,8 @@ public class doModifier extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

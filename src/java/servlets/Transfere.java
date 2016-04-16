@@ -27,7 +27,7 @@ import modele.Utilisateur;
  *
  * @author boris.klett
  */
-public class transfere extends HttpServlet {
+public class Transfere extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -105,9 +105,9 @@ public class transfere extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NegativeAmmountException ex) {
-            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InsufficientBalanceException ex) {
-            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -125,9 +125,9 @@ public class transfere extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NegativeAmmountException ex) {
-            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InsufficientBalanceException ex) {
-            Logger.getLogger(transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

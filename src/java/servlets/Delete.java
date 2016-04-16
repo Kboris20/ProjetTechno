@@ -5,7 +5,6 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,14 +13,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Compte;
-import utilities.WebUtilities;
 
 /**
  *
  * @author christop.francill
  */
-public class doModifierCompte extends HttpServlet {
+public class Delete extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,42 +33,28 @@ public class doModifierCompte extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
-        WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
         try {
             Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
+            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
-
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
-
-                Compte cpt = new Compte();
-                cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-                if (CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()) {
-                    cpt.setNom(request.getParameter("nom"));
-                    cpt.setSolde(Float.valueOf(request.getParameter("solde")));
-                    cpt.setTaux(Float.valueOf(request.getParameter("taux")));
-
-                    CompteDao.update(cpt);
-
-                    response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + cli.getIdentifiant() + "&modCpt=true");
+                if (ClientDao.delete(cli)) {
+                    response.sendRedirect(request.getContextPath() + "/index?del=true");
                 } else {
-                    WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
-                    out.println("<div class=\"alert alert-error\">");
-                    out.println("Ce compte n'appartient pas au bon client.");
-                    out.println("</div>");
-                    WebUtilities.doFooter(out);
+                    response.sendRedirect(request.getContextPath() + "/index?del=false");
                 }
             } else {
-                out.println("Aucun client n'existe avec cet identifiant.");
+                response.sendRedirect(request.getContextPath() + "/index?del=error1");
             }
+        } catch (Exception ex) {
+            response.sendRedirect(request.getContextPath() + "/index?del=error2&text=\"" + ex.getMessage() + "\"");
         } finally {
             out.close();
         }

@@ -9,7 +9,6 @@ import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ import utilities.WebUtilities;
  *
  * @author christop.francill
  */
-public class displayClient extends HttpServlet {
+public class DoModifierCompte extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,61 +43,36 @@ public class displayClient extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
+        WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
         try {
-
-            WebUtilities.doHeader(out, "Afficher un client", request, "clientDetail", Integer.parseInt(request.getParameter("idCli")));
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
-            ArrayList<Client> cliListe = new ArrayList<Client>();
-            cliListe.addAll(ClientDao.research(cli));
+            ArrayList<Client> cliListe = ClientDao.research(cli);
 
-            if (cliListe.size() > 0) {
+            if (!cliListe.isEmpty()) {
                 cli = cliListe.get(0);
-                /* TODO output your page here. You may use following sample code. */
-                try {
-                    if (request.getParameter("add").equals("true")) {
-                        out.println("<div class=\"alert alert-success\">");
-                        out.println("Client crée.");
-                        out.println("</div>");
-                    }
-                } catch (Exception ex) {
+
+                Compte cpt = new Compte();
+                cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+                if (CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()) {
+                    cpt.setNom(request.getParameter("nom"));
+                    cpt.setSolde(Float.valueOf(request.getParameter("solde")));
+                    cpt.setTaux(Float.valueOf(request.getParameter("taux")));
+
+                    CompteDao.update(cpt);
+
+                    response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + cli.getIdentifiant() + "&modCpt=true");
+                } else {
+                    WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
+                    out.println("<div class=\"alert alert-error\">");
+                    out.println("Ce compte n'appartient pas au bon client.");
+                    out.println("</div>");
+                    WebUtilities.doFooter(out);
                 }
-                out.println("<fieldset><legend>" + cli.getNom() + " " + cli.getPrenom() + "</legend>");
-                out.println(cli.getAdresse() + "<br/>");
-                out.println(cli.getVille());
-
-                try {
-                    if (request.getParameter("dele").equalsIgnoreCase("true")) {
-                        out.println("<div id=\"popupDeleteClientDisplayClient\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
-                        out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
-                        ArrayList<Compte> listeCmpt = new ArrayList<Compte>();
-                        Compte c = new Compte();
-                        c.setIdentifiant(Integer.valueOf(request.getParameter("id")));
-                        listeCmpt.addAll(CompteDao.research(c));
-                        out.println("<b><u>Confirmation</u></b>");
-                        out.println("<p>Voulez vous réellement supprimer le compte</p>");
-                        out.println("<b> " + listeCmpt.get(0).getNom() + ", solde: " + listeCmpt.get(0).getSolde() + "</b>");
-                        out.println("<br/>");
-                        out.println("<a href=\"deleteCompte?id=" + request.getParameter("id") + "&cliId=" + request.getParameter("idCli") + "\" class=\"btn btn-danger btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span></a>");
-                        out.println("</div>");
-                    }
-                } catch (Exception ex) {
-                }
-
-                RequestDispatcher dispatcher = request.getRequestDispatcher("allComptes?idCli=" + cli.getIdentifiant());
-                dispatcher.include(request, response);
-
-                out.println("</fieldset>");
             } else {
-                out.println("<div class=\"alert\">");
                 out.println("Aucun client n'existe avec cet identifiant.");
-                out.println("</div>");
             }
-            out.println("<br/><br/>");
-        } catch (Exception ex) {
-            out.println(ex.getMessage());
         } finally {
-            WebUtilities.doFooter(out);
             out.close();
         }
     }

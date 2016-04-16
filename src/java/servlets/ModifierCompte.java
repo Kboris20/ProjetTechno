@@ -21,12 +21,11 @@ import utilities.WebUtilities;
  *
  * @author christop.francill
  */
-public class modifierCompte extends HttpServlet {
+public class ModifierCompte extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -37,60 +36,76 @@ public class modifierCompte extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-        
-         WebUtilities.doHeader(out, "Modifier un compte", request, "compteMod", Integer.valueOf(request.getParameter("id")));
+
+        WebUtilities.doHeader(out, "Modifier un compte", request, "compteMod", Integer.valueOf(request.getParameter("id")));
         try {
             Client cli = new Client();
             cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
-            
-            if(cliListe.size()>0){
+
+            if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
-                
+
                 Compte cpt = new Compte();
                 cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
                 ArrayList<Compte> listeCpt = CompteDao.research(cpt);
-                if(listeCpt.size()>0){
+                if (listeCpt.size() > 0) {
                     cpt = listeCpt.get(0);
-                    if(CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()){
-                        out.println("<form  id=\"form1\" name=\"form1\" method=\"post\"  action=\"doModifierCompte\">");
-                            out.println("<input type=\"hidden\" name=\"idCli\" value=\""+ cli.getIdentifiant() +"\"/>");
-                            out.println("<input type=\"hidden\" name=\"id\" value=\""+ cpt.getIdentifiant() +"\"/>");
-                            out.println("<p>");
-                                out.println("<label for=\"nom\">Nom</label>");
-                                out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\""+ cpt.getNom() +"\"/>");
-                              out.println("</p>");
-                              out.println("<p>");
-                                out.println("<label for=\"solde\">Solde</label>");
-                                out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\""+ cpt.getSolde() +"\"/>");
-                              out.println("</p>");
-                              out.println("<p>");
-                                out.println("<label for=\"taux\">Taux</label>");
-                                out.println("<input type=\"text\" name=\"taux\" id=\"taux\" value=\""+ cpt.getTaux() +"\"/>");
-                              out.println("</p>");
-                              out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
+                    if (CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()) {
+                        out.println("<div class=\"row\"><div class=\"col-sm-8\">");
+                        out.println("<form  id=\"form1\" name=\"form1\" method=\"get\"  action=\"doModifierCompte\">");
+
+                        out.println("<input type=\"hidden\" name=\"idCli\" value=\"" + cli.getIdentifiant() + "\"/>");
+
+                        out.println("<input type=\"hidden\" name=\"id\" value=\"" + cpt.getIdentifiant() + "\"/>");
+                        out.println("<table><tr><td>");
+                        out.println("<label for=\"nom\">Compte</label>");
+                        out.println("</td>");
+                        out.println("<td>");
+                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cpt.getNom() + "\" required/>");
+                        out.println("</td>");
+                        out.println("</tr>");
+                        out.println("<tr>");
+                        out.println("<td>");
+                        out.println("<label for=\"solde\">Solde</label>");
+                        out.println("</td>");
+                        out.println("<td>");
+                        out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\"" + cpt.getSolde() + "\" required/>");
+                        out.println("</td>");
+                        out.println("</tr>");
+                        out.println("<tr>");
+                        out.println("<td>");
+                        out.println("<label for=\"taux\">Taux</label>");
+                        out.println("</td>");
+                        out.println("<td>");
+                        out.println("<input type=\"text\" name=\"taux\" id=\"taux\" value=\"" + cpt.getTaux() + "\" required/>");
+                        out.println("</td>");
+                        out.println("</tr>");
+                        out.println("</table>");
+                        out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
                         out.println("</form>");
-                    }else{
+                        out.println("</div><div class=\"col-sm-4\"><img src=\"http://localhost:8080/crud/theme/img/modifier_compte.png\" alt=\"image nouveau compte\"/></div></div>");
+                    } else {
                         out.println("<div class=\"alert alert-warning\">");
                         out.println("Ce compte n'appartient pas au bon client.");
                         out.println("</div>");
                     }
                 }
-            }else{
+            } else {
                 out.println("<div class=\"alert alert-warning\">");
                 out.println("Aucun client n'existe avec cet identifiant.");
                 out.println("</div>");
             }
-            
+
             //out.println("<a href=\"afficherClient?id=" + cli.getIdentifiant() + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
         } finally {
-            
+
             WebUtilities.doFooter(out);
             out.close();
         }
@@ -98,8 +113,7 @@ public class modifierCompte extends HttpServlet {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -113,8 +127,7 @@ public class modifierCompte extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

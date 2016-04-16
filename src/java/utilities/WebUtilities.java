@@ -25,6 +25,7 @@ public class WebUtilities {
         out.println("<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css\" integrity=\"sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r\" crossorigin=\"anonymous\">");
         out.println("<!-- Latest compiled and minified JavaScript -->");
         out.println("<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js\" integrity=\"sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS\" crossorigin=\"anonymous\"></script>");
+        out.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\"></script>");
 
         out.println("<meta name=\"viewport\" content=\"width=device-width; initial-scale=0.5; maximum-scale=0.5; user-scalable=0;\" />");
         out.println("<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />");
@@ -223,6 +224,7 @@ public class WebUtilities {
         out.println("</div>");
         out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
         out.println("<script src=\"bootstrap/js/bootstrap.min.js\"></script>");
+        out.println("<script type=\"text/javascript\" src=\"theme/js/Jquery.js\"></script>");
         out.println("</body>");
         out.println("</html>");
     }
@@ -232,6 +234,7 @@ public class WebUtilities {
             out.println("</div>");
             out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
             out.println("<script src=\"bootstrap/js/bootstrap.min.js\"></script>");
+            out.println("<script type=\"text/javascript\" src=\"theme/js/Jquery.js\"></script>");
             out.println("</body>");
             out.println("</html>");
         } else {
@@ -240,6 +243,7 @@ public class WebUtilities {
             out.println("</div>");
             out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
             out.println("<script src=\"bootstrap/js/bootstrap.min.js\"></script>");
+            out.println("<script type=\"text/javascript\" src=\"theme/js/Jquery.js\"></script>");
             out.println("</body>");
             out.println("</html>");
         }

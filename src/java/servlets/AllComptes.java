@@ -22,7 +22,7 @@ import utilities.WebUtilities;
  *
  * @author christop.francill
  */
-public class allComptes extends HttpServlet {
+public class AllComptes extends HttpServlet {
 
     private Integer nombreComptes;
 

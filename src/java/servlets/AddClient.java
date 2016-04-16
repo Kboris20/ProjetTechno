@@ -1,23 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package servlets;
 
+import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utilities.WebUtilities;
+import modele.Client;
 
 /**
  *
- * @author boris.klett
+ * @author christop.francill
  */
-public class welcomeServlet extends HttpServlet {
+public class AddClient extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,6 +32,7 @@ public class welcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
@@ -39,32 +40,18 @@ public class welcomeServlet extends HttpServlet {
         }
 
         try {
-            /* TODO output your page here. You may use following sample code. */
-            WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
-            out.println("<hr/>");
-            out.println("<center>");
-            out.println("<br/>");
-            try {
-                if (request.getParameter("nbFois") == null) {
-                    out.println("<h2>Bonjour Mme/M : " + HtmlHttpUtils.getUser(request) + " !</h2>");
-                }
-            } catch (NullPointerException ex) {
-            }
-            out.println("<table>");
-            out.println("<tr>");
-            out.println("<td>");
-            out.println("<h3><b><u>Statistiques</u></b></h3>");
-            out.println("à implémenter");
-            out.println("<br/>");
-            out.println("<br/>");
-            out.println("</td>");
-            out.println("</tr>");
 
-            out.println("</table>");
-            out.println("</center>");
+            Client newCli = new Client();
+            newCli.setNom(request.getParameter("nom"));
+            newCli.setPrenom(request.getParameter("prenom"));
+            newCli.setAdresse(request.getParameter("adresse"));
+            newCli.setVille(request.getParameter("ville"));
+
+            int identifiant = (int) ClientDao.create(newCli);
+
+            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + identifiant + "&add=true");
 
         } finally {
-            WebUtilities.doFooter(out);
             out.close();
         }
     }
@@ -107,5 +94,4 @@ public class welcomeServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

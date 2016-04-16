@@ -4,25 +4,25 @@
  */
 package servlets;
 
-import dao.ClientDao;
+import dao.CompteDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
+import modele.Compte;
 
 /**
  *
  * @author christop.francill
  */
-public class delete extends HttpServlet {
+public class AddCompte extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -33,36 +33,31 @@ public class delete extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-
+        
         try {
-            Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Client> cliListe = ClientDao.research(cli);
-            if (cliListe.size() > 0) {
-                cli = cliListe.get(0);
-                if (ClientDao.delete(cli)) {
-                    response.sendRedirect(request.getContextPath() + "/index?del=true");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/index?del=false");
-                }
-            } else {
-                response.sendRedirect(request.getContextPath() + "/index?del=error1");
-            }
-        } catch (Exception ex) {
-            response.sendRedirect(request.getContextPath() + "/index?del=error2&text=\"" + ex.getMessage() + "\"");
-        } finally {
+            Compte newCompt = new Compte();
+            newCompt.setNom(request.getParameter("nom"));
+            newCompt.setSolde(Float.parseFloat(request.getParameter("solde")));
+            newCompt.setTaux(Float.parseFloat(request.getParameter("taux")));
+                        
+            CompteDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
+
+            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
+        } finally {            
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -76,7 +71,8 @@ public class delete extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

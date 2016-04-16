@@ -19,7 +19,7 @@ import modele.Compte;
  *
  * @author boris.klett
  */
-public class transfereCheck extends HttpServlet {
+public class TransfereCheck extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

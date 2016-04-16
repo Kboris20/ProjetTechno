@@ -7,17 +7,19 @@ package servlets;
 import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
+import utilities.WebUtilities;
 
 /**
  *
  * @author christop.francill
  */
-public class addClient extends HttpServlet {
+public class DisplayModifierClient extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,26 +34,57 @@ public class addClient extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-
         try {
+            Client cli = new Client();
+            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Client> cliListe = ClientDao.research(cli);
+            WebUtilities.doHeader(out, "Modifier un client", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
 
-            Client newCli = new Client();
-            newCli.setNom(request.getParameter("nom"));
-            newCli.setPrenom(request.getParameter("prenom"));
-            newCli.setAdresse(request.getParameter("adresse"));
-            newCli.setVille(request.getParameter("ville"));
+            try {
+                String modParam = request.getParameter("mod");
 
-            int identifiant = (int) ClientDao.create(newCli);
+                if (modParam.equals("true")) {
+                    out.println("<div class=\"alert alert-success\">");
+                    out.println("Client modifié.");
+                    out.println("</div>");
+                }
+            } catch (Exception ex) {
+            }
 
-            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + identifiant + "&add=true");
-
+            if (cliListe.size() > 0) {
+                cli = cliListe.get(0);
+                out.println("<form  id=\"form1\" name=\"form1\" method=\"post\"  action=\"doModifier\">");
+                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cli.getIdentifiant() + "\"/>");
+                out.println("<p>");
+                out.println("<label for=\"nom\">Nom</label>");
+                out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cli.getNom() + "\"/>");
+                out.println("</p>");
+                out.println("<p>");
+                out.println("<label for=\"prenom\">Prénom</label>");
+                out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\"" + cli.getPrenom() + "\"/>");
+                out.println("</p>");
+                out.println("<p>");
+                out.println("<label for=\"adresse\">Adresse</label>");
+                out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\"" + cli.getAdresse() + "\"/>");
+                out.println("</p>");
+                out.println("<p>");
+                out.println("<label for=\"ville\">Ville</label>");
+                out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\"" + cli.getVille() + "\"/>");
+                out.println("</p>");
+                out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
+                out.println("</form>");
+            } else {
+                out.println("<div class=\"alert alert-warning\">");
+                out.println("Aucun client n'existe avec cet identifiant.");
+                out.println("</div>");
+            }
         } finally {
+            WebUtilities.doFooter(out);
             out.close();
         }
     }

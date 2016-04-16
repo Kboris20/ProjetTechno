@@ -19,9 +19,9 @@ import utilities.WebUtilities;
  *
  * @author christop.francill
  */
-public class listAll extends HttpServlet {
+public class ListAll extends HttpServlet {
 
-    private ArrayList<Client> listeCli;
+    public static ArrayList<Client> listeCli;
     private Integer nombreClient;
 
     /**

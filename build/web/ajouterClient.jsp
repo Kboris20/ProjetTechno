@@ -23,7 +23,7 @@
                         <label for="nom">Nom</label>
                     </td>
                     <td> 
-                        <input type="text" name="nom" id="nom" class="form-control" required/>
+                        <input type="text" name="nom" id="nom" required/>
                     </td>
                 </tr>
                 <tr>
@@ -31,7 +31,7 @@
                         <label for="prenom">Prénom</label>
                     </td>
                     <td>
-                        <input type="text" name="prenom" id="prenom" class="form-control" required/>
+                        <input type="text" name="prenom" id="prenom" required/>
                     </td>
                 </tr>
                 <tr>
@@ -39,7 +39,7 @@
                         <label for="adresse">Adresse</label>
                     </td>
                     <td>
-                        <input type="text" name="adresse" id="adresse"  class="form-control" required/>
+                        <input type="text" name="adresse" id="adresse" required/>
                     </td>
                 </tr>
                 <tr>
@@ -47,7 +47,7 @@
                         <label for="ville">Ville</label>
                     </td>
                     <td>              
-                        <input type="text" name="ville" id="ville" class="form-control" required/>
+                        <input type="text" name="ville" id="ville" required/>
                     </td>
                 </tr>
             </table>
