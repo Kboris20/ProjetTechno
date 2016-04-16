@@ -154,12 +154,11 @@ public class TransfereCompteACompte extends HttpServlet {
                 } else {
                     out.println("<h3>Compte à créditer... </h3>");
                     out.println("<a class=\"btn btn-primary choisirCompte\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
-//                    out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
 
                     out.println("<div id=\"popupChoixCliTransfCompte\" class=\"alert alert-warning alert-dismissible clients\" role=\"alert\">");
                     out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
                     ArrayList<Client> listeCli = new ArrayList<Client>();
-                    listeCli.addAll(ListAll.listeCli);
+                    listeCli.addAll(WelcomeServlet.listeCli);
                     out.println("<div class=\"list-group\">");
                     out.println("<a class=\"list-group-item disabled\">Liste des clients</a>");
 
@@ -169,7 +168,7 @@ public class TransfereCompteACompte extends HttpServlet {
                             ArrayList<Compte> comptListe = new ArrayList<Compte>();
                             out.println("<div id=\"compte_" + cli.getIdentifiant() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
                             out.println("<div class=\"list-group\">");
-                            out.println("<a href=\"#\" class=\"list-group-item disabled\">Comptes</a>");
+                            out.println("<a href=\"#this\" class=\"list-group-item disabled\">Comptes</a>");
                             for (Compte c : cli.getListeCompte()) {
                                 if (c.getIdentifiant() != Integer.valueOf(request.getParameter("id"))) {
                                     comptListe.add(c);
@@ -178,19 +177,19 @@ public class TransfereCompteACompte extends HttpServlet {
                             if (!comptListe.isEmpty()) {
 
                                 for (Compte compte : comptListe) {
-                                    out.println("<a onClick=\"Ap()\" class=\"list-group-item\">Compte: " + compte.getNom() + ", Solde: " + compte.getSolde() + "</a>");
+                                    out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id") + "&id1=" + compte.getIdentifiant() + "&idCli=" + request.getParameter("idCli") + "\" class=\"list-group-item\">Compte: " + compte.getNom() + ", Solde: " + compte.getSolde() + "</a>");
 
                                 }
                             } else {
-                                out.println("<a href=\"#\" class=\"list-group-item disabled\"><i>Pas de compte disponible!</i></a>");
+                                out.println("<a href=\"#this\" class=\"list-group-item disabled\"><i>Pas de compte disponible!</i></a>");
                             }
                             out.println("</div></div>");
                         }
 
                     }
-                }
+                
                 out.println("</div>");
-                out.println("</div>");
+                out.println("</div>");}
 
             } else {
                 out.println("<div class=\"alert alert-warning\">");

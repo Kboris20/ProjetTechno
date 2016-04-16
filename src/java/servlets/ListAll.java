@@ -21,7 +21,7 @@ import utilities.WebUtilities;
  */
 public class ListAll extends HttpServlet {
 
-    public static ArrayList<Client> listeCli;
+    private ArrayList<Client> listeCli;
     private Integer nombreClient;
 
     /**
@@ -39,7 +39,7 @@ public class ListAll extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         listeCli = new ArrayList<Client>();
-        listeCli.addAll(ClientDao.researchAll());
+        listeCli.addAll(WelcomeServlet.listeCli);
 
 //        String transfereToClient = new String();
 //        transfereToClient = request.getParameter("trans");

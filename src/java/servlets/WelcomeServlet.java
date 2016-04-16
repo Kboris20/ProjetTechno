@@ -5,12 +5,15 @@
  */
 package servlets;
 
+import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modele.Client;
 import utilities.WebUtilities;
 
 /**
@@ -18,6 +21,8 @@ import utilities.WebUtilities;
  * @author boris.klett
  */
 public class WelcomeServlet extends HttpServlet {
+    public static ArrayList<Client> listeCli;
+    private Integer nombreClient;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,6 +37,8 @@ public class WelcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        listeCli = new ArrayList<Client>();
+        listeCli.addAll(ClientDao.researchAll());
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
