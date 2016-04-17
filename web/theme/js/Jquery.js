@@ -1,8 +1,15 @@
+function getClients() {
+    $.get("GetClients", function(responseText) {
+        $("#resultat").html(responseText);
+    });
+}
+
 $(document).ready(function() {
     $(".clients").hide();
     $(".comptes").hide();
     $(".fermer").hide();
     $(".add").hide();
+    getClients();
 });
 $(".choisirCompte").click(function() {
     $(".choisirCompte").slideUp();
