@@ -10,6 +10,9 @@ import dao.TransactionDao;
 import static dao.UtilisateurDao.researchByUsername;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -42,13 +45,16 @@ public class GestionTransaction extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
-        Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);       
-        
+
+        Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+
         listeTra = new ArrayList<Transaction>();
         listeTra.addAll(TransactionDao.researchAll());
         listeTraJoin = new ArrayList<TransactionAdvanced>();
         listeTraJoin.addAll(TransactionAdvancedDao.researchByUser(current_user));
+        
+        SimpleDateFormat formater = new SimpleDateFormat("dd MMMM yyyy");   
+        DecimalFormat myFormatter = new DecimalFormat("###.00 CHF");
         
         try {
             HtmlHttpUtils.isAuthenticate(request);
@@ -56,8 +62,13 @@ public class GestionTransaction extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
-        WebUtilities.doHeader(out, "Liste des transactions", request, "transactions",0);
-
+        WebUtilities.doHeader(out, "Liste des transactions", request, "transactions", 0);
+        
+        out.println("<div class=\"panel panel-default\">");
+        out.println("<div class=\"panel-heading\">");
+        out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
+        out.println("</div>");
+        
         try {
             out.println("<a href=\"TransfertFromTransfertManag?status=deb&idCompteDeb=-1&idCompteCred=-1\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
             if (listeTraJoin.isEmpty()) {
@@ -65,6 +76,7 @@ public class GestionTransaction extends HttpServlet {
                 out.println("Vous n'avez fait encore aucune transaction");
                 out.println("</div>");
             } else {
+
                 out.println("<table class=\"table table-hover\" style=\"width: 100%;\">");
                 out.println("<tr>");
                 out.println("<td class=\"listRow\">Client débit</td>");
@@ -76,25 +88,22 @@ public class GestionTransaction extends HttpServlet {
                 out.println("</tr>");
                 for (TransactionAdvanced tra : listeTraJoin) {
                     out.println("<tr>");
-                    out.println("<td>" + tra.getClient_debit()+ "</td>");
-                    out.println("<td>" + tra.getCompte_debit()+ "</td>");
+                    out.println("<td>" + tra.getClient_debit() + "</td>");
+                    out.println("<td>" + tra.getCompte_debit() + "</td>");
                     out.println("<td>" + tra.getClient_credit() + "</td>");
                     out.println("<td>" + tra.getCompte_credit() + "</td>");
-                    out.println("<td>" + tra.getMontant() + "</td>");
-                    out.println("<td>" + tra.getDate() + "</td>");
+                    out.println("<td>" + myFormatter.format(tra.getMontant()) + "</td>");
+                    out.println("<td>" + formater.format(tra.getDate()) + "</td>");
                     out.println("</tr>");
                 }
                 out.println("</table>");
             }
-
+            out.println("</table>");
+            out.println("</div>");
         } finally {
             WebUtilities.doFooter(out);
             out.close();
         }
-
-        WebUtilities.doFooter(out);
-
-        out.close();
 
     }
 
