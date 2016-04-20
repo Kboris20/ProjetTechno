@@ -36,6 +36,7 @@ public class welcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        String userConnected = HtmlHttpUtils.getUser(request);
 
         try {
             HtmlHttpUtils.isAuthenticate(request);
@@ -52,13 +53,15 @@ public class welcomeServlet extends HttpServlet {
             out.println("<br/>");
             try {
                 if (request.getParameter("nbFois") == null) {
-                    out.println("<h2>Bonjour Mme/M : " + HtmlHttpUtils.getUser(request) + " !</h2>");
+                    out.println("<h2>Bonjour Mme/M : " + userConnected + " !</h2>");
                 }
             } catch (NullPointerException ex) {
             }
-            
+
             int nbTransactions = TransactionDao.getNbTransactions();
-            int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser();     
+            int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser();
+            
+            ArrayList<Utilisateur> users = UtilisateurDao.researchAll();
 
             out.println("<h3><b><u>Statistiques</u></b></h3>");
             out.println("<div class=\"row\">");
@@ -68,7 +71,12 @@ public class welcomeServlet extends HttpServlet {
             out.println("<canvas id=\"canvas\" height=\"300\" width=\"600\"></canvas>");
             out.println("<script>");
             out.println("var barChartData = {");
-            out.println("labels : [\"boris\",\"julien\",\"melissa\",\"silvio\"],");
+            
+            for (Utilisateur user : users) {
+                out.println("labels : [\"" + user.getUsername() + "\",");
+            }
+            out.println("\"" + users.get(users.size() - 1).getUsername() + "\"],");
+            
             out.println("datasets : [ {");
             out.println("label : \"Nombre de transactions\",");
             out.println("fillColor : \"rgba(151,187,205,0.5)\",");
@@ -78,7 +86,7 @@ public class welcomeServlet extends HttpServlet {
             out.println("data : [60, 20, 40, 10] } ] };");
             out.println("</script>");
             out.println("</div>");
-            
+
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
             out.println("<h3>Mes transferts</h3>");
             out.println("<canvas id=\"chart-area\" width=\"300\" height=\"300\"/>");
@@ -87,7 +95,7 @@ public class welcomeServlet extends HttpServlet {
             out.println("value: " + nbTransactionsByUser + ",");
             out.println("color:\"#46BFBD\",");
             out.println("highlight: \"#5AD3D1\",");
-            out.println("label: \"Utilisateur\" },");
+            out.println("label: \"" + userConnected + "\" },");
             out.println("{");
             out.println("value: " + nbTransactions + ",");
             out.println("color: \"#F7464A\",");
