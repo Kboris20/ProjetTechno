@@ -68,7 +68,7 @@ public class ModifierCompte extends HttpServlet {
                         out.println("<label for=\"nom\">Compte</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cpt.getNom() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cpt.getNom() + "\" required readonly=\"readonly\"/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("<tr>");
@@ -76,7 +76,7 @@ public class ModifierCompte extends HttpServlet {
                         out.println("<label for=\"solde\">Solde</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\"" + cpt.getSolde() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\"" + cpt.getSolde() + "\" required readonly=\"readonly\"/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("<tr>");
