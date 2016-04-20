@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import modele.Compte;
@@ -36,7 +37,7 @@ public class TransactionDao {
             pstmt.setInt(4, user.getIdentifiant());
             pstmt.executeUpdate();
             c.commit();
-            
+
         } catch (SQLException ex) {
             System.out.println("Error INSERT: " + ex.getMessage());
         } finally {
@@ -68,14 +69,14 @@ public class TransactionDao {
                 Integer id = rs.getInt("numero");
                 Compte cmpt_deb = new Compte();
                 Compte cmpt_cred = new Compte();
-                                
+
                 cmpt_deb.setIdentifiant(rs.getInt("num_compte_deb"));//CompteDao.researchById(rs.getInt("num_compte_deb"));
                 cmpt_cred.setIdentifiant(rs.getInt("num_compte_cred"));//CompteDao.researchById(rs.getInt("num_compte_cred"));
                 float montant = rs.getFloat("montant");
                 Date date = rs.getDate("date_trans");
-                           
-                Transaction transaction = new Transaction(id,cmpt_deb,cmpt_cred,montant,date);
-                listTr.add(transaction);                
+
+                Transaction transaction = new Transaction(id, cmpt_deb, cmpt_cred, montant, date);
+                listTr.add(transaction);
             }
             return listTr;
         } catch (SQLException ex) {
@@ -92,8 +93,58 @@ public class TransactionDao {
 
         }
     }
-    
-        /*public static ArrayList<Transaction> researchWithAccountNameByUser(Utilisateur user) {
+
+    /*public static ArrayList<Transaction> researchWithAccountNameByUser(Utilisateur user) {
+     ArrayList<Transaction> listTr = new ArrayList<Transaction>();
+     Connection cnx = null;
+     PreparedStatement pstmt = null;
+     ResultSet rs = null;
+
+     try {
+     cnx = OracleConnections.getConnection();
+
+     String query = "select t.numero as numero, c1.nom as nom_compte_debit, c2.nom as nom_compte_credit, t.montant as montant, t.date_trans as date "
+     + "from transfert t where t.num_employe = ? "
+     + "inner join compte c1 "
+     + "on t.num_compte_deb = c1.numero "
+     + "inner join compte c2 "
+     + "on t.num_compte_cred = c2.numero";
+     pstmt = cnx.prepareStatement(query);
+     pstmt.setInt(1,user.getIdentifiant());
+     rs = pstmt.executeQuery();
+
+     while (rs.next()) {
+                
+     Integer id = rs.getInt("numero");
+                
+     Compte cmpt_deb = new Compte();
+     cmpt_deb.setNom(rs.getString("nom_compte_debit"));
+     Compte cmpt_cred = new Compte();
+     cmpt_cred.setNom(rs.getString("nom_compte_credit"));
+                
+     float montant = rs.getFloat("montant");
+     Date date = rs.getDate("date_trans");
+                           
+     Transaction transaction = new Transaction(id,cmpt_deb,cmpt_cred,montant,date);
+                           
+     listTr.add(transaction);                
+     }
+     return listTr;
+     } catch (SQLException ex) {
+     System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+     return null;
+     } finally {
+     try {
+     rs.close();
+     pstmt.close();
+     cnx.close();
+     } catch (SQLException ex) {
+     System.out.println("Error SELECT SQL: " + ex.getMessage());
+     }
+
+     }
+     }*/
+    public static ArrayList<Transaction> researchByUser(Utilisateur user) {
         ArrayList<Transaction> listTr = new ArrayList<Transaction>();
         Connection cnx = null;
         PreparedStatement pstmt = null;
@@ -102,31 +153,21 @@ public class TransactionDao {
         try {
             cnx = OracleConnections.getConnection();
 
-            String query = "select t.numero as numero, c1.nom as nom_compte_debit, c2.nom as nom_compte_credit, t.montant as montant, t.date_trans as date "
-                    + "from transfert t where t.num_employe = ? "
-                    + "inner join compte c1 "
-                    + "on t.num_compte_deb = c1.numero "
-                    + "inner join compte c2 "
-                    + "on t.num_compte_cred = c2.numero";
+            String query = "select numero, num_compte_deb, num_compte_cred, montant, date_trans from transfert where num_employe = ?";
             pstmt = cnx.prepareStatement(query);
-            pstmt.setInt(1,user.getIdentifiant());
+            pstmt.setInt(1, user.getIdentifiant());
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                
                 Integer id = rs.getInt("numero");
-                
-                Compte cmpt_deb = new Compte();
-                cmpt_deb.setNom(rs.getString("nom_compte_debit"));
-                Compte cmpt_cred = new Compte();
-                cmpt_cred.setNom(rs.getString("nom_compte_credit"));
-                
+                Compte cmpt_deb = CompteDao.researchById(rs.getInt("num_compte_deb"));
+                Compte cmpt_cred = CompteDao.researchById(rs.getInt("num_compte_cred"));
                 float montant = rs.getFloat("montant");
                 Date date = rs.getDate("date_trans");
-                           
-                Transaction transaction = new Transaction(id,cmpt_deb,cmpt_cred,montant,date);
-                           
-                listTr.add(transaction);                
+
+                Transaction transaction = new Transaction(id, cmpt_deb, cmpt_cred, montant, date);
+
+                listTr.add(transaction);
             }
             return listTr;
         } catch (SQLException ex) {
@@ -142,46 +183,67 @@ public class TransactionDao {
             }
 
         }
-    }*/
+    }
 
-    public static ArrayList<Transaction> researchByUser(Utilisateur user) {
-        ArrayList<Transaction> listTr = new ArrayList<Transaction>();
-        Connection cnx = null;
-        PreparedStatement pstmt = null;
+    public static int getNbTransactions() {
+        Connection c = null;
+        Statement stmt = null;
         ResultSet rs = null;
 
         try {
-            cnx = OracleConnections.getConnection();
+            c = OracleConnections.getConnection();
 
-            String query = "select numero, num_compte_deb, num_compte_cred, montant, date_trans from transfert where num_employe = ?";
-            pstmt = cnx.prepareStatement(query);
-            pstmt.setInt(1,user.getIdentifiant());
-            rs = pstmt.executeQuery();
+            String query = "select count(*) as rowcount from transfert";
+            stmt = c.createStatement();
 
-            while (rs.next()) {
-                Integer id = rs.getInt("numero");
-                Compte cmpt_deb = CompteDao.researchById(rs.getInt("num_compte_deb"));
-                Compte cmpt_cred = CompteDao.researchById(rs.getInt("num_compte_cred"));
-                float montant = rs.getFloat("montant");
-                Date date = rs.getDate("date_trans");
-                           
-                Transaction transaction = new Transaction(id,cmpt_deb,cmpt_cred,montant,date);
-                           
-                listTr.add(transaction);                
-            }
-            return listTr;
+            rs = stmt.executeQuery(query);
+            rs.next();
+            int nbTransactions = rs.getInt("rowcount");
+
+            return nbTransactions;
+
         } catch (SQLException ex) {
             System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
-            return null;
+            return 0;
         } finally {
             try {
                 rs.close();
-                pstmt.close();
-                cnx.close();
+                stmt.close();
+                c.close();
             } catch (SQLException ex) {
                 System.out.println("Error SELECT SQL: " + ex.getMessage());
             }
+        }
+    }
 
+    public static int getNbTransactionsByUser() {
+        Connection c = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            c = OracleConnections.getConnection();
+
+            String query = "select count(*) as rowcountbyuser from transfert where num_employe = 3";
+            stmt = c.createStatement();
+
+            rs = stmt.executeQuery(query);
+            rs.next();
+            int nbTransactionsByUser = rs.getInt("rowcountbyuser");
+
+            return nbTransactionsByUser;
+
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return 0;
+        } finally {
+            try {
+                rs.close();
+                stmt.close();
+                c.close();
+            } catch (SQLException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
         }
     }
 
