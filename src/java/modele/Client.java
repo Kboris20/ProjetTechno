@@ -4,44 +4,44 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Client implements Serializable{
-    private Integer identifiant;
-    private String  nom;
-    private String  prenom;
-    private String  adresse;
-    private String  ville;
-    private ArrayList<Compte> listeCompte;
+    private Integer id;
+    private String  lastName;
+    private String  firstName;
+    private String  address;
+    private String  city;
+    private ArrayList<Account> listAccount;
     
-    public Client(Integer _identifiant,String _nom,String _prenom,String _adresse,String _ville,ArrayList<Compte> _listeCompte){
-        this.identifiant = _identifiant;
-        this.nom = _nom;
-        this.prenom = _prenom;
-        this.adresse = _adresse;
-        this.ville = _ville;
+    public Client(Integer id,String lastName,String firstName,String address,String city,ArrayList<Account> listAccount){
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.address = address;
+        this.city = city;
         
-        this.listeCompte = new ArrayList<Compte>();
-        listeCompte.addAll(_listeCompte);
+        this.listAccount = new ArrayList<Account>();
+        listAccount.addAll(listAccount);
     }
     
-    public Client(Integer _identifiant,String _nom,String _prenom,String _adresse,String _ville){
-        this.identifiant = _identifiant;
-        this.nom = _nom;
-        this.prenom = _prenom;
-        this.adresse = _adresse;
-        this.ville = _ville;
+    public Client(Integer id,String lastName,String firstName,String address,String city){
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.address = address;
+        this.city = city;
     }
     
     public Client(){
-        this.identifiant = null;
-        this.nom = null;
-        this.prenom = null;
-        this.adresse = null;
-        this.ville = null;
-        this.listeCompte = new ArrayList<Compte>();
+        this.id = null;
+        this.lastName = null;
+        this.firstName = null;
+        this.address = null;
+        this.city = null;
+        this.listAccount = new ArrayList<Account>();
     }
     
     @Override
     public String toString(){
-        return String.valueOf(identifiant) + "," + nom + "," + prenom + "," + adresse + "," + ville;
+        return String.valueOf(id) + "," + lastName + "," + firstName + "," + address + "," + city;
     }
     
     public void print(){
@@ -49,58 +49,58 @@ public class Client implements Serializable{
     }
     
     public boolean isNull(){
-        return nom==null && prenom==null && adresse==null && ville==null && identifiant==null && listeCompte.size()==0;
+        return lastName==null && firstName==null && address==null && city==null && id==null && listAccount.size()==0;
     }
     
-    public Integer getIdentifiant() {
-        return identifiant;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdentifiant(Integer identifiant) {
-        this.identifiant = identifiant;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getNom() {
-        return nom;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getAdresse() {
-        return adresse;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getVille() {
-        return ville;
+    public String getCity() {
+        return city;
     }
 
-    public void setVille(String ville) {
-        this.ville = ville;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public ArrayList<Compte> getListeCompte() {
-        return listeCompte;
+    public ArrayList<Account> getListAccount() {
+        return listAccount;
     }
 
-    public void setListeCompte(ArrayList<Compte> listeCompte) {
-        this.listeCompte = listeCompte;
+    public void setListAccount(ArrayList<Account> listAccount) {
+        this.listAccount = listAccount;
     }
     
-    public void addCompte(Compte cpt){
-        this.listeCompte.add(cpt);
+    public void addCompte(Account cpt){
+        this.listAccount.add(cpt);
     }
 }

@@ -41,7 +41,7 @@ public class Delete extends HttpServlet {
 
         try {
             Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            cli.setId(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);

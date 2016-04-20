@@ -17,73 +17,72 @@ import oracle.jdbc.OracleTypes;
 
 /**
  *
- * @author christop.francill
+ * @author Silvio
  */
 public class ClientDao {
-    public static long create(Client cli){
-        Connection c = null;
-        OraclePreparedStatement pstmt = null;
-        ResultSet rs = null;
-        
+
+    public static long create(Client client) {
+        Connection con = null;
+        OraclePreparedStatement prepStatement = null;
+        ResultSet resultSet = null;
+
         long rId = -1;
-        
-        try{
-            c = OracleConnections.getConnection();
-            
+
+        try {
+            con = OracleConnections.getConnection();
+
             StringBuilder sql = new StringBuilder("insert into client(nom,prenom,adresse,ville) values (?,?,?,?) returning numero into ?");
-            pstmt = (OraclePreparedStatement) c.prepareStatement(sql.toString());
-            
-            pstmt.setString(1, cli.getNom());
-            pstmt.setString(2, cli.getPrenom());
-            pstmt.setString(3, cli.getAdresse());
-            pstmt.setString(4, cli.getVille());
-            pstmt.registerReturnParameter(5, OracleTypes.NUMBER);
-            pstmt.executeUpdate();
-            c.commit();
-            
-            rs = pstmt.getReturnResultSet();
-            while(rs.next()){
-                rId = rs.getLong(1);
+            prepStatement = (OraclePreparedStatement) con.prepareStatement(sql.toString());
+
+            prepStatement.setString(1, client.getLastName());
+            prepStatement.setString(2, client.getFirstName());
+            prepStatement.setString(3, client.getAddress());
+            prepStatement.setString(4, client.getCity());
+            prepStatement.registerReturnParameter(5, OracleTypes.NUMBER);
+            prepStatement.executeUpdate();
+            con.commit();
+
+            resultSet = prepStatement.getReturnResultSet();
+            while (resultSet.next()) {
+                rId = resultSet.getLong(1);
             }
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Error INSERT: " + ex.getMessage());
-        }finally{
-            try{
-                pstmt.close();
-                c.close();
-            }catch(SQLException ex){
+        } finally {
+            try {
+                prepStatement.close();
+                con.close();
+            } catch (SQLException ex) {
                 System.out.println("Error INSERT CLOSE: " + ex.getMessage());
             }
         }
         System.out.println(rId);
         return rId;
     }
-    
-    public static ArrayList<Client> researchAll(){
+
+    public static ArrayList<Client> researchAll() {
         ArrayList<Client> listCli = new ArrayList<Client>();
-         
-        Connection cnx = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        
+
+        Connection con = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
         try {
-            cnx = OracleConnections.getConnection();
+            con = OracleConnections.getConnection();
 
-            //String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero);
             StringBuilder sql = new StringBuilder("select numero, nom, prenom, adresse, ville from client order by nom, prenom, adresse, ville");
-        stmt = cnx.createStatement();
+            statement = con.createStatement();
+            resultSet = statement.executeQuery(sql.toString());
 
-            rs = stmt.executeQuery(sql.toString());
-
-            while (rs.next()) {
-                Client c = new Client();
-                c.setIdentifiant(rs.getInt("numero"));
-                c.setNom(rs.getString("nom"));
-                c.setPrenom(rs.getString("prenom"));
-                c.setAdresse(rs.getString("adresse"));
-                c.setVille(rs.getString("ville"));
-                c.setListeCompte(CompteDao.research(c.getIdentifiant()));
-                listCli.add(c);
+            while (resultSet.next()) {
+                Client client = new Client();
+                client.setId(resultSet.getInt("numero"));
+                client.setLastName(resultSet.getString("nom"));
+                client.setFirstName(resultSet.getString("prenom"));
+                client.setAddress(resultSet.getString("adresse"));
+                client.setCity(resultSet.getString("ville"));
+                client.setListAccount(AccountDao.research(client.getId()));
+                listCli.add(client);
             }
             return listCli;
         } catch (SQLException ex) {
@@ -91,90 +90,88 @@ public class ClientDao {
             return null;
         } finally {
             try {
-                rs.close();
-                stmt.close();
-                cnx.close();
+                resultSet.close();
+                statement.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println("Error SELECT SQL: " + ex.getMessage());
             }
 
         }
     }
-    
-    public static ArrayList<Client> research(Client cli){
-        ArrayList<Client> listCli = new ArrayList<Client>();
-        
-        boolean and = false;
-        
-        Connection cnx = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            cnx = OracleConnections.getConnection();
 
-            //String sql = "select numero, nom, solde, taux from compte where numero_client=" + String.valueOf(client_numero);
+    public static ArrayList<Client> research(Client cli) {
+        ArrayList<Client> listCli = new ArrayList<Client>();
+
+        boolean and = false;
+
+        Connection con = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            con = OracleConnections.getConnection();
+
             StringBuilder sql = new StringBuilder("select numero, nom, prenom, adresse, ville from client");
 
             if (!cli.isNull()) {
                 sql.append(" where ");
-                if (cli.getIdentifiant() != -1) {
+                if (cli.getId() != -1) {
                     sql.append("numero = '");
-                    sql.append(cli.getIdentifiant());
+                    sql.append(cli.getId());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getNom() != null) {
+                if (cli.getLastName() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("nom = '");
-                    sql.append(cli.getNom());
+                    sql.append(cli.getLastName());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getPrenom() != null) {
+                if (cli.getFirstName() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("prenom = '");
-                    sql.append(cli.getPrenom());
+                    sql.append(cli.getFirstName());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getAdresse() != null) {
+                if (cli.getAddress() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("adresse = '");
-                    sql.append(cli.getAdresse());
+                    sql.append(cli.getAddress());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getVille() != null) {
+                if (cli.getCity() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("ville = '");
-                    sql.append(cli.getVille());
+                    sql.append(cli.getCity());
                     sql.append("'");
                 }
             }
-            
-            
-            stmt = cnx.createStatement();
 
-            rs = stmt.executeQuery(sql.toString());
+            statement = con.createStatement();
 
-            while (rs.next()) {
-                Client c = new Client();
-                c.setIdentifiant(rs.getInt("numero"));
-                c.setNom(rs.getString("nom"));
-                c.setPrenom(rs.getString("prenom"));
-                c.setAdresse(rs.getString("adresse"));
-                c.setVille(rs.getString("ville"));
-                c.setListeCompte(CompteDao.research(c.getIdentifiant()));
-                listCli.add(c);
+            resultSet = statement.executeQuery(sql.toString());
+
+            while (resultSet.next()) {
+                Client client = new Client();
+                client.setId(resultSet.getInt("numero"));
+                client.setLastName(resultSet.getString("nom"));
+                client.setFirstName(resultSet.getString("prenom"));
+                client.setAddress(resultSet.getString("adresse"));
+                client.setCity(resultSet.getString("ville"));
+                client.setListAccount(AccountDao.research(client.getId()));
+                listCli.add(client);
             }
             return listCli;
         } catch (SQLException ex) {
@@ -182,69 +179,69 @@ public class ClientDao {
             return null;
         } finally {
             try {
-                rs.close();
-                stmt.close();
-                cnx.close();
+                resultSet.close();
+                statement.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println("Error SELECT SQL: " + ex.getMessage());
             }
 
         }
     }
-    
-    public static void update(Client cli){
-        Connection cnx = null;
-        PreparedStatement pstmt = null;
+
+    public static void update(Client cli) {
+        Connection con = null;
+        PreparedStatement prepStatement = null;
 
         try {
-            cnx = OracleConnections.getConnection();
+            con = OracleConnections.getConnection();
 
             StringBuilder sql = new StringBuilder("UPDATE client SET NOM = ?, PRENOM = ?, ADRESSE = ?, VILLE = ? WHERE numero = ?");
-            pstmt = (OraclePreparedStatement) cnx.prepareStatement(sql.toString());
+            prepStatement = (OraclePreparedStatement) con.prepareStatement(sql.toString());
 
-            pstmt.setString(1, cli.getNom());
-            pstmt.setString(2, cli.getPrenom());
-            pstmt.setString(3, cli.getAdresse());
-            pstmt.setString(4, cli.getVille());
-            pstmt.setLong(5, cli.getIdentifiant());
-            pstmt.executeUpdate();
-            cnx.commit();
+            prepStatement.setString(1, cli.getLastName());
+            prepStatement.setString(2, cli.getFirstName());
+            prepStatement.setString(3, cli.getAddress());
+            prepStatement.setString(4, cli.getCity());
+            prepStatement.setLong(5, cli.getId());
+            prepStatement.executeUpdate();
+            con.commit();
         } catch (SQLException ex) {
             System.out.println("Error UPDATE SET: " + ex.getMessage());
         } finally {
             try {
-                pstmt.close();
-                cnx.close();
+                prepStatement.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println("Error UPDATE CLOSE: " + ex.getMessage());
             }
         }
     }
-    
-    public static boolean delete(Client cli){
-        Connection cnx = null;
-        PreparedStatement pstmt = null;
+
+    public static boolean delete(Client cli) {
+        Connection con = null;
+        PreparedStatement prepStatement = null;
 
         try {
-            cnx = OracleConnections.getConnection();
+            con = OracleConnections.getConnection();
 
             StringBuilder sql = new StringBuilder("DELETE FROM client WHERE numero = ?");
-            pstmt = (OraclePreparedStatement) cnx.prepareStatement(sql.toString());
+            prepStatement = (OraclePreparedStatement) con.prepareStatement(sql.toString());
 
-            pstmt.setLong(1, cli.getIdentifiant());
-            pstmt.executeUpdate();
-            cnx.commit();
+            prepStatement.setLong(1, cli.getId());
+            prepStatement.executeUpdate();
+            con.commit();
             return true;
         } catch (SQLException ex) {
             System.out.println("Error DELETE SQL: " + ex.getMessage());
             return false;
         } finally {
             try {
-                pstmt.close();
-                cnx.close();
+                prepStatement.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println("Error DELETE CLOSE: " + ex.getMessage());
             }
         }
-    }    
+    }
 }

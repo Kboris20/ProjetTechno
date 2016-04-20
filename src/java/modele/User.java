@@ -9,27 +9,27 @@ package modele;
  *
  * @author silvio.gutierre
  */
-public class Utilisateur {
+public class User {
     
-    private Integer identifiant;
+    private Integer id;
     private String username;
     private String pwd;
     
-    public Utilisateur() {
+    public User() {
     }
 
-    public Utilisateur(Integer identifiant, String username, String pwd) {
-        this.identifiant = identifiant;
+    public User(Integer id, String username, String pwd) {
+        this.id = id;
         this.username = username;
         this.pwd = pwd;
     }
 
-    public Integer getIdentifiant() {
-        return identifiant;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdentifiant(Integer identifiant) {
-        this.identifiant = identifiant;
+    public void setId(Integer id) {
+        this.id = id;
     }
     
     public String getUsername() {

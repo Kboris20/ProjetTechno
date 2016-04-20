@@ -1,13 +1,13 @@
 package utilities;
 
 import dao.ClientDao;
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspWriter;
 import modele.Client;
-import modele.Compte;
+import modele.Account;
 import servlets.HtmlHttpUtils;
 
 public class WebUtilities {
@@ -88,43 +88,43 @@ public class WebUtilities {
         } else if (page.equalsIgnoreCase("clientDetail") && id > 0) {
             Client c = new Client();
             Client cli = new Client();
-            c.setIdentifiant(id);
+            c.setId(id);
             cli = ClientDao.research(c).get(0);
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><a href=\"afficherClient?idCli=" + id + "\">" + cli.getNom() + "_" + cli.getPrenom() + "</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"afficherClient?idCli=" + id + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
         } else if (page.equalsIgnoreCase("compteMod") && id > 0) {
-            Compte cpt = new Compte();
-            Compte cpte = new Compte();
-            cpt.setIdentifiant(id);
-            cpte = CompteDao.research(cpt).get(0);
+            Account cpt = new Account();
+            Account cpte = new Account();
+            cpt.setId(id);
+            cpte = AccountDao.research(cpt).get(0);
 
             Client c = new Client();
             Client cli = new Client();
-            c.setIdentifiant(CompteDao.researchOwnerId(cpte.getIdentifiant()));
+            c.setId(AccountDao.researchOwnerId(cpte.getId()));
             cli = ClientDao.research(c).get(0);
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index?\">Clients</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\">" + cli.getNom() + "_" + cli.getPrenom() + "</a></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getIdentifiant() + "\">" + cpte.getNom() + "</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
 
         } else if (page.equalsIgnoreCase("tranfere") && id > 0) {
-            Compte cpt = new Compte();
-            Compte cpte = new Compte();
-            cpt.setIdentifiant(id);
-            cpte = CompteDao.research(cpt).get(0);
+            Account cpt = new Account();
+            Account cpte = new Account();
+            cpt.setId(id);
+            cpte = AccountDao.research(cpt).get(0);
 
             Client c = new Client();
             Client cli = new Client();
-            c.setIdentifiant(CompteDao.researchOwnerId(cpte.getIdentifiant()));
+            c.setId(AccountDao.researchOwnerId(cpte.getId()));
             cli = ClientDao.research(c).get(0);
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\">" + cli.getNom() + "_" + cli.getPrenom() + "</a></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getIdentifiant() + "\">" + cpte.getNom() + "</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
 
         } else if (page.equalsIgnoreCase("transactions")) {
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
@@ -140,20 +140,20 @@ public class WebUtilities {
         doDivBody(out, title, request);
 
         out.println("<ul class=\"nav nav-tabs\">");
-        Compte cpt = new Compte();
-        Compte cpte = new Compte();
-        cpt.setIdentifiant(id);
-        cpte = CompteDao.research(cpt).get(0);
+        Account cpt = new Account();
+        Account cpte = new Account();
+        cpt.setId(id);
+        cpte = AccountDao.research(cpt).get(0);
 
         Client c = new Client();
         Client cli = new Client();
-        c.setIdentifiant(CompteDao.researchOwnerId(cpte.getIdentifiant()));
+        c.setId(AccountDao.researchOwnerId(cpte.getId()));
         cli = ClientDao.research(c).get(0);
 
         out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
         out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
-        out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getIdentifiant() + "\">" + cli.getNom() + "_" + cli.getPrenom() + "</a></li>");
-        out.println("<li role=\"presentation\" class=\"active\"><a href=\"transfereCompteACompte?id=" + id + "&id1=-1&idCli=" + cli.getIdentifiant() + "\">" + cpte.getNom() + "</a></li>");
+        out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
+        out.println("<li role=\"presentation\" class=\"active\"><a href=\"transfereCompteACompte?id=" + id + "&id1=-1&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
         out.println("</ul>");
         out.println("</div>");
         out.println("<div class=\"divContent\">");

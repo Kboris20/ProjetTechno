@@ -5,7 +5,7 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Compte;
+import modele.Account;
 import utilities.WebUtilities;
 
 /**
@@ -46,29 +46,29 @@ public class ModifierCompte extends HttpServlet {
         WebUtilities.doHeader(out, "Modifier un compte", request, "compteMod", Integer.valueOf(request.getParameter("id")));
         try {
             Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
+            cli.setId(Integer.parseInt(request.getParameter("idCli")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
 
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
 
-                Compte cpt = new Compte();
-                cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-                ArrayList<Compte> listeCpt = CompteDao.research(cpt);
+                Account cpt = new Account();
+                cpt.setId(Integer.parseInt(request.getParameter("id")));
+                ArrayList<Account> listeCpt = AccountDao.research(cpt);
                 if (listeCpt.size() > 0) {
                     cpt = listeCpt.get(0);
-                    if (CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()) {
+                    if (AccountDao.researchOwnerId(cpt.getId()) == cli.getId()) {
                         out.println("<div class=\"row\"><div class=\"col-sm-8\">");
                         out.println("<form  id=\"form1\" name=\"form1\" method=\"get\"  action=\"doModifierCompte\">");
 
-                        out.println("<input type=\"hidden\" name=\"idCli\" value=\"" + cli.getIdentifiant() + "\"/>");
+                        out.println("<input type=\"hidden\" name=\"idCli\" value=\"" + cli.getId() + "\"/>");
 
-                        out.println("<input type=\"hidden\" name=\"id\" value=\"" + cpt.getIdentifiant() + "\"/>");
+                        out.println("<input type=\"hidden\" name=\"id\" value=\"" + cpt.getId() + "\"/>");
                         out.println("<table><tr><td>");
                         out.println("<label for=\"nom\">Compte</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cpt.getNom() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cpt.getName() + "\" required/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("<tr>");
@@ -76,7 +76,7 @@ public class ModifierCompte extends HttpServlet {
                         out.println("<label for=\"solde\">Solde</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\"" + cpt.getSolde() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\"" + cpt.getBalance() + "\" required/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("<tr>");
@@ -84,7 +84,7 @@ public class ModifierCompte extends HttpServlet {
                         out.println("<label for=\"taux\">Taux</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"taux\" id=\"taux\" value=\"" + cpt.getTaux() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"taux\" id=\"taux\" value=\"" + cpt.getRate() + "\" required/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");

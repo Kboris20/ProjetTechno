@@ -4,7 +4,7 @@
  */
 package servlets;
 
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Compte;
+import modele.Account;
 
 /**
  *
@@ -41,12 +41,12 @@ public class DeleteCompte extends HttpServlet {
         }
         
         try {
-            Compte cpt = new Compte();
-            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Compte> cptListe = CompteDao.research(cpt);
+            Account cpt = new Account();
+            cpt.setId(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Account> cptListe = AccountDao.research(cpt);
             if(cptListe.size()>0){
                 cpt = cptListe.get(0);
-                CompteDao.delete(cpt);
+                AccountDao.delete(cpt);
                 response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=true");
             }else{
                 response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=error1");
