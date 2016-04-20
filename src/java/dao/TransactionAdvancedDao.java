@@ -30,7 +30,7 @@ public class TransactionAdvancedDao {
         try {
             cnx = OracleConnections.getConnection();
 
-            String query = "select tr.numero as numero, cl1.nom||' '||cl1.prenom as clientd, co1.nom as compted, cl2.nom||' '||cl2.prenom as clientc, "
+            String query ="select tr.numero as numero, cl1.nom||' '||cl1.prenom as clientd, co1.nom as compted, cl2.nom||' '||cl2.prenom as clientc, "
                     + "co2.nom as comptec, tr.montant as montant, tr.date_trans as date_trans\n"
                     + "from transfert tr\n"
                     + "inner join compte co1\n"
@@ -40,10 +40,10 @@ public class TransactionAdvancedDao {
                     + "inner join client cl1\n"
                     + "on cl1.numero = co1.numero_client\n"
                     + "inner join client cl2\n"
-                    + "on cl2.numero = co2.numero_client";
+                    + "on cl2.numero = co2.numero_client\n"
+                    + "order by tr.date_trans desc, tr.montant"; 
 
             pstmt = cnx.prepareStatement(query);
-
             rs = pstmt.executeQuery();
 
             while (rs.next()){                
@@ -98,7 +98,8 @@ public class TransactionAdvancedDao {
                     + "on cl1.numero = co1.numero_client "
                     + "inner join client cl2 "
                     + "on cl2.numero = co2.numero_client "
-                    + "where num_employe = ?";
+                    + "where num_employe = ?"
+                    + "order by tr.date_trans desc, tr.montant"; 
 
             pstmt = cnx.prepareStatement(query);
             
