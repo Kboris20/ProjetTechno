@@ -5,12 +5,16 @@
  */
 package servlets;
 
+import dao.TransactionDao;
+import dao.UtilisateurDao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modele.Utilisateur;
 import utilities.WebUtilities;
 
 /**
@@ -32,6 +36,7 @@ public class welcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
@@ -42,7 +47,7 @@ public class welcomeServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
             out.println("<hr/>");
-            
+
             out.println("<center>");
             out.println("<br/>");
             try {
@@ -52,51 +57,43 @@ public class welcomeServlet extends HttpServlet {
             } catch (NullPointerException ex) {
             }
             
+            int nbTransactions = TransactionDao.getNbTransactions();
+            int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser();     
+
             out.println("<h3><b><u>Statistiques</u></b></h3>");
             out.println("<div class=\"row\">");
-            
+
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
-            out.println("<h3>Bar Chart</h3>");
-            out.println("<canvas id=\"canvas\" height=\"450\" width=\"600\"></canvas>");
+            out.println("<h3>Nombre de transferts par utilisateur</h3>");
+            out.println("<canvas id=\"canvas\" height=\"300\" width=\"600\"></canvas>");
             out.println("<script>");
-            out.println("var randomScalingFactor = function(){ return Math.round(Math.random()*100)};");
             out.println("var barChartData = {");
-            out.println("labels : [\"January\",\"February\",\"March\",\"April\",\"May\",\"June\",\"July\"],");
+            out.println("labels : [\"boris\",\"julien\",\"melissa\",\"silvio\"],");
             out.println("datasets : [ {");
-            out.println("fillColor : \"rgba(297,125,49,1)\",");
-            out.println("strokeColor : \"rgba(0,0,0,1)\",");
-            out.println("highlightFill: \"rgba(220,220,220,0.75)\",");
-            out.println("highlightStroke: \"rgba(0,0,0,1)\",");
-            out.println("data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()] },");
-            out.println("{");
-            out.println("fillColor : \"rgba(217,217,217,1)\",");
-            out.println("strokeColor : \"rgba(0,0,0,1)\",");
-            out.println("highlightFill : \"rgba(165,165,165,1)\",");
-            out.println("highlightStroke : \"rgbargba(0,0,0,1)\",");
-            out.println("data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()] } ] }");
+            out.println("label : \"Nombre de transactions\",");
+            out.println("fillColor : \"rgba(151,187,205,0.5)\",");
+            out.println("strokeColor : \"rgba(151,187,205,0.8)\",");
+            out.println("highlightFill : \"rgba(151,187,205,0.75)\",");
+            out.println("highlightStroke : \"rgbargba(151,187,205,1)\",");
+            out.println("data : [60, 20, 40, 10] } ] };");
             out.println("</script>");
             out.println("</div>");
             
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
-            out.println("<h3>Pie Chart</h3>");
+            out.println("<h3>Mes transferts</h3>");
             out.println("<canvas id=\"chart-area\" width=\"300\" height=\"300\"/>");
             out.println("<script>");
             out.println("var pieData = [ {");
-            out.println("value: 300,");
-            out.println("color:\"#ff1800\",");
-            out.println("highlight: \"#ffa49a\",");
-            out.println("label: \"Red\" },");
+            out.println("value: " + nbTransactionsByUser + ",");
+            out.println("color:\"#46BFBD\",");
+            out.println("highlight: \"#5AD3D1\",");
+            out.println("label: \"Utilisateur\" },");
             out.println("{");
-            out.println("value: 50,");
-            out.println("color: \"#00960b\",");
-            out.println("highlight: \"#80d286\",");
-            out.println("label: \"Green\" },");
-            out.println("{");
-            out.println("value: 100,");
-            out.println("color: \"#ed7d31\",");
-            out.println("highlight: \"#ecad83\",");
-            out.println("label: \"Orange\" } ];");
-            
+            out.println("value: " + nbTransactions + ",");
+            out.println("color: \"#F7464A\",");
+            out.println("highlight: \"#FF5A5E\",");
+            out.println("label: \"Total\" } ];");
+
             out.println("window.onload = function(){");
             out.println("var ctx = document.getElementById(\"chart-area\").getContext(\"2d\");");
             out.println("window.myPie = new Chart(ctx).Pie(pieData);");
@@ -104,10 +101,10 @@ public class welcomeServlet extends HttpServlet {
             out.println("window.myBar = new Chart(ctx).Bar(barChartData, { responsive : true }); };");
             out.println("</script>");
             out.println(" </div>");
-                    
+
             out.println("</center>");
             out.println(" </div>");
-            
+
         } finally {
             WebUtilities.doFooter(out);
             out.close();
