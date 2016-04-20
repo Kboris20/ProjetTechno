@@ -50,11 +50,11 @@ public class ListAll extends HttpServlet {
                 out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                 ArrayList<Client> listeCli = new ArrayList<Client>();
                 Client c = new Client();
-                c.setIdentifiant(Integer.valueOf(request.getParameter("id")));
+                c.setId(Integer.valueOf(request.getParameter("id")));
                 listeCli.addAll(ClientDao.research(c));
                 out.println("<b><u>Confirmation</u></b>");
                 out.println("<p>Voulez vous réellement supprimer</p>");
-                out.println("<b> " + listeCli.get(0).getNom() + " " + listeCli.get(0).getPrenom() + "</b>");
+                out.println("<b> " + listeCli.get(0).getLastName() + " " + listeCli.get(0).getFirstName() + "</b>");
                 out.println("<br/>");
                 out.println("<a href=\"delete?id=" + request.getParameter("id") + "\" class=\"btn btn-danger btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span></a>");
                 out.println("</div>");

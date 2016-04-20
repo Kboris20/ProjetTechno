@@ -6,7 +6,7 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Compte;
+import modele.Account;
 import utilities.WebUtilities;
 
 /**
@@ -81,9 +81,9 @@ public class TransfertFromTransfertManag extends HttpServlet {
 
             Integer idCompteDeb;
             Integer idCompteCred;
-            Compte compteDeb = new Compte();
-            Compte compteCred = new Compte();
-            Compte compt = new Compte();
+            Account compteDeb = new Account();
+            Account compteCred = new Account();
+            Account compt = new Account();
             String status = request.getParameter("status");
 
             if (status.equalsIgnoreCase("deb")) {
@@ -98,9 +98,9 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 idCompteDeb = Integer.valueOf(request.getParameter("idCompteDeb"));
                 out.println("<br/>");
                 out.println("<h3>Le compte débité </h3>");
-                compt.setIdentifiant(idCompteDeb);
-                compteDeb = CompteDao.research(compt).get(0);
-                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire Mme/M. : " + CompteDao.researchOwner(idCompteDeb) + "</b>");
+                compt.setId(idCompteDeb);
+                compteDeb = AccountDao.research(compt).get(0);
+                out.println("<b>Compte: " + compteDeb.getName() + ", solde: " + compteDeb.getBalance() + ", propriétaire Mme/M. : " + AccountDao.researchOwner(idCompteDeb) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
                 out.println("<h3>Veuillez entrer le compte à créditer: </h3>");
@@ -112,18 +112,18 @@ public class TransfertFromTransfertManag extends HttpServlet {
                 idCompteCred = Integer.valueOf(request.getParameter("idCompteCred"));
                 out.println("<br/>");
                 out.println("<h3>Le compte débité </h3>");
-                compt.setIdentifiant(idCompteDeb);
-                compteDeb = CompteDao.research(compt).get(0);
-                out.println("<b>Compte: " + compteDeb.getNom() + ", solde: " + compteDeb.getSolde() + ", propriétaire Mme/M. : " + CompteDao.researchOwner(idCompteDeb) + "</b>");
+                compt.setId(idCompteDeb);
+                compteDeb = AccountDao.research(compt).get(0);
+                out.println("<b>Compte: " + compteDeb.getName() + ", solde: " + compteDeb.getBalance() + ", propriétaire Mme/M. : " + AccountDao.researchOwner(idCompteDeb) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
                 out.println("<a href=\"TransfertFromTransfertManag?status=allOk&idCompteDeb=" + idCompteCred + "&idCompteCred=" + idCompteDeb + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les comptes\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
                 out.println("<br/>");
                 out.println("<br/>");
                 out.println("<h3>Le compte crédité </h3>");
-                compt.setIdentifiant(idCompteCred);
-                compteCred = CompteDao.research(compt).get(0);
-                out.println("<b>Compte: " + compteCred.getNom() + ", solde: " + compteCred.getSolde() + ", propriétaire Mme/M. : " + CompteDao.researchOwner(idCompteCred) + "</b>");
+                compt.setId(idCompteCred);
+                compteCred = AccountDao.research(compt).get(0);
+                out.println("<b>Compte: " + compteCred.getName() + ", solde: " + compteCred.getBalance() + ", propriétaire Mme/M. : " + AccountDao.researchOwner(idCompteCred) + "</b>");
                 out.println("<br/>");
                 out.println("<br/>");
 
@@ -149,23 +149,23 @@ public class TransfertFromTransfertManag extends HttpServlet {
 
             if (!listeCli.isEmpty()) {
                 for (Client cli : listeCli) {
-                    out.println("<a href=\"#this\" onClick=\"Affiche('#compte_" + cli.getIdentifiant() + "')\" href=\"#\" class=\"list-group-item\">" + cli.getNom() + " " + cli.getPrenom() + "</a>");
-                    ArrayList<Compte> comptListe = new ArrayList<Compte>();
-                    out.println("<div id=\"compte_" + cli.getIdentifiant() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
+                    out.println("<a href=\"#this\" onClick=\"Affiche('#compte_" + cli.getId() + "')\" href=\"#\" class=\"list-group-item\">" + cli.getLastName() + " " + cli.getFirstName() + "</a>");
+                    ArrayList<Account> comptListe = new ArrayList<Account>();
+                    out.println("<div id=\"compte_" + cli.getId() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
                     out.println("<div class=\"list-group\">");
                     out.println("<a href=\"#this\" class=\"list-group-item disabled\">Comptes</a>");
-                    for (Compte c : cli.getListeCompte()) {
-                        if (c.getIdentifiant() != Integer.valueOf(request.getParameter("idCompteDeb"))) {
+                    for (Account c : cli.getListAccount()) {
+                        if (c.getId() != Integer.valueOf(request.getParameter("idCompteDeb"))) {
                             comptListe.add(c);
                         }
                     }
                     if (!comptListe.isEmpty()) {
 
-                        for (Compte compte : comptListe) {
+                        for (Account compte : comptListe) {
                             if (request.getParameter("status").equalsIgnoreCase("deb")) {
-                                out.println("<a href=\"TransfertFromTransfertManag?status=cred&idCompteDeb=" + compte.getIdentifiant() + "&idCompteCred=" + request.getParameter("idCompteCred") + "\" class=\"list-group-item\">Compte: " + compte.getNom() + ", Solde: " + compte.getSolde() + "</a>");
+                                out.println("<a href=\"TransfertFromTransfertManag?status=cred&idCompteDeb=" + compte.getId() + "&idCompteCred=" + request.getParameter("idCompteCred") + "\" class=\"list-group-item\">Compte: " + compte.getName() + ", Solde: " + compte.getBalance() + "</a>");
                             } else {
-                                out.println("<a href=\"TransfertFromTransfertManag?status=allOk&idCompteDeb=" + request.getParameter("idCompteDeb") + "&idCompteCred=" + compte.getIdentifiant() + "\" class=\"list-group-item\">Compte: " + compte.getNom() + ", Solde: " + compte.getSolde() + "</a>");
+                                out.println("<a href=\"TransfertFromTransfertManag?status=allOk&idCompteDeb=" + request.getParameter("idCompteDeb") + "&idCompteCred=" + compte.getId() + "\" class=\"list-group-item\">Compte: " + compte.getName() + ", Solde: " + compte.getBalance() + "</a>");
                             }
                         }
                     } else {

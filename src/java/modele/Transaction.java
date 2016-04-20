@@ -14,26 +14,26 @@ import java.util.Date;
 public class Transaction {
     
     private Integer id;
-    private Compte compte_debit;
-    private Compte compte_credit;
-    private float montant;
+    private Account account_debit;
+    private Account account_credit;
+    private float amount;
     private Date date;
 
     public Transaction() {
     }
     
-    public Transaction(Integer id, Compte compte_debit, Compte compte_credit, float montant, Date date) {
+    public Transaction(Integer id, Account account_debit, Account account_credit, float amount, Date date) {
         this.id = id;
-        this.compte_debit = compte_debit;
-        this.compte_credit = compte_credit;
-        this.montant = montant;
+        this.account_debit = account_debit;
+        this.account_credit = account_credit;
+        this.amount = amount;
         this.date = date;
     }
     
-     public Transaction(Compte compte_debit, Compte compte_credit, float montant) {
-        this.compte_debit = compte_debit;
-        this.compte_credit = compte_credit;
-        this.montant = montant;
+     public Transaction(Account account_debit, Account account_credit, float amount) {
+        this.account_debit = account_debit;
+        this.account_credit = account_credit;
+        this.amount = amount;
     }
 
     public Integer getId() {
@@ -44,28 +44,28 @@ public class Transaction {
         this.id = id;
     }
 
-    public Compte getCompte_debit() {
-        return compte_debit;
+    public Account getAccount_debit() {
+        return account_debit;
     }
 
-    public void setCompte_debit(Compte compte_debit) {
-        this.compte_debit = compte_debit;
+    public void setAccount_debit(Account account_debit) {
+        this.account_debit = account_debit;
     }
 
-    public Compte getCompte_credit() {
-        return compte_credit;
+    public Account getAccount_credit() {
+        return account_credit;
     }
 
-    public void setCompte_credit(Compte compte_credit) {
-        this.compte_credit = compte_credit;
+    public void setAccount_credit(Account account_credit) {
+        this.account_credit = account_credit;
     }
 
-    public float getMontant() {
-        return montant;
+    public float getAmount() {
+        return amount;
     }
 
-    public void setMontant(float montant) {
-        this.montant = montant;
+    public void setAmount(float amount) {
+        this.amount = amount;
     }
 
     public Date getDate() {

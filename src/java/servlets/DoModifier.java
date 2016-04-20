@@ -42,16 +42,16 @@ public class DoModifier extends HttpServlet {
 
         try {
             Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            cli.setId(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
-                cli.setNom(request.getParameter("nom"));
-                cli.setPrenom(request.getParameter("prenom"));
-                cli.setAdresse(request.getParameter("adresse"));
-                cli.setVille(request.getParameter("ville"));
+                cli.setLastName(request.getParameter("nom"));
+                cli.setFirstName(request.getParameter("prenom"));
+                cli.setAddres(request.getParameter("adresse"));
+                cli.setCity(request.getParameter("ville"));
                 ClientDao.update(cli);
-                response.sendRedirect(request.getContextPath() + "/modifier?id=" + cli.getIdentifiant() + "&mod=true");
+                response.sendRedirect(request.getContextPath() + "/modifier?id=" + cli.getId() + "&mod=true");
             } else {
                 response.sendRedirect(request.getContextPath() + "/index?mod=error1");
             }

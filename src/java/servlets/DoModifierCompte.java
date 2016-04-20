@@ -5,7 +5,7 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Compte;
+import modele.Account;
 import utilities.WebUtilities;
 
 /**
@@ -46,22 +46,22 @@ public class DoModifierCompte extends HttpServlet {
         WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
         try {
             Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
+            cli.setId(Integer.parseInt(request.getParameter("idCli")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
 
             if (!cliListe.isEmpty()) {
                 cli = cliListe.get(0);
 
-                Compte cpt = new Compte();
-                cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-                if (CompteDao.researchOwnerId(cpt.getIdentifiant()) == cli.getIdentifiant()) {
-                    cpt.setNom(request.getParameter("nom"));
-                    cpt.setSolde(Float.valueOf(request.getParameter("solde")));
-                    cpt.setTaux(Float.valueOf(request.getParameter("taux")));
+                Account cpt = new Account();
+                cpt.setId(Integer.parseInt(request.getParameter("id")));
+                if (AccountDao.researchOwnerId(cpt.getId()) == cli.getId()) {
+                    cpt.setName(request.getParameter("nom"));
+                    cpt.setBalance(Float.valueOf(request.getParameter("solde")));
+                    cpt.setRate(Float.valueOf(request.getParameter("taux")));
 
-                    CompteDao.update(cpt);
+                    AccountDao.update(cpt);
 
-                    response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + cli.getIdentifiant() + "&modCpt=true");
+                    response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + cli.getId() + "&modCpt=true");
                 } else {
                     WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
                     out.println("<div class=\"alert alert-error\">");

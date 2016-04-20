@@ -5,7 +5,7 @@
 package servlets;
 
 
-import MemoryUser.Utilisateurs;
+import MemoryUser.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -43,7 +43,7 @@ public class ServletLogin extends HttpServlet {
                 if (!username.equals("") && !password.equals("")) {
 
 
-                      if(Utilisateurs.verifyUser(username, password)){
+                      if(Users.verifyUser(username, password)){
                         //CREATION HTTP SESSION
                         //request.getRequestDispatcher("/index.jsp").forward(request, response);
                         HttpSession s= request.getSession(true);

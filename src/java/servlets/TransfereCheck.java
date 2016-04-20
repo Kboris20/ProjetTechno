@@ -5,7 +5,7 @@
  */
 package servlets;
 
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Compte;
+import modele.Account;
 
 /**
  *
@@ -47,14 +47,14 @@ public class TransfereCheck extends HttpServlet {
             String id = request.getParameter("id");
             String id1 = request.getParameter("id1");
             Integer idCli = Integer.valueOf(request.getParameter("idCli"));
-            Compte cpt = new Compte();
+            Account cpt = new Account();
             Float somme = Float.valueOf(montant + "." + centimes);
 
-            cpt.setIdentifiant(Integer.valueOf(id));
-            ArrayList<Compte> cptListe = CompteDao.research(cpt);
+            cpt.setId(Integer.valueOf(id));
+            ArrayList<Account> cptListe = AccountDao.research(cpt);
             cpt = cptListe.get(0);
             if (idCli == 0) {
-                if (somme > cpt.getSolde()) {
+                if (somme > cpt.getBalance()) {
                     response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=true&status=allOk&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=false&status=allOk&somme=" + somme + "&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
@@ -62,7 +62,7 @@ public class TransfereCheck extends HttpServlet {
                 }
             } else {
 
-                if (somme > cpt.getSolde()) {
+                if (somme > cpt.getBalance()) {
                     response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=true&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
                 } else {
                     response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=false&somme=" + somme + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");

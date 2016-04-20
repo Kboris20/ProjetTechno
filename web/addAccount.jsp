@@ -56,7 +56,7 @@
         </form>
     </div>
     <div class="col-sm-4">
-        <img src="http://localhost:8080/crud/theme/img/nouveau_compte2.png" alt="image nouveau compte"/>
+        <img src="http://localhost:8080/crud/theme/img/nouveau_compte2.png" alt="new account"/>
     </div>
 </div>
 

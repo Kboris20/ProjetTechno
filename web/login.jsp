@@ -14,7 +14,7 @@
     try {
         if (request.getParameter("error").equalsIgnoreCase("true")) {
             out.println("<div class=\"alert alert-error\">");
-            out.println("Veuillez réessayer !");
+            out.println("Le nom d'utilisateur ou le mot de passe est incorrect !");
             out.println("</div>");
         }
     } catch (Exception ex) {
@@ -27,11 +27,11 @@
     <table class="tablePageConnection">
         <tr>
         <label for="username" class="sr-only">Nom d'utilisateur</label>
-        <td class="td"><input type="text" id="username" name="username" class="form-control" placeholder="Nom d'utilisateur" required autofocus></td>
+        <td class="identification"><input type="text" id="username" name="username" class="form-control" placeholder="Nom d'utilisateur" required autofocus></td>
         </tr>
         <tr>
         <label for="password" class="sr-only">Mot de passe  </label>
-        <td class="td"><input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required></td>
+        <td class="identification"><input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required></td>
         </tr>
     </table>
     <br/>

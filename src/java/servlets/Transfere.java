@@ -5,9 +5,9 @@
  */
 package servlets;
 
-import dao.CompteDao;
+import dao.AccountDao;
 import dao.TransactionDao;
-import dao.UtilisateurDao;
+import dao.UserDao;
 import exception.InsufficientBalanceException;
 import exception.NegativeAmmountException;
 import java.io.IOException;
@@ -19,9 +19,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Compte;
+import modele.Account;
 import modele.Transaction;
-import modele.Utilisateur;
+import modele.User;
 
 /**
  *
@@ -54,14 +54,14 @@ public class Transfere extends HttpServlet {
             String id = request.getParameter("id");
             String id1 = request.getParameter("id1");
             Integer idCli = Integer.valueOf(request.getParameter("idCli"));
-            Compte cpt = new Compte();
-            Compte cptDest = new Compte();
-            Utilisateur user = UtilisateurDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+            Account cpt = new Account();
+            Account cptDest = new Account();
+            User user = UserDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
 
-            cpt.setIdentifiant(Integer.valueOf(id));
-            cptDest.setIdentifiant(Integer.valueOf(id1));
-            ArrayList<Compte> cptListe = CompteDao.research(cpt);
-            ArrayList<Compte> cptListeDest = CompteDao.research(cptDest);
+            cpt.setId(Integer.valueOf(id));
+            cptDest.setId(Integer.valueOf(id1));
+            ArrayList<Account> cptListe = AccountDao.research(cpt);
+            ArrayList<Account> cptListeDest = AccountDao.research(cptDest);
 
             cpt = cptListe.get(0);
             cptDest = cptListeDest.get(0);
@@ -74,8 +74,8 @@ public class Transfere extends HttpServlet {
             /*dans le cardre de l'exercice nous nous permettons de laisser l'opération tel quel mais 
              normalement l'opération ci-dessous devrait être atomique hors ce n'est pas le cas ici
              */
-            CompteDao.update(cpt);
-            CompteDao.update(cptDest);
+            AccountDao.update(cpt);
+            AccountDao.update(cptDest);
 
             if (idCli == 0) {
                 response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?trans=ok&status=allOk&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");

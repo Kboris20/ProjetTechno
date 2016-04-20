@@ -4,14 +4,14 @@
  */
 package servlets;
 
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Compte;
+import modele.Account;
 
 /**
  *
@@ -41,12 +41,12 @@ public class AddCompte extends HttpServlet {
         }
         
         try {
-            Compte newCompt = new Compte();
-            newCompt.setNom(request.getParameter("nom"));
-            newCompt.setSolde(Float.parseFloat(request.getParameter("solde")));
-            newCompt.setTaux(Float.parseFloat(request.getParameter("taux")));
+            Account newCompt = new Account();
+            newCompt.setName(request.getParameter("nom"));
+            newCompt.setBalance(Float.parseFloat(request.getParameter("solde")));
+            newCompt.setRate(Float.parseFloat(request.getParameter("taux")));
                         
-            CompteDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
+            AccountDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
 
             response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
         } finally {            

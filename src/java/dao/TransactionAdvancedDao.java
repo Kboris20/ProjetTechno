@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import modele.TransactionAdvanced;
-import modele.Utilisateur;
+import modele.User;
 
 /**
  *
@@ -21,115 +21,115 @@ import modele.Utilisateur;
 public class TransactionAdvancedDao {
 
     public static ArrayList<TransactionAdvanced> researchAll() {
-        ArrayList<TransactionAdvanced> listTrans = new ArrayList<TransactionAdvanced>();
+        ArrayList<TransactionAdvanced> listTransfer = new ArrayList<TransactionAdvanced>();
 
-        Connection cnx = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        Connection con = null;
+        PreparedStatement prepStatement = null;
+        ResultSet resultSet = null;
 
         try {
-            cnx = OracleConnections.getConnection();
+            con = OracleConnections.getConnection();
 
-            String query ="select tr.numero as numero, cl1.nom||' '||cl1.prenom as clientd, co1.nom as compted, cl2.nom||' '||cl2.prenom as clientc, "
-                    + "co2.nom as comptec, tr.montant as montant, tr.date_trans as date_trans\n"
-                    + "from transfert tr\n"
-                    + "inner join compte co1\n"
-                    + "on tr.num_compte_deb = co1.numero\n"
-                    + "inner join compte co2\n"
-                    + "on tr.num_compte_cred = co2.numero\n"
-                    + "inner join client cl1\n"
-                    + "on cl1.numero = co1.numero_client\n"
-                    + "inner join client cl2\n"
-                    + "on cl2.numero = co2.numero_client\n"
-                    + "order by tr.date_trans desc, tr.montant"; 
+            StringBuilder query = new StringBuilder("select tr.numero as numero, cl1.nom||' '||cl1.prenom as clientd, co1.nom as compted, cl2.nom||' '||cl2.prenom as clientc, ");
+            query.append("co2.nom as comptec, tr.montant as montant, tr.date_trans as date_trans");
+            query.append("from transfert tr");
+            query.append("inner join compte co1");
+            query.append("on tr.num_compte_deb = co1.numero");
+            query.append("inner join compte co2");
+            query.append("on tr.num_compte_cred = co2.numero");
+            query.append("inner join client cl1");
+            query.append("on cl1.numero = co1.numero_client");
+            query.append("inner join client cl2");
+            query.append("on cl2.numero = co2.numero_client");
+            query.append("order by tr.date_trans desc, tr.montant");
 
-            pstmt = cnx.prepareStatement(query);
-            rs = pstmt.executeQuery();
+            prepStatement = con.prepareStatement(query.toString());
+            resultSet = prepStatement.executeQuery();
 
-            while (rs.next()){                
-                int id = rs.getInt("numero");
-                String client_debit = rs.getString("clientd");
-                String compte_debit = rs.getString("compted");
-                String client_credit = rs.getString("clientc");
-                String compte_credit = rs.getString("comptec");
-                float montant = rs.getFloat("montant");
-                Date date_trans = rs.getDate("date_trans");
-                                               
-                TransactionAdvanced tr = new TransactionAdvanced(id,client_debit,compte_debit,client_credit,compte_credit,montant,date_trans);
+            while (resultSet.next()) {
+                int id = resultSet.getInt("numero");
+                String client_debit = resultSet.getString("clientd");
+                String account_debit = resultSet.getString("compted");
+                String client_credit = resultSet.getString("clientc");
+                String account_credit = resultSet.getString("comptec");
+                float amount = resultSet.getFloat("montant");
+                Date transfer_date = resultSet.getDate("date_trans");
 
-                listTrans.add(tr);
+                TransactionAdvanced transfer = new TransactionAdvanced(id, client_debit, account_debit, client_credit, account_credit, amount, transfer_date);
+
+                listTransfer.add(transfer);
             }
 
-            return listTrans;
+            return listTransfer;
         } catch (SQLException ex) {
             System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
             return null;
         } finally {
             try {
-                rs.close();
-                pstmt.close();
-                cnx.close();
+                resultSet.close();
+                prepStatement.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println("Error SELECT SQL: " + ex.getMessage());
             }
 
         }
     }
-    
-    public static ArrayList<TransactionAdvanced> researchByUser(Utilisateur user) {
-            
-        ArrayList<TransactionAdvanced> listTrans = new ArrayList<TransactionAdvanced>();
 
-        Connection cnx = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+    public static ArrayList<TransactionAdvanced> researchByUser(User user) {
+
+        ArrayList<TransactionAdvanced> listTransfer = new ArrayList<TransactionAdvanced>();
+
+        Connection con = null;
+        PreparedStatement prepStatement = null;
+        ResultSet resultSet = null;
 
         try {
-            cnx = OracleConnections.getConnection();
+            con = OracleConnections.getConnection();
 
-            String query = "select tr.numero as numero, cl1.nom||' '||cl1.prenom as clientd, co1.nom as compted, cl2.nom||' '||cl2.prenom as clientc, "
-                    + "co2.nom as comptec, tr.montant, tr.date_trans "
-                    + "from transfert tr "
-                    + "inner join compte co1 "
-                    + "on tr.num_compte_deb = co1.numero "
-                    + "inner join compte co2 "
-                    + "on tr.num_compte_cred = co2.numero "
-                    + "inner join client cl1 "
-                    + "on cl1.numero = co1.numero_client "
-                    + "inner join client cl2 "
-                    + "on cl2.numero = co2.numero_client "
-                    + "where num_employe = ?"
-                    + "order by tr.date_trans desc, tr.montant"; 
+            StringBuilder query = new StringBuilder("select tr.numero as numero, cl1.nom||' '||cl1.prenom as clientd, co1.nom as compted, cl2.nom||' '||cl2.prenom as clientc, ");
+            query.append("co2.nom as comptec, tr.montant, tr.date_trans ");
+            query.append("from transfert tr ");
+            query.append("inner join compte co1 ");
+            query.append("on tr.num_compte_deb = co1.numero ");
+            query.append("inner join compte co2 ");
+            query.append("on tr.num_compte_cred = co2.numero ");
+            query.append("inner join client cl1 ");
+            query.append("on cl1.numero = co1.numero_client ");
+            query.append("inner join client cl2 ");
+            query.append("on cl2.numero = co2.numero_client ");
+            query.append("where num_employe = ?");
+            query.append("order by tr.date_trans desc, tr.montant");
 
-            pstmt = cnx.prepareStatement(query);
-            
-            pstmt.setInt(1,user.getIdentifiant());
+            prepStatement = con.prepareStatement(query.toString());
 
-            rs = pstmt.executeQuery();
+            prepStatement.setInt(1, user.getId());
 
-            while (rs.next()){                
-                int id = rs.getInt("numero");
-                String client_debit = rs.getString("clientd");
-                String compte_debit = rs.getString("compted");
-                String client_credit = rs.getString("clientc");
-                String compte_credit = rs.getString("comptec");               
-                float montant = rs.getFloat("montant");
-                Date date_trans = rs.getDate("date_trans");
-                                               
-                TransactionAdvanced tr = new TransactionAdvanced(id,client_debit,compte_debit,client_credit,compte_credit,montant,date_trans);
+            resultSet = prepStatement.executeQuery();
 
-                listTrans.add(tr);
+            while (resultSet.next()) {
+                int id = resultSet.getInt("numero");
+                String client_debit = resultSet.getString("clientd");
+                String account_debit = resultSet.getString("compted");
+                String client_credit = resultSet.getString("clientc");
+                String account_credit = resultSet.getString("comptec");
+                float amount = resultSet.getFloat("montant");
+                Date transfer_date = resultSet.getDate("date_trans");
+
+                TransactionAdvanced transfer = new TransactionAdvanced(id, client_debit, account_debit, client_credit, account_credit, amount, transfer_date);
+
+                listTransfer.add(transfer);
             }
 
-            return listTrans;
+            return listTransfer;
         } catch (SQLException ex) {
             System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
             return null;
         } finally {
             try {
-                rs.close();
-                pstmt.close();
-                cnx.close();
+                resultSet.close();
+                prepStatement.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println("Error SELECT SQL: " + ex.getMessage());
             }
