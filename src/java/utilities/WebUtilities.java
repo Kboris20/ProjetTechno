@@ -16,6 +16,8 @@ public class WebUtilities {
         out.println("<html>");
         out.println("<head>");
         out.println("<title>" + title + "</title>");
+        
+        out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js\"></script>");
 
         out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
         out.println("<link href=\"theme/css/style.css\" rel=\"stylesheet\" media=\"screen\">");
