@@ -15,10 +15,10 @@ import modele.Utilisateur;
  */
 public class Utilisateurs {
 
-    public static List users = UtilisateurDao.researchAll();
+   private static final List users = UtilisateurDao.researchAll();
 
     public static boolean verifyUser(String user, String pw) {
-        Utilisateur util = new Utilisateur();
+        Utilisateur util;
         if (!UtilisateurDao.researchByUsername(user).isEmpty()) {
             util = UtilisateurDao.researchByUsername(user).get(0);
             if (util.getPwd().equals(pw)) {

@@ -5,12 +5,9 @@
  */
 package servlets;
 
-<<<<<<< HEAD:src/java/servlets/WelcomeServlet.java
 import dao.ClientDao;
-=======
 import dao.TransactionDao;
 import dao.UtilisateurDao;
->>>>>>> chart:src/java/servlets/welcomeServlet.java
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,11 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-<<<<<<< HEAD:src/java/servlets/WelcomeServlet.java
 import modele.Client;
-=======
 import modele.Utilisateur;
->>>>>>> chart:src/java/servlets/welcomeServlet.java
 import utilities.WebUtilities;
 
 /**
@@ -45,13 +39,10 @@ public class WelcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-<<<<<<< HEAD:src/java/servlets/WelcomeServlet.java
         listeCli = new ArrayList<Client>();
         listeCli.addAll(ClientDao.researchAll());
-=======
         String userConnected = HtmlHttpUtils.getUser(request);
 
->>>>>>> chart:src/java/servlets/welcomeServlet.java
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
