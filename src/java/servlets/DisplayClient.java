@@ -5,7 +5,7 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Compte;
+import modele.Account;
 import static servlets.WelcomeServlet.listeCli;
 import utilities.WebUtilities;
 
@@ -49,7 +49,7 @@ public class DisplayClient extends HttpServlet {
 
             WebUtilities.doHeader(out, "Afficher un client", request, "clientDetail", Integer.parseInt(request.getParameter("idCli")));
             Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
+            cli.setId(Integer.parseInt(request.getParameter("idCli")));
             ArrayList<Client> cliListe = new ArrayList<Client>();
             cliListe.addAll(ClientDao.research(cli));
 
@@ -66,21 +66,21 @@ public class DisplayClient extends HttpServlet {
                     }
                 } catch (Exception ex) {
                 }
-                out.println("<fieldset><legend>" + cli.getNom() + " " + cli.getPrenom() + "</legend>");
-                out.println(cli.getAdresse() + "<br/>");
-                out.println(cli.getVille());
+                out.println("<fieldset><legend>" + cli.getLastName() + " " + cli.getFirstName() + "</legend>");
+                out.println(cli.getAddress() + "<br/>");
+                out.println(cli.getCity());
 
                 try {
                     if (request.getParameter("dele").equalsIgnoreCase("true")) {
-                        out.println("<div id=\"popupDeleteClientDisplayClient\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                        out.println("<div class=\"alert alert-warning alert-dismissible popupAlert\" role=\"alert\">");
                         out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
-                        ArrayList<Compte> listeCmpt = new ArrayList<Compte>();
-                        Compte c = new Compte();
-                        c.setIdentifiant(Integer.valueOf(request.getParameter("id")));
-                        listeCmpt.addAll(CompteDao.research(c));
+                        ArrayList<Account> listeCmpt = new ArrayList<Account>();
+                        Account c = new Account();
+                        c.setId(Integer.valueOf(request.getParameter("id")));
+                        listeCmpt.addAll(AccountDao.research(c));
                         out.println("<b><u>Confirmation</u></b>");
                         out.println("<p>Voulez vous réellement supprimer le compte</p>");
-                        out.println("<b> " + listeCmpt.get(0).getNom() + ", solde: " + listeCmpt.get(0).getSolde() + "</b>");
+                        out.println("<b> " + listeCmpt.get(0).getName() + ", solde: " + listeCmpt.get(0).getBalance() + "</b>");
                         out.println("<br/>");
                         out.println("<a href=\"deleteCompte?id=" + request.getParameter("id") + "&cliId=" + request.getParameter("idCli") + "\" class=\"btn btn-danger btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span></a>");
                         out.println("</div>");
@@ -88,7 +88,7 @@ public class DisplayClient extends HttpServlet {
                 } catch (Exception ex) {
                 }
 
-                RequestDispatcher dispatcher = request.getRequestDispatcher("allComptes?idCli=" + cli.getIdentifiant());
+                RequestDispatcher dispatcher = request.getRequestDispatcher("allComptes?idCli=" + cli.getId());
                 dispatcher.include(request, response);
 
                 out.println("</fieldset>");

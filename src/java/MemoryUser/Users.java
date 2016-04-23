@@ -5,20 +5,19 @@
 package MemoryUser;
 
 import dao.UtilisateurDao;
-import java.util.Hashtable;
 import java.util.List;
-import modele.Utilisateur;
+import modele.User;
 
 /**
  *
- * @author francill
+ * @author Boris
  */
-public class Utilisateurs {
+public class Users {
 
    private static final List users = UtilisateurDao.researchAll();
 
     public static boolean verifyUser(String user, String pw) {
-        Utilisateur util;
+        User util = new User();
         if (!UtilisateurDao.researchByUsername(user).isEmpty()) {
             util = UtilisateurDao.researchByUsername(user).get(0);
             if (util.getPwd().equals(pw)) {

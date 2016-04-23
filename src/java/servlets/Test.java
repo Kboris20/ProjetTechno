@@ -6,9 +6,9 @@
 
 package servlets;
 
-import dao.CompteDao;
+import dao.AccountDao;
 import dao.UtilisateurDao;
-import modele.Utilisateur;
+import modele.User;
 
 /**
  *
@@ -17,10 +17,10 @@ import modele.Utilisateur;
 public class Test {
     
     public static void main(String[] args){
-//    Utilisateur u = UtilisateurDao.researchByUsername("boris").get(0);
+//    User u = UtilisateurDao.researchByUsername("boris").get(0);
 //    
 //        System.out.println(u.getIdentifiant()+", "+u.getUsername()+", "+u.getPwd());
-        System.out.println(CompteDao.researchOwnerId(41));
+        System.out.println(AccountDao.researchOwnerId(41));
     }
     
 }

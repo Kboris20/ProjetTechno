@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="col-sm-8">
-        <form id="form1" name="form1" method="post" action="addCompte">
+         <form id="formAddAccount" name="formAddAccount" method="post" action="addCompte">
             <input type="hidden" name="clientId" id="clientId" value="<%= id%>"/>
             <table>
                 <tr>

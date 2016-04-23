@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Utilisateur;
+import modele.User;
 import utilities.WebUtilities;
 
 /**
@@ -66,7 +66,7 @@ public class WelcomeServlet extends HttpServlet {
             int nbTransactions = TransactionDao.getNbTransactions();
             int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser();
             
-            ArrayList<Utilisateur> users = UtilisateurDao.researchAll();
+            ArrayList<User> users = UtilisateurDao.researchAll();
 
             out.println("<h3><b><u>Statistiques</u></b></h3>");
             out.println("<div class=\"row\">");
@@ -77,7 +77,7 @@ public class WelcomeServlet extends HttpServlet {
             out.println("<script>");
             out.println("var barChartData = {");
             
-            for (Utilisateur user : users) {
+            for (User user : users) {
                 out.println("labels : [\"" + user.getUsername() + "\",");
             }
             out.println("\"" + users.get(users.size() - 1).getUsername() + "\"],");

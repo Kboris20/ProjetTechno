@@ -14,7 +14,7 @@
     try {
         if (request.getParameter("error").equalsIgnoreCase("true")) {
             out.println("<div class=\"alert alert-error\">");
-            out.println("Veuillez réessayer !");
+            out.println("Le mot de passe/nom d'utilisateur est incorrect!");
             out.println("</div>");
         }
     } catch (Exception ex) {
@@ -24,19 +24,19 @@
     <h3 class="h3 form-signin-heading"><span class="glyphicon glyphicon-user"></span> S'identifier</h3>
     <hr/>
     <br/>
-    <table class="tablePageConnection">
+    <table class="tablePageConnexion">
         <tr>
         <label for="username" class="sr-only">Nom d'utilisateur</label>
-        <td class="td"><input type="text" id="username" name="username" class="form-control" placeholder="Nom d'utilisateur" required autofocus></td>
+        <td class="tdConnexion"><input type="text" id="username" name="username" class="form-control" placeholder="Nom d'utilisateur" required autofocus></td>
         </tr>
         <tr>
-        <label for="password" class="sr-only">Mot de passe  </label>
-        <td class="td"><input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required></td>
+        <label for="password" class="sr-only">Mot de passe</label>
+        <td class="tdConnexion"><input type="password" id="password" name="password" class="form-control" placeholder="Mot de passe" required></td>
         </tr>
     </table>
     <br/>
     <br/>
-    <button id="connectionButton" class="btn btn-lg btn-primary btn-block" type="submit">Se connecter</button>
+    <button id="connexionButton" class="btn btn-lg btn-primary btn-block" type="submit">Se connecter</button>
 </form>
 <div id="divImgConnexion">
     <img id="imgStyle" src="http://localhost:8080/crud/theme/img/imgidentification.jpg" alt="image d'identificaiton"/>

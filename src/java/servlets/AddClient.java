@@ -42,10 +42,10 @@ public class AddClient extends HttpServlet {
         try {
 
             Client newCli = new Client();
-            newCli.setNom(request.getParameter("nom"));
-            newCli.setPrenom(request.getParameter("prenom"));
-            newCli.setAdresse(request.getParameter("adresse"));
-            newCli.setVille(request.getParameter("ville"));
+            newCli.setLastName(request.getParameter("nom"));
+            newCli.setFirstName(request.getParameter("prenom"));
+            newCli.setAddress(request.getParameter("adresse"));
+            newCli.setCity(request.getParameter("ville"));
 
             int identifiant = (int) ClientDao.create(newCli);
 

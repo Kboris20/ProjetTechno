@@ -8,6 +8,7 @@ import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,9 @@ import utilities.WebUtilities;
  * @author christop.francill
  */
 public class ListAll extends HttpServlet {
+
+    private List<Client> listeCli;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,15 +50,15 @@ public class ListAll extends HttpServlet {
 
         try {
             if (request.getParameter("dele").equalsIgnoreCase("true")) {
-                out.println("<div id=\"popupDelClientListAll\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                out.println("<div class=\"alert alert-warning alert-dismissible popupAlert\" role=\"alert\">");
                 out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                 ArrayList<Client> listeCli = new ArrayList<Client>();
                 Client c = new Client();
-                c.setIdentifiant(Integer.valueOf(request.getParameter("id")));
+                c.setId(Integer.valueOf(request.getParameter("id")));
                 listeCli.addAll(ClientDao.research(c));
                 out.println("<b><u>Confirmation</u></b>");
                 out.println("<p>Voulez vous réellement supprimer</p>");
-                out.println("<b> " + listeCli.get(0).getNom() + " " + listeCli.get(0).getPrenom() + "</b>");
+                out.println("<b> " + listeCli.get(0).getLastName() + " " + listeCli.get(0).getFirstName() + "</b>");
                 out.println("<br/>");
                 out.println("<a href=\"delete?id=" + request.getParameter("id") + "\" class=\"btn btn-danger btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span></a>");
                 out.println("</div>");
@@ -103,6 +107,9 @@ public class ListAll extends HttpServlet {
             } catch (Exception ex) {
             }
 
+            listeCli = new ArrayList<Client>();
+            listeCli.addAll(ClientDao.researchAll());
+            Integer nombreClient;
             out.println("<div class=\"panel panel-default\">");
             out.println("<div class=\"panel-heading\">");
             out.println("<a class=\"btn btn-primary addC\"><i class=\"icon-white icon-plus\" title=\"Ajouter un client\"></i></a>");
@@ -117,13 +124,45 @@ public class ListAll extends HttpServlet {
                     + "<td><input type=\"text\" name=\"adresse\" placeholder=\"Adresse\" required/></td>"
                     + "<td><input type=\"text\" name=\"ville\" placeholder=\"Ville\" required/></td>"
                     + "<td><img src=\"http://localhost:8080/crud/theme/img/nouveau_client1.png\" alt=\"image nouveau client\"/></td>"
-                    
                     + "</tr></table></form>"
+                    + "</div>"
                     + "</div>");
+            out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
+            out.println("<tr>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td class=\"listRow\">Nom</td>");
+            out.println("<td class=\"listRow\">Prenom</td>");
+            out.println("<td class=\"listRow\">Adresse</td>");
+            out.println("<td class=\"listRow\">Ville</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("</tr>");
 
-            out.println("</div><div style=\"text-align:center\" id=\"resultat\"><img src=\"http://localhost:8080/crud/theme/img/ajax-loader.gif\" alt=\"Chargement\"/></div>");
+            if (listeCli.isEmpty()) {
+                out.println("<div class=\"alert alert-info\">");
+                out.println("Il n'y a pas de client");
+                out.println("</div>");
+            } else {
+                nombreClient = 0;
+                for (Client cli : listeCli) {
+                    out.println("<tr>");
+                    out.println("<td>" + ++nombreClient + "</td>");
+                    out.println("<td>" + cli.getLastName() + "</td>");
+                    out.println("<td>" + cli.getFirstName() + "</td>");
+                    out.println("<td>" + cli.getAddress() + "</td>");
+                    out.println("<td>" + cli.getCity() + "</td>");
+                    out.println("<td></td>");
+                    out.println("<td></td>");
+                    out.println("<td><a href=\"afficherClient?idCli=" + cli.getId() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\" title=\"Détailler\"></i></a>");
+                    out.println("<a href=\"modifier?id=" + cli.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                    out.println("<a href=\"index?dele=true&id=" + cli.getId() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
+                    out.println("</tr>");
+                }
 
-            
+            }
+            out.println("</table>");
+
             out.println("</div>");
         } finally {
             WebUtilities.doFooter(out);

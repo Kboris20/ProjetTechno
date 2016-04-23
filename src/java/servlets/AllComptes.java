@@ -5,7 +5,7 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Compte;
+import modele.Account;
 import utilities.WebUtilities;
 
 /**
@@ -54,13 +54,13 @@ public class AllComptes extends HttpServlet {
                 out.println("<h3>Liste des comptes</h3>");
 
                 Client cli = new Client();
-                cli.setIdentifiant(Integer.parseInt(request.getParameter("idCli")));
+                cli.setId(Integer.parseInt(request.getParameter("idCli")));
                 ArrayList<Client> cliListe = new ArrayList<Client>();
                 cliListe.addAll(ClientDao.research(cli));
 
                 if (cliListe.size() > 0) {
                     cli = cliListe.get(0);
-                    cli.setListeCompte(CompteDao.research(cli.getIdentifiant()));
+                    cli.setListAccount(AccountDao.research(cli.getId()));
 
                     try {
                         if (request.getParameter("addCompte").equals("true")) {
@@ -89,13 +89,13 @@ public class AllComptes extends HttpServlet {
 
                     out.println("<div class=\"panel panel-default\">");
                     out.println("<div class=\"panel-heading\">");
-                    out.println("<a href=\"ajouterCompte.jsp?idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
+                    out.println("<a href=\"ajouterCompte.jsp?idCli=" + cli.getId() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
                     out.println("</div>");
 
                     out.println("<br/>");
-                    if (cli.getListeCompte().size() > 0) {
+                    if (cli.getListAccount().size() > 0) {
                         out.println("<form action=\"deleteMultiCompteConfirm\">");
-                        out.println("<table class=\"table table-hover inset\" id=\"tableClientAllComptes\">");
+                        out.println("<table class=\"table table-hover inset list\" >");
                         out.println("<thead>");
                         out.println("<th>&nbsp;</td>");
                         out.println("<th class=\"listRow\">Compte</td>");
@@ -106,16 +106,16 @@ public class AllComptes extends HttpServlet {
                         out.println("<th>&nbsp;</td>");
                         out.println("</thead>");
                         nombreComptes = 0;
-                        for (Compte compt : cli.getListeCompte()) {
-                            out.println("<tr class=\"trCompte\">");
+                        for (Account compt : cli.getListAccount()) {
+                            out.println("<tr class=\"trAccount\">");
 
                             out.println("<td>" + ++nombreComptes + "</td>");
-                            out.println("<td>" + compt.getNom() + "</td>");
-                            out.println("<td>" + compt.getSolde() + "</td>");
-                            out.println("<td>" + compt.getTaux() + "</td>");
-                            out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getIdentifiant() + "&id1=-1&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a>");
-                            out.println("<a href=\"modifierCompte?id=" + compt.getIdentifiant() + "&idCli=" + cli.getIdentifiant() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
-                            out.println("<a href=\"afficherClient?id=" + compt.getIdentifiant() + "&idCli=" + cli.getIdentifiant() + "&dele=true\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
+                            out.println("<td>" + compt.getName() + "</td>");
+                            out.println("<td>" + compt.getBalance() + "</td>");
+                            out.println("<td>" + compt.getRate() + "</td>");
+                            out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getId() + "&id1=-1&idCli=" + cli.getId() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a>");
+                            out.println("<a href=\"modifierCompte?id=" + compt.getId() + "&idCli=" + cli.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                            out.println("<a href=\"afficherClient?id=" + compt.getId() + "&idCli=" + cli.getId() + "&dele=true\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
                             out.println("</tr>");
                         }
                         out.println("</table>");
@@ -135,23 +135,23 @@ public class AllComptes extends HttpServlet {
             } else {
                 WebUtilities.doHeader(out, "Afficher tous les comptes", request, "clientDetail", Integer.valueOf(request.getParameter("id")));
 
-                ArrayList<Compte> listeCpt = new ArrayList<Compte>();
-                listeCpt.addAll(CompteDao.research(new Compte()));
+                ArrayList<Account> listeCpt = new ArrayList<Account>();
+                listeCpt.addAll(AccountDao.research(new Account()));
 
                 if (listeCpt.size() > 0) {
-                    out.println("<table class=\"table table-hover\" id=\"tableComptesAllComptes\">");
+                    out.println("<table class=\"table table-hover list\" >");
                     out.println("<tr>");
                     out.println("<td class=\"listRow\">Nom</td>");
                     out.println("<td class=\"listRow\">Solde</td>");
                     out.println("<td class=\"listRow\">Taux</td>");
                     out.println("<td class=\"listRow\">Client</td>");
                     out.println("</tr>");
-                    for (Compte cpt : listeCpt) {
+                    for (Account cpt : listeCpt) {
                         out.println("<tr>");
-                        out.println("<td>" + cpt.getNom() + "</td>");
-                        out.println("<td>" + cpt.getSolde() + "</td>");
-                        out.println("<td>" + cpt.getTaux() + "</td>");
-                        out.println("<td>" + CompteDao.researchOwner(cpt.getIdentifiant()) + "</td>");
+                        out.println("<td>" + cpt.getName() + "</td>");
+                        out.println("<td>" + cpt.getBalance() + "</td>");
+                        out.println("<td>" + cpt.getRate() + "</td>");
+                        out.println("<td>" + AccountDao.researchOwner(cpt.getId()) + "</td>");
                         out.println("</tr>");
                     }
                     out.println("</table>");

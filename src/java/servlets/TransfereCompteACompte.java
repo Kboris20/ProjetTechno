@@ -6,7 +6,7 @@
 package servlets;
 
 import dao.ClientDao;
-import dao.CompteDao;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
-import modele.Compte;
+import modele.Account;
 import utilities.WebUtilities;
 
 /**
@@ -64,17 +64,17 @@ public class TransfereCompteACompte extends HttpServlet {
             } catch (Exception ex) {
             }
 
-            Compte cpt = new Compte();
-            cpt.setIdentifiant(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Compte> cptListe = CompteDao.research(cpt);
+            Account cpt = new Account();
+            cpt.setId(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Account> cptListe = AccountDao.research(cpt);
             Integer id1 = -1;
-            id1 = cpt.getIdentifiant();
+            id1 = cpt.getId();
 
             if (cptListe.size() > 0) {
                 cpt = cptListe.get(0);
-                String owner = CompteDao.researchOwner(cpt.getIdentifiant());
+                String owner = AccountDao.researchOwner(cpt.getId());
                 out.println("<h3>Compte débité appartenant à Mme/M. " + owner + " </h3>");
-                out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteaCompte\">");
+                out.println("<table class=\"table table-hover list\" >");
                 out.println("<tr>");
                 out.println("<td class=\"listRow\">Compte</td>");
                 out.println("<td class=\"listRow\">Solde</td>");
@@ -84,9 +84,9 @@ public class TransfereCompteACompte extends HttpServlet {
                 out.println("</tr>");
 
                 out.println("<tr>");
-                out.println("<td>" + cpt.getNom() + "</td>");
-                out.println("<td>" + cpt.getSolde() + "</td>");
-                out.println("<td>" + cpt.getTaux() + "</td>");
+                out.println("<td>" + cpt.getName() + "</td>");
+                out.println("<td>" + cpt.getBalance() + "</td>");
+                out.println("<td>" + cpt.getRate() + "</td>");
                 out.println("</tr>");
                 out.println("</table>");
                 out.println("<br/>");
@@ -94,7 +94,7 @@ public class TransfereCompteACompte extends HttpServlet {
                 if (Integer.valueOf(request.getParameter("id1")) > -1) {
                     try {
                         if (request.getParameter("error").equals("false")) {
-                            out.println("<div id=\"popupErrorTransfCompte\" class=\"alert alert-warning alert-dismissible\" role=\"alert\">");
+                            out.println("<div class=\"alert alert-warning alert-dismissible popupAlert\" role=\"alert\">");
                             out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                             out.println("<b><u>Confirmation</u></b>");
                             out.println("<p>Souhaitez vous réellement effectuer de de: ");
@@ -106,18 +106,18 @@ public class TransfereCompteACompte extends HttpServlet {
                     } catch (Exception ex) {
                     }
 
-                    Compte cptDest = new Compte();
-                    cptDest.setIdentifiant(Integer.parseInt(request.getParameter("id1")));
-                    ArrayList<Compte> cptListeDest = CompteDao.research(cptDest);
+                    Account cptDest = new Account();
+                    cptDest.setId(Integer.parseInt(request.getParameter("id1")));
+                    ArrayList<Account> cptListeDest = AccountDao.research(cptDest);
 
                     Client cliDest = new Client();
                     if (cptListeDest.size() > 0) {
                         cptDest = cptListeDest.get(0);
-                        String ownerDest = CompteDao.researchOwner(cptDest.getIdentifiant());
+                        String ownerDest = AccountDao.researchOwner(cptDest.getId());
                         out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=" + request.getParameter("id") + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les rôles\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
                         out.println("<br/>");
                         out.println("<h3>Compte crédité appartenant à Mme/M. " + ownerDest + " </h3>");
-                        out.println("<table class=\"table table-hover\" id=\"tableCompteTransfertCompteACompte\">");
+                        out.println("<table class=\"table table-hover list\" >");
                         out.println("<tr>");
                         out.println("<td class=\"listRow\">Compte</td>");
                         out.println("<td class=\"listRow\">Solde</td>");
@@ -127,17 +127,17 @@ public class TransfereCompteACompte extends HttpServlet {
                         out.println("</tr>");
 
                         out.println("<tr>");
-                        out.println("<td>" + cptDest.getNom() + "</td>");
-                        out.println("<td>" + cptDest.getSolde() + "</td>");
-                        out.println("<td>" + cptDest.getTaux() + "</td>");
+                        out.println("<td>" + cptDest.getName() + "</td>");
+                        out.println("<td>" + cptDest.getBalance() + "</td>");
+                        out.println("<td>" + cptDest.getRate() + "</td>");
                         out.println("</tr>");
                         out.println("</table>");
                         out.println("<br/>");
 
                         out.println("<form method=\"GET\" action=\"transfereCheck\"");
-                        out.println("<label for=\"montant\">Montant:  CHF </label>");
-                        out.println("<input type=\"number\" name=\"montant\" id=\"montant\" value=\"00\"/>.");
-                        out.println("<input type=\"number\" name=\"centimes\" id=\"centimes\" value=\"00\"/>");
+                        out.println("<label for=\"amount\">Montant:  CHF </label>");
+                        out.println("<input type=\"number\" name=\"amount\" id=\"amount\" value=\"00\"/>.");
+                        out.println("<input type=\"number\" name=\"cents\" id=\"cents\" value=\"00\"/>");
                         out.println("<input type=\"hidden\" name=\"id1\" value=\"" + request.getParameter("id1") + "\"/>");
                         out.println("<input type=\"hidden\" name=\"id\" value=\"" + request.getParameter("id") + "\"/>");
                         out.println("<input type=\"hidden\" name=\"idCli\" value=\"" + request.getParameter("idCli") + "\"/>");
@@ -155,7 +155,7 @@ public class TransfereCompteACompte extends HttpServlet {
                     out.println("<h3>Compte à créditer... </h3>");
                     out.println("<a class=\"btn btn-primary choisirCompte\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
 
-                    out.println("<div id=\"popupChoixCliTransfCompte\" class=\"alert alert-warning alert-dismissible clients\" role=\"alert\">");
+                    out.println("<div class=\"alert alert-warning alert-dismissible clients popupAlert\" role=\"alert\">");
                     out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
                     ArrayList<Client> listeCli = new ArrayList<Client>();
                     listeCli.addAll(WelcomeServlet.listeCli);
@@ -164,20 +164,20 @@ public class TransfereCompteACompte extends HttpServlet {
 
                     if (!listeCli.isEmpty()) {
                         for (Client cli : listeCli) {
-                            out.println("<a href=\"#this\" onClick=\"Affiche('#compte_" + cli.getIdentifiant() + "')\" href=\"#\" class=\"list-group-item\">" + cli.getNom() + " " + cli.getPrenom() + "</a>");
-                            ArrayList<Compte> comptListe = new ArrayList<Compte>();
-                            out.println("<div id=\"compte_" + cli.getIdentifiant() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
+                            out.println("<a href=\"#this\" onClick=\"Affiche('#compte_" + cli.getId() + "')\" href=\"#\" class=\"list-group-item\">" + cli.getLastName() + " " + cli.getFirstName() + "</a>");
+                            ArrayList<Account> comptListe = new ArrayList<Account>();
+                            out.println("<div id=\"compte_" + cli.getId() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
                             out.println("<div class=\"list-group\">");
                             out.println("<a href=\"#this\" class=\"list-group-item disabled\">Comptes</a>");
-                            for (Compte c : cli.getListeCompte()) {
-                                if (c.getIdentifiant() != Integer.valueOf(request.getParameter("id"))) {
+                            for (Account c : cli.getListAccount()) {
+                                if (c.getId() != Integer.valueOf(request.getParameter("id"))) {
                                     comptListe.add(c);
                                 }
                             }
                             if (!comptListe.isEmpty()) {
 
-                                for (Compte compte : comptListe) {
-                                    out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id") + "&id1=" + compte.getIdentifiant() + "&idCli=" + request.getParameter("idCli") + "\" class=\"list-group-item\">Compte: " + compte.getNom() + ", Solde: " + compte.getSolde() + "</a>");
+                                for (Account compte : comptListe) {
+                                    out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id") + "&id1=" + compte.getId() + "&idCli=" + request.getParameter("idCli") + "\" class=\"list-group-item\">Compte: " + compte.getName() + ", Solde: " + compte.getBalance() + "</a>");
 
                                 }
                             } else {

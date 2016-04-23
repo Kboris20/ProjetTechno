@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import modele.Utilisateur;
+import modele.User;
 
 /**
  *
@@ -19,25 +19,25 @@ import modele.Utilisateur;
  */
 public class UtilisateurDao {
 
-    public static ArrayList<Utilisateur> researchAll() {
-        ArrayList<Utilisateur> users = new ArrayList<Utilisateur>();
+    public static ArrayList<User> researchAll() {
+        ArrayList<User> users = new ArrayList<User>();
 
-        Connection cnx = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        Connection con = null;
+        PreparedStatement prepStatement = null;
+        ResultSet resultSet = null;
 
         try {
-            cnx = OracleConnections.getConnection();
+            con = OracleConnections.getConnection();
 
             String query = "select numero, username, pwd from employe";
-            pstmt = cnx.prepareStatement(query);
-            rs = pstmt.executeQuery();
+            prepStatement = con.prepareStatement(query);
+            resultSet = prepStatement.executeQuery();
 
-            while (rs.next()) {
-                Integer numero = rs.getInt("numero");
-                String username = rs.getString("username");
-                String pwd = rs.getString("pwd");
-                Utilisateur user = new Utilisateur(numero, username, pwd);
+            while (resultSet.next()) {
+                Integer numero = resultSet.getInt("numero");
+                String username = resultSet.getString("username");
+                String pwd = resultSet.getString("pwd");
+                User user = new User(numero, username, pwd);
                 users.add(user);
             }
             return users;
@@ -46,9 +46,9 @@ public class UtilisateurDao {
             return null;
         } finally {
             try {
-                rs.close();
-                pstmt.close();
-                cnx.close();
+                resultSet.close();
+                prepStatement.close();
+                con.close();
             } catch (SQLException ex) {
                 System.out.println("Error SELECT SQL: " + ex.getMessage());
             }
@@ -56,31 +56,31 @@ public class UtilisateurDao {
         }
     }
 
-    public static ArrayList<Utilisateur> researchByUsername(String username) {
-        ArrayList<Utilisateur> users = new ArrayList<Utilisateur>();
+    public static ArrayList<User> researchByUsername(String username) {
+        ArrayList<User> users = new ArrayList<User>();
 
-        Connection cnx = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        Connection con = null;
+        PreparedStatement prepStatement = null;
+        ResultSet resultSet = null;
 
         try {
-            cnx = OracleConnections.getConnection();
+            con = OracleConnections.getConnection();
 
             String query = "select numero, username, pwd from employe where username = ?";
-            pstmt = cnx.prepareStatement(query);
-            pstmt.setString(1, username);
-            rs = pstmt.executeQuery();
+            prepStatement = con.prepareStatement(query);
+            prepStatement.setString(1, username);
+            resultSet = prepStatement.executeQuery();
 
-            while (rs.next()) {
-                Integer numero = rs.getInt("numero");
-                String pwd = rs.getString("pwd");
-                String user_name = rs.getString("username");
-                Utilisateur user = new Utilisateur(numero, user_name, pwd);
+            while (resultSet.next()) {
+                Integer number = resultSet.getInt("numero");
+                String pwd = resultSet.getString("pwd");
+                String user_name = resultSet.getString("username");
+                User user = new User(number, user_name, pwd);
                 users.add(user);
             }
-            rs.close();
-            pstmt.close();
-            cnx.close();
+            resultSet.close();
+            prepStatement.close();
+            con.close();
             return users;
 
         } catch (SQLException ex) {

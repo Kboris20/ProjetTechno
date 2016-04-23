@@ -10,7 +10,6 @@ import dao.TransactionDao;
 import static dao.UtilisateurDao.researchByUsername;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Transaction;
 import modele.TransactionAdvanced;
-import modele.Utilisateur;
+import modele.User;
 import utilities.WebUtilities;
 
 /**
@@ -46,7 +45,7 @@ public class GestionTransaction extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        Utilisateur current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+        User current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
 
         listeTra = new ArrayList<Transaction>();
         listeTra.addAll(TransactionDao.researchAll());
@@ -89,10 +88,10 @@ public class GestionTransaction extends HttpServlet {
                 for (TransactionAdvanced tra : listeTraJoin) {
                     out.println("<tr>");
                     out.println("<td>" + tra.getClient_debit() + "</td>");
-                    out.println("<td>" + tra.getCompte_debit() + "</td>");
+                    out.println("<td>" + tra.getAccount_debit() + "</td>");
                     out.println("<td>" + tra.getClient_credit() + "</td>");
-                    out.println("<td>" + tra.getCompte_credit() + "</td>");
-                    out.println("<td>" + myFormatter.format(tra.getMontant()) + "</td>");
+                    out.println("<td>" + tra.getAccount_credit() + "</td>");
+                    out.println("<td>" + myFormatter.format(tra.getAmount()) + "</td>");
                     out.println("<td>" + formater.format(tra.getDate()) + "</td>");
                     out.println("</tr>");
                 }

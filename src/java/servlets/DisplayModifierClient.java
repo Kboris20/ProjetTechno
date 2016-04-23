@@ -41,7 +41,7 @@ public class DisplayModifierClient extends HttpServlet {
         }
         try {
             Client cli = new Client();
-            cli.setIdentifiant(Integer.parseInt(request.getParameter("id")));
+            cli.setId(Integer.parseInt(request.getParameter("id")));
             ArrayList<Client> cliListe = ClientDao.research(cli);
             WebUtilities.doHeader(out, "Modifier un client", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
 
@@ -59,22 +59,22 @@ public class DisplayModifierClient extends HttpServlet {
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
                 out.println("<form  id=\"form1\" name=\"form1\" method=\"post\"  action=\"doModifier\">");
-                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cli.getIdentifiant() + "\"/>");
+                out.println("<input type=\"hidden\" name=\"id\" value=\"" + cli.getId() + "\"/>");
                 out.println("<p>");
                 out.println("<label for=\"nom\">Nom</label>");
-                out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cli.getNom() + "\"/>");
+                out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cli.getLastName() + "\"/>");
                 out.println("</p>");
                 out.println("<p>");
                 out.println("<label for=\"prenom\">Prénom</label>");
-                out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\"" + cli.getPrenom() + "\"/>");
+                out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\"" + cli.getFirstName() + "\"/>");
                 out.println("</p>");
                 out.println("<p>");
                 out.println("<label for=\"adresse\">Adresse</label>");
-                out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\"" + cli.getAdresse() + "\"/>");
+                out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\"" + cli.getAddress() + "\"/>");
                 out.println("</p>");
                 out.println("<p>");
                 out.println("<label for=\"ville\">Ville</label>");
-                out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\"" + cli.getVille() + "\"/>");
+                out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\"" + cli.getCity() + "\"/>");
                 out.println("</p>");
                 out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
                 out.println("</form>");
