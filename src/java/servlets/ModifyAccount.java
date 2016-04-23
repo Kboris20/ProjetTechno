@@ -21,7 +21,7 @@ import utilities.WebUtilities;
  *
  * @author christop.francill
  */
-public class ModifierCompte extends HttpServlet {
+public class ModifyAccount extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,30 +45,30 @@ public class ModifierCompte extends HttpServlet {
 
         WebUtilities.doHeader(out, "Modifier un compte", request, "compteMod", Integer.valueOf(request.getParameter("id")));
         try {
-            Client cli = new Client();
-            cli.setId(Integer.parseInt(request.getParameter("idCli")));
-            ArrayList<Client> cliListe = ClientDao.research(cli);
+            Client client = new Client();
+            client.setId(Integer.parseInt(request.getParameter("idCli")));
+            ArrayList<Client> clients = ClientDao.research(client);
 
-            if (cliListe.size() > 0) {
-                cli = cliListe.get(0);
+            if (clients.size() > 0) {
+                client = clients.get(0);
 
-                Account cpt = new Account();
-                cpt.setId(Integer.parseInt(request.getParameter("id")));
-                ArrayList<Account> listeCpt = AccountDao.research(cpt);
-                if (listeCpt.size() > 0) {
-                    cpt = listeCpt.get(0);
-                    if (AccountDao.researchOwnerId(cpt.getId()) == cli.getId()) {
+                Account account = new Account();
+                account.setId(Integer.parseInt(request.getParameter("id")));
+                ArrayList<Account> accounts = AccountDao.research(account);
+                if (accounts.size() > 0) {
+                    account = accounts.get(0);
+                    if (AccountDao.researchOwnerId(account.getId()) == client.getId()) {
                         out.println("<div class=\"row\"><div class=\"col-sm-8\">");
                         out.println("<form  id=\"form1\" name=\"form1\" method=\"get\"  action=\"doModifierCompte\">");
 
-                        out.println("<input type=\"hidden\" name=\"idCli\" value=\"" + cli.getId() + "\"/>");
+                        out.println("<input type=\"hidden\" name=\"idCli\" value=\"" + client.getId() + "\"/>");
 
-                        out.println("<input type=\"hidden\" name=\"id\" value=\"" + cpt.getId() + "\"/>");
+                        out.println("<input type=\"hidden\" name=\"id\" value=\"" + account.getId() + "\"/>");
                         out.println("<table><tr><td>");
                         out.println("<label for=\"nom\">Compte</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + cpt.getName() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + account.getName() + "\" required/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("<tr>");
@@ -76,7 +76,7 @@ public class ModifierCompte extends HttpServlet {
                         out.println("<label for=\"solde\">Solde</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\"" + cpt.getBalance() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"solde\" id=\"solde\" value=\"" + account.getBalance() + "\" required/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("<tr>");
@@ -84,7 +84,7 @@ public class ModifierCompte extends HttpServlet {
                         out.println("<label for=\"taux\">Taux</label>");
                         out.println("</td>");
                         out.println("<td>");
-                        out.println("<input type=\"text\" name=\"taux\" id=\"taux\" value=\"" + cpt.getRate() + "\" required/>");
+                        out.println("<input type=\"text\" name=\"taux\" id=\"taux\" value=\"" + account.getRate() + "\" required/>");
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
@@ -103,7 +103,6 @@ public class ModifierCompte extends HttpServlet {
                 out.println("</div>");
             }
 
-            //out.println("<a href=\"afficherClient?id=" + cli.getIdentifiant() + "\" class=\"btn btn-inverse\"><i class=\"icon-white icon-share-alt\"></i> Retour à la liste</a>");
         } finally {
 
             WebUtilities.doFooter(out);

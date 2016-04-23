@@ -27,7 +27,7 @@ import modele.User;
  *
  * @author boris.klett
  */
-public class Transfere extends HttpServlet {
+public class DoTransfer extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,6 +37,8 @@ public class Transfere extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws exception.NegativeAmmountException
+     * @throws exception.InsufficientBalanceException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NegativeAmmountException, InsufficientBalanceException {
@@ -80,9 +82,7 @@ public class Transfere extends HttpServlet {
             if (idCli == 0) {
                 response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?trans=ok&status=allOk&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
             } else {
-
                 response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?trans=ok&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
-
             }
 
         } finally {
@@ -105,9 +105,9 @@ public class Transfere extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NegativeAmmountException ex) {
-            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DoTransfer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InsufficientBalanceException ex) {
-            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DoTransfer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -125,9 +125,9 @@ public class Transfere extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (NegativeAmmountException ex) {
-            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DoTransfer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InsufficientBalanceException ex) {
-            Logger.getLogger(Transfere.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DoTransfer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

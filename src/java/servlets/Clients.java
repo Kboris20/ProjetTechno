@@ -20,9 +20,9 @@ import utilities.WebUtilities;
  *
  * @author christop.francill
  */
-public class ListAll extends HttpServlet {
+public class Clients extends HttpServlet {
 
-    private List<Client> listeCli;
+    private List<Client> clients;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,13 +33,11 @@ public class ListAll extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)            
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-//        String transfereToClient = new String();
-//        transfereToClient = request.getParameter("trans");
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
@@ -53,9 +51,9 @@ public class ListAll extends HttpServlet {
                 out.println("<div class=\"alert alert-warning alert-dismissible popupAlert\" role=\"alert\">");
                 out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                 ArrayList<Client> listeCli = new ArrayList<Client>();
-                Client c = new Client();
-                c.setId(Integer.valueOf(request.getParameter("id")));
-                listeCli.addAll(ClientDao.research(c));
+                Client client = new Client();
+                client.setId(Integer.valueOf(request.getParameter("id")));
+                listeCli.addAll(ClientDao.research(client));
                 out.println("<b><u>Confirmation</u></b>");
                 out.println("<p>Voulez vous réellement supprimer</p>");
                 out.println("<b> " + listeCli.get(0).getLastName() + " " + listeCli.get(0).getFirstName() + "</b>");
@@ -107,9 +105,9 @@ public class ListAll extends HttpServlet {
             } catch (Exception ex) {
             }
 
-            listeCli = new ArrayList<Client>();
-            listeCli.addAll(ClientDao.researchAll());
-            Integer nombreClient;
+            clients = new ArrayList<Client>();
+            clients.addAll(ClientDao.researchAll());
+            Integer nbClient;
             out.println("<div class=\"panel panel-default\">");
             out.println("<div class=\"panel-heading\">");
             out.println("<a class=\"btn btn-primary addC\"><i class=\"icon-white icon-plus\" title=\"Ajouter un client\"></i></a>");
@@ -139,24 +137,24 @@ public class ListAll extends HttpServlet {
             out.println("<td>&nbsp;</td>");
             out.println("</tr>");
 
-            if (listeCli.isEmpty()) {
+            if (clients.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Il n'y a pas de client");
                 out.println("</div>");
             } else {
-                nombreClient = 0;
-                for (Client cli : listeCli) {
+                nbClient = 0;
+                for (Client client : clients) {
                     out.println("<tr>");
-                    out.println("<td>" + ++nombreClient + "</td>");
-                    out.println("<td>" + cli.getLastName() + "</td>");
-                    out.println("<td>" + cli.getFirstName() + "</td>");
-                    out.println("<td>" + cli.getAddress() + "</td>");
-                    out.println("<td>" + cli.getCity() + "</td>");
+                    out.println("<td>" + ++nbClient + "</td>");
+                    out.println("<td>" + client.getLastName() + "</td>");
+                    out.println("<td>" + client.getFirstName() + "</td>");
+                    out.println("<td>" + client.getAddress() + "</td>");
+                    out.println("<td>" + client.getCity() + "</td>");
                     out.println("<td></td>");
                     out.println("<td></td>");
-                    out.println("<td><a href=\"afficherClient?idCli=" + cli.getId() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\" title=\"Détailler\"></i></a>");
-                    out.println("<a href=\"modifier?id=" + cli.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
-                    out.println("<a href=\"index?dele=true&id=" + cli.getId() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
+                    out.println("<td><a href=\"afficherClient?idCli=" + client.getId() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\" title=\"Détailler\"></i></a>");
+                    out.println("<a href=\"modifier?id=" + client.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                    out.println("<a href=\"index?dele=true&id=" + client.getId() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
                     out.println("</tr>");
                 }
 

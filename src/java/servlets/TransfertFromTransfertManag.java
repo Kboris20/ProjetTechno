@@ -71,9 +71,9 @@ public class TransfertFromTransfertManag extends HttpServlet {
                     out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                     out.println("<b><u>Confirmation</u></b>");
                     out.println("<p>Souhaitez vous réellement effectuer le transfert pour le montant de:</p>");
-                    out.println("<b> " + request.getParameter("somme") + " CHF?</b>");
+                    out.println("<b> " + request.getParameter("amount") + " CHF?</b>");
                     out.println("<br/>");
-                    out.println("<a href=\"transfere?somme=" + request.getParameter("somme") + "&id=" + request.getParameter("idCompteDeb") + "&id1=" + request.getParameter("idCompteCred") + "&idCli=0\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
+                    out.println("<a href=\"DoTransfer?amount=" + request.getParameter("amount") + "&id=" + request.getParameter("idCompteDeb") + "&id1=" + request.getParameter("idCompteCred") + "&idCli=0\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
                     out.println("</div>");
                 }
             } catch (Exception ex) {

@@ -26,7 +26,7 @@ import utilities.WebUtilities;
  *
  * @author silvio.gutierre
  */
-public class GestionTransaction extends HttpServlet {
+public class Transactions extends HttpServlet {
 
     private ArrayList<Transaction> listeTra;
     private ArrayList<TransactionAdvanced> listeTraJoin;

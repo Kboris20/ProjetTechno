@@ -84,9 +84,9 @@ public class WebUtilities {
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
             out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
         } else if (page.equalsIgnoreCase("clients")) {
-
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"index\">Clients</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
         } else if (page.equalsIgnoreCase("clientDetail") && id > 0) {
             Client c = new Client();
             Client cli = new Client();
@@ -95,7 +95,7 @@ public class WebUtilities {
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><a href=\"afficherClient?idCli=" + id + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"afficherClient?idCli=" + id + "\">" + cli.getLastName() + " " + cli.getFirstName() + "</a></li>");
         } else if (page.equalsIgnoreCase("compteMod") && id > 0) {
             Account cpt = new Account();
             Account cpte = new Account();
@@ -109,7 +109,7 @@ public class WebUtilities {
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index?\">Clients</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + " " + cli.getFirstName() + "</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
 
         } else if (page.equalsIgnoreCase("tranfere") && id > 0) {
@@ -137,25 +137,26 @@ public class WebUtilities {
         out.println("<div class=\"divContent\">");
     }
 
-    public static void doHeader(PrintWriter out, String title, HttpServletRequest request, String page, Integer id, Integer id1) {
+    public static void doHeader(PrintWriter out, String title, HttpServletRequest request, String page, Integer id_account1, Integer id_account2) {
         doHeader(out, title);
         doDivBody(out, title, request);
 
-        out.println("<ul class=\"nav nav-tabs\">");
         Account cpt = new Account();
         Account cpte = new Account();
-        cpt.setId(id);
+        cpt.setId(id_account1);
         cpte = AccountDao.research(cpt).get(0);
 
         Client c = new Client();
         Client cli = new Client();
         c.setId(AccountDao.researchOwnerId(cpte.getId()));
-        cli = ClientDao.research(c).get(0);
-
+        cli = ClientDao.research(c).get(0);      
+        
+        
+        out.println("<ul class=\"nav nav-tabs\">");
         out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
         out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
         out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
-        out.println("<li role=\"presentation\" class=\"active\"><a href=\"transfereCompteACompte?id=" + id + "&id1=-1&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
+        out.println("<li role=\"presentation\" class=\"active\"><a href=\"transfereCompteACompte?id=" + id_account1 + "&id1=-1&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
         out.println("</ul>");
         out.println("</div>");
         out.println("<div class=\"divContent\">");
@@ -251,31 +252,4 @@ public class WebUtilities {
         }
     }
 
-//    public static void doHeader(PrintWriter out, String title){
-//        out.println("<html>");
-//        out.println("<head>");
-//        out.println("<title>"+ title +"</title>");
-//        out.println("</head>");
-//        out.println("<body style=\"padding: 10px;\">");
-//        out.println("<h1>"+ title +"</h1>");
-//    }
-//    
-//    public static void doHeader(JspWriter out, String title) throws IOException{
-//        out.println("<html>");
-//        out.println("<head>");
-//        out.println("<title>"+ title +"</title>");
-//        out.println("</head>");
-//        out.println("<body style=\"padding: 10px;\">");
-//        out.println("<h1>"+ title +"</h1>");
-//    }
-//    
-//    public static void doFooter(PrintWriter out){
-//        out.println("</body>");
-//        out.println("</html>");
-//    }
-//    
-//    public static void doFooter(JspWriter out) throws IOException{
-//        out.println("</body>");
-//        out.println("</html>");
-//    }
 }

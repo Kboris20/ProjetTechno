@@ -16,12 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modele.Client;
 import modele.Account;
-import static servlets.WelcomeServlet.listeCli;
 import utilities.WebUtilities;
 
 /**
  *
- * @author christop.francill
+ * @author Boris
  */
 public class DisplayClient extends HttpServlet {
 
@@ -55,7 +54,6 @@ public class DisplayClient extends HttpServlet {
 
             if (cliListe.size() > 0) {
                 cli = cliListe.get(0);
-                /* TODO output your page here. You may use following sample code. */
                 try {
                     if (request.getParameter("add").equals("true")) {
                         WelcomeServlet.listeCli = new ArrayList<Client>();

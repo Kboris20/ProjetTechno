@@ -98,9 +98,9 @@ public class TransfereCompteACompte extends HttpServlet {
                             out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                             out.println("<b><u>Confirmation</u></b>");
                             out.println("<p>Souhaitez vous réellement effectuer de de: ");
-                            out.println("<b> " + request.getParameter("somme") + " CHF?</b></p>");
+                            out.println("<b> " + request.getParameter("amount") + " CHF?</b></p>");
                             out.println("<br/>");
-                            out.println("<a href=\"transfere?somme=" + request.getParameter("somme") + "&id=" + request.getParameter("id") + "&id1=" + request.getParameter("id1") + "&idCli=" + request.getParameter("idCli") + "\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
+                            out.println("<a href=\"transfere?amount=" + request.getParameter("amount") + "&id=" + request.getParameter("id") + "&id1=" + request.getParameter("id1") + "&idCli=" + request.getParameter("idCli") + "\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
                             out.println("</div>");
                         }
                     } catch (Exception ex) {

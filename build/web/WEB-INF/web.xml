@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <servlet>
-        <servlet-name>listAll</servlet-name>
-        <servlet-class>servlets.ListAll</servlet-class>
+        <servlet-name>Clients</servlet-name>
+        <servlet-class>servlets.Clients</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>addClient</servlet-name>
@@ -38,7 +38,7 @@
     </servlet>
     <servlet>
         <servlet-name>modifierCompte</servlet-name>
-        <servlet-class>servlets.ModifierCompte</servlet-class>
+        <servlet-class>servlets.ModifyAccount</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>doModifierCompte</servlet-name>
@@ -58,7 +58,7 @@
     </servlet>
     <servlet>
         <servlet-name>transfere</servlet-name>
-        <servlet-class>servlets.Transfere</servlet-class>
+        <servlet-class>servlets.DoTransfer</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>welcomeServlet</servlet-name>
@@ -70,7 +70,7 @@
     </servlet>
     <servlet>
         <servlet-name>gestionTransaction</servlet-name>
-        <servlet-class>servlets.GestionTransaction</servlet-class>
+        <servlet-class>servlets.Transactions</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>TransfertFromTransfertManag</servlet-name>
@@ -85,7 +85,7 @@
         <servlet-class>servlets.GetClients2</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>listAll</servlet-name>
+        <servlet-name>Clients</servlet-name>
         <url-pattern>/index</url-pattern>
     </servlet-mapping>
     <servlet-mapping>

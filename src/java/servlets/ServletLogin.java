@@ -44,8 +44,6 @@ public class ServletLogin extends HttpServlet {
 
 
                       if(Users.verifyUser(username, password)){
-                        //CREATION HTTP SESSION
-                        //request.getRequestDispatcher("/index.jsp").forward(request, response);
                         HttpSession s= request.getSession(true);
                         s.setAttribute("username", username);
                         response.sendRedirect(request.getContextPath() + "/welcomeServlet");

@@ -48,24 +48,24 @@ public class TransfereCheck extends HttpServlet {
             String id1 = request.getParameter("id1");
             Integer idCli = Integer.valueOf(request.getParameter("idCli"));
             Account cpt = new Account();
-            Float somme = Float.valueOf(amount + "." + cents);
+            Float total = Float.valueOf(amount + "." + cents);
 
             cpt.setId(Integer.valueOf(id));
             ArrayList<Account> cptListe = AccountDao.research(cpt);
             cpt = cptListe.get(0);
             if (idCli == 0) {
-                if (somme > cpt.getBalance()) {
+                if (total > cpt.getBalance()) {
                     response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=true&status=allOk&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=false&status=allOk&somme=" + somme + "&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
+                    response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=false&status=allOk&amount=" + total + "&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
 
                 }
             } else {
 
-                if (somme > cpt.getBalance()) {
+                if (total > cpt.getBalance()) {
                     response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=true&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
                 } else {
-                    response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=false&somme=" + somme + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
+                    response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=false&amount=" + total + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
                 }
             }
 
