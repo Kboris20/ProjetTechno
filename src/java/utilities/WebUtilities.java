@@ -49,7 +49,7 @@ public class WebUtilities {
 
         out.println("<div id=\"divPageUser\" class=\"col-md-4\">");
         out.println("<p><span class=\"glyphicon glyphicon-user\" title=\"Utilisateur\"></span> " + HtmlHttpUtils.getUser(request) + ",");
-        out.println("<a href=\"" + request.getContextPath() + "/logout\"><span class=\"glyphicon glyphicon-log-out\" title=\"Déconnection\"></span></a>");
+        out.println("<a href=\"" + request.getContextPath() + "/logout\"><span class=\"glyphicon glyphicon-log-out\" title=\"Déconnexion\"></span></a>");
         out.println("</p>");
         out.println("</div>");
         out.println("</div>");
@@ -66,8 +66,9 @@ public class WebUtilities {
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"transferts\">Transferts</a></li>");
         } else {
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
             out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><a href=\"TransfertFromTransfertManag?status=deb\">New transfert</a></li>");
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"TransfertFromTransfertManag?status=deb\">Nouveau transfert</a></li>");
         }
         out.println("</ul>");
         out.println("</div>");
@@ -96,40 +97,42 @@ public class WebUtilities {
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"afficherClient?idCli=" + id + "\">" + cli.getLastName() + " " + cli.getFirstName() + "</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
         } else if (page.equalsIgnoreCase("compteMod") && id > 0) {
-            Account cpt = new Account();
-            Account cpte = new Account();
-            cpt.setId(id);
-            cpte = AccountDao.research(cpt).get(0);
+            Account a = new Account();
+            Account acc = new Account();
+            a.setId(id);
+            acc = AccountDao.research(a).get(0);
 
             Client c = new Client();
             Client cli = new Client();
-            c.setId(AccountDao.researchOwnerId(cpte.getId()));
+            c.setId(AccountDao.researchOwnerId(acc.getId()));
             cli = ClientDao.research(c).get(0);
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index?\">Clients</a></li>");
             out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + " " + cli.getFirstName() + "</a></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
-
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getId() + "\">" + acc.getName() + "</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
         } else if (page.equalsIgnoreCase("tranfere") && id > 0) {
-            Account cpt = new Account();
-            Account cpte = new Account();
-            cpt.setId(id);
-            cpte = AccountDao.research(cpt).get(0);
+            Account a = new Account();
+            Account acc = new Account();
+            a.setId(id);
+            acc = AccountDao.research(a).get(0);
 
             Client c = new Client();
             Client cli = new Client();
-            c.setId(AccountDao.researchOwnerId(cpte.getId()));
+            c.setId(AccountDao.researchOwnerId(acc.getId()));
             cli = ClientDao.research(c).get(0);
 
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
             out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
             out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
-            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
-
+            out.println("<li role=\"presentation\" class=\"active\"><a href=\"modifierCompte?id=" + id + "&idCli=" + cli.getId() + "\">" + acc.getName() + "</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
         } else if (page.equalsIgnoreCase("transactions")) {
             out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
+            out.println("<li role=\"presentation\"><a href=\"index?\">Clients</a></li>");
             out.println("<li role=\"presentation\" class=\"active\"><a href=\"gestionTransaction\">Transferts</a></li>");
         }
         out.println("</ul>");
@@ -157,6 +160,7 @@ public class WebUtilities {
         out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
         out.println("<li role=\"presentation\"><a href=\"afficherClient?idCli=" + cli.getId() + "\">" + cli.getLastName() + "_" + cli.getFirstName() + "</a></li>");
         out.println("<li role=\"presentation\" class=\"active\"><a href=\"transfereCompteACompte?id=" + id_account1 + "&id1=-1&idCli=" + cli.getId() + "\">" + cpte.getName() + "</a></li>");
+        out.println("<li role=\"presentation\"><a href=\"gestionTransaction\">Transferts</a></li>");
         out.println("</ul>");
         out.println("</div>");
         out.println("<div class=\"divContent\">");
@@ -206,7 +210,7 @@ public class WebUtilities {
 
             out.println("<div id=\"divPageUserForm\" class=\"col-md-4\">");
             out.println("<p><span class=\"glyphicon glyphicon-user\" title=\"Utilisateur\"></span> " + HtmlHttpUtils.getUser(request) + ",");
-            out.println("<a href=\"" + request.getContextPath() + "/logout\"><span class=\"glyphicon glyphicon-log-out\" title=\"Déconnection\"></span></a>");
+            out.println("<a href=\"" + request.getContextPath() + "/logout\"><span class=\"glyphicon glyphicon-log-out\" title=\"Déconnexion\"></span></a>");
             out.println("</p>");
             out.println("</div>");
             out.println("</div>");

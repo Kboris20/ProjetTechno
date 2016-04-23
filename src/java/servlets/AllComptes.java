@@ -89,7 +89,7 @@ public class AllComptes extends HttpServlet {
 
                     out.println("<div class=\"panel panel-default\">");
                     out.println("<div class=\"panel-heading\">");
-                    out.println("<a href=\"ajouterCompte.jsp?idCli=" + cli.getId() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
+                    out.println("<a href=\"addAccount.jsp?idCli=" + cli.getId() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
                     out.println("</div>");
 
                     out.println("<br/>");

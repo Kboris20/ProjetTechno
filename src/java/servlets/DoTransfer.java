@@ -52,7 +52,7 @@ public class DoTransfer extends HttpServlet {
         }
 
         try {
-            Float somme = Float.valueOf(request.getParameter("somme"));
+            Float somme = Float.valueOf(request.getParameter("amount"));
             String id = request.getParameter("id");
             String id1 = request.getParameter("id1");
             Integer idCli = Integer.valueOf(request.getParameter("idCli"));

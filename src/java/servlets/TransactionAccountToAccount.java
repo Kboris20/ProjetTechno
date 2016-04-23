@@ -22,7 +22,7 @@ import utilities.WebUtilities;
  *
  * @author boris.klett
  */
-public class TransfereCompteACompte extends HttpServlet {
+public class TransactionAccountToAccount extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,11 +46,11 @@ public class TransfereCompteACompte extends HttpServlet {
 
         try {
 
-            WebUtilities.doHeader(out, "Transfère compte à compte", request, "transfere", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id")));
+            WebUtilities.doHeader(out, "Transfert compte à compte", request, "transfert", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id")));
             try {
                 if (request.getParameter("trans").equals("ok")) {
                     out.println("<div class=\"alert alert-success\">");
-                    out.println("Transfère effectué.");
+                    out.println("Transfert effectué.");
                     out.println("</div>");
                 }
             } catch (Exception ex) {
@@ -64,15 +64,13 @@ public class TransfereCompteACompte extends HttpServlet {
             } catch (Exception ex) {
             }
 
-            Account cpt = new Account();
-            cpt.setId(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Account> cptListe = AccountDao.research(cpt);
-            Integer id1 = -1;
-            id1 = cpt.getId();
+            Account account = new Account();
+            account.setId(Integer.parseInt(request.getParameter("id")));
+            ArrayList<Account> cptListe = AccountDao.research(account);
 
             if (cptListe.size() > 0) {
-                cpt = cptListe.get(0);
-                String owner = AccountDao.researchOwner(cpt.getId());
+                account = cptListe.get(0);
+                String owner = AccountDao.researchOwner(account.getId());
                 out.println("<h3>Compte débité appartenant à Mme/M. " + owner + " </h3>");
                 out.println("<table class=\"table table-hover list\" >");
                 out.println("<tr>");
@@ -84,9 +82,9 @@ public class TransfereCompteACompte extends HttpServlet {
                 out.println("</tr>");
 
                 out.println("<tr>");
-                out.println("<td>" + cpt.getName() + "</td>");
-                out.println("<td>" + cpt.getBalance() + "</td>");
-                out.println("<td>" + cpt.getRate() + "</td>");
+                out.println("<td>" + account.getName() + "</td>");
+                out.println("<td>" + account.getBalance() + "</td>");
+                out.println("<td>" + account.getRate() + "</td>");
                 out.println("</tr>");
                 out.println("</table>");
                 out.println("<br/>");
@@ -106,14 +104,13 @@ public class TransfereCompteACompte extends HttpServlet {
                     } catch (Exception ex) {
                     }
 
-                    Account cptDest = new Account();
-                    cptDest.setId(Integer.parseInt(request.getParameter("id1")));
-                    ArrayList<Account> cptListeDest = AccountDao.research(cptDest);
+                    Account accountDest = new Account();
+                    accountDest.setId(Integer.parseInt(request.getParameter("id1")));
+                    ArrayList<Account> accountsDest = AccountDao.research(accountDest);
 
-                    Client cliDest = new Client();
-                    if (cptListeDest.size() > 0) {
-                        cptDest = cptListeDest.get(0);
-                        String ownerDest = AccountDao.researchOwner(cptDest.getId());
+                    if (accountsDest.size() > 0) {
+                        accountDest = accountsDest.get(0);
+                        String ownerDest = AccountDao.researchOwner(accountDest.getId());
                         out.println("<a href=\"transfereCompteACompte?id=" + request.getParameter("id1") + "&id1=" + request.getParameter("id") + "\"><button type=\"button\" class=\"btn btn-default btn-sm\" title=\"Inverser les rôles\"><span class=\"glyphicon glyphicon-sort\"></span></button></a>");
                         out.println("<br/>");
                         out.println("<h3>Compte crédité appartenant à Mme/M. " + ownerDest + " </h3>");
@@ -127,9 +124,9 @@ public class TransfereCompteACompte extends HttpServlet {
                         out.println("</tr>");
 
                         out.println("<tr>");
-                        out.println("<td>" + cptDest.getName() + "</td>");
-                        out.println("<td>" + cptDest.getBalance() + "</td>");
-                        out.println("<td>" + cptDest.getRate() + "</td>");
+                        out.println("<td>" + accountDest.getName() + "</td>");
+                        out.println("<td>" + accountDest.getBalance() + "</td>");
+                        out.println("<td>" + accountDest.getRate() + "</td>");
                         out.println("</tr>");
                         out.println("</table>");
                         out.println("<br/>");
@@ -157,19 +154,19 @@ public class TransfereCompteACompte extends HttpServlet {
 
                     out.println("<div class=\"alert alert-warning alert-dismissible clients popupAlert\" role=\"alert\">");
                     out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
-                    ArrayList<Client> listeCli = new ArrayList<Client>();
-                    listeCli.addAll(WelcomeServlet.listeCli);
+                    ArrayList<Client> clients = new ArrayList<Client>();
+                    clients.addAll(WelcomeServlet.clients);
                     out.println("<div class=\"list-group\">");
                     out.println("<a class=\"list-group-item disabled\">Liste des clients</a>");
 
-                    if (!listeCli.isEmpty()) {
-                        for (Client cli : listeCli) {
-                            out.println("<a href=\"#this\" onClick=\"Affiche('#compte_" + cli.getId() + "')\" href=\"#\" class=\"list-group-item\">" + cli.getLastName() + " " + cli.getFirstName() + "</a>");
+                    if (!clients.isEmpty()) {
+                        for (Client client : clients) {
+                            out.println("<a href=\"#this\" onClick=\"Affiche('#compte_" + client.getId() + "')\" href=\"#\" class=\"list-group-item\">" + client.getLastName() + " " + client.getFirstName() + "</a>");
                             ArrayList<Account> comptListe = new ArrayList<Account>();
-                            out.println("<div id=\"compte_" + cli.getId() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
+                            out.println("<div id=\"compte_" + client.getId() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
                             out.println("<div class=\"list-group\">");
                             out.println("<a href=\"#this\" class=\"list-group-item disabled\">Comptes</a>");
-                            for (Account c : cli.getListAccount()) {
+                            for (Account c : client.getListAccount()) {
                                 if (c.getId() != Integer.valueOf(request.getParameter("id"))) {
                                     comptListe.add(c);
                                 }
@@ -185,7 +182,6 @@ public class TransfereCompteACompte extends HttpServlet {
                             }
                             out.println("</div></div>");
                         }
-
                     }
                 
                 out.println("</div>");

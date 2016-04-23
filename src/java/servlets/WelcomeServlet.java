@@ -24,7 +24,7 @@ import utilities.WebUtilities;
  * @author boris.klett
  */
 public class WelcomeServlet extends HttpServlet {
-    public static ArrayList<Client> listeCli;
+    public static ArrayList<Client> clients;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,8 +39,8 @@ public class WelcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        listeCli = new ArrayList<Client>();
-        listeCli.addAll(ClientDao.researchAll());
+        clients = new ArrayList<Client>();
+        clients.addAll(ClientDao.researchAll());
         String userConnected = HtmlHttpUtils.getUser(request);
 
         try {
@@ -50,7 +50,6 @@ public class WelcomeServlet extends HttpServlet {
         }
 
         try {
-            /* TODO output your page here. You may use following sample code. */
             WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
             out.println("<hr/>");
 

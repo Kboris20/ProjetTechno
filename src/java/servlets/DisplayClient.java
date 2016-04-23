@@ -49,15 +49,15 @@ public class DisplayClient extends HttpServlet {
             WebUtilities.doHeader(out, "Afficher un client", request, "clientDetail", Integer.parseInt(request.getParameter("idCli")));
             Client cli = new Client();
             cli.setId(Integer.parseInt(request.getParameter("idCli")));
-            ArrayList<Client> cliListe = new ArrayList<Client>();
-            cliListe.addAll(ClientDao.research(cli));
+            ArrayList<Client> clients = new ArrayList<Client>();
+            clients.addAll(ClientDao.research(cli));
 
-            if (cliListe.size() > 0) {
-                cli = cliListe.get(0);
+            if (clients.size() > 0) {
+                cli = clients.get(0);
                 try {
                     if (request.getParameter("add").equals("true")) {
-                        WelcomeServlet.listeCli = new ArrayList<Client>();
-                        WelcomeServlet.listeCli.addAll(ClientDao.researchAll());
+                        WelcomeServlet.clients = new ArrayList<Client>();
+                        WelcomeServlet.clients.addAll(ClientDao.researchAll());
                         out.println("<div class=\"alert alert-success\">");
                         out.println("Client crée.");
                         out.println("</div>");

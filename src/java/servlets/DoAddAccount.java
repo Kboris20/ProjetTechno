@@ -1,6 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 package servlets;
@@ -8,7 +7,6 @@ package servlets;
 import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +15,14 @@ import modele.Account;
 
 /**
  *
- * @author boris.klett
+ * @author christop.francill
  */
-public class TransfereCheck extends HttpServlet {
+public class DoAddAccount extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP
+     * <code>GET</code> and
+     * <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -34,49 +33,31 @@ public class TransfereCheck extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
+        
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-
+        
         try {
-            String amount = request.getParameter("amount");
-            String cents = request.getParameter("cents");
-            String id = request.getParameter("id");
-            String id1 = request.getParameter("id1");
-            Integer idCli = Integer.valueOf(request.getParameter("idCli"));
-            Account cpt = new Account();
-            Float total = Float.valueOf(amount + "." + cents);
+            Account newCompt = new Account();
+            newCompt.setName(request.getParameter("nom"));
+            newCompt.setBalance(Float.parseFloat(request.getParameter("solde")));
+            newCompt.setRate(Float.parseFloat(request.getParameter("taux")));
+                        
+            AccountDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
 
-            cpt.setId(Integer.valueOf(id));
-            ArrayList<Account> cptListe = AccountDao.research(cpt);
-            cpt = cptListe.get(0);
-            if (idCli == 0) {
-                if (total > cpt.getBalance()) {
-                    response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=true&status=allOk&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/TransfertFromTransfertManag?error=false&status=allOk&amount=" + total + "&idCompteDeb=" + id + "&idCompteCred=" + id1 + "");
-
-                }
-            } else {
-
-                if (total > cpt.getBalance()) {
-                    response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=true&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/transfereCompteACompte?error=false&amount=" + total + "&id=" + id + "&id1=" + id1 + "&idCli=" + idCli + "");
-                }
-            }
-
-        } finally {
+            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
+        } finally {            
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP <code>GET</code> method.
+     * Handles the HTTP
+     * <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -90,7 +71,8 @@ public class TransfereCheck extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP
+     * <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -112,5 +94,4 @@ public class TransfereCheck extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

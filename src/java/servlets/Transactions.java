@@ -6,7 +6,6 @@
 package servlets;
 
 import dao.TransactionAdvancedDao;
-import dao.TransactionDao;
 import static dao.UtilisateurDao.researchByUsername;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Transaction;
 import modele.TransactionAdvanced;
 import modele.User;
 import utilities.WebUtilities;
@@ -28,8 +26,7 @@ import utilities.WebUtilities;
  */
 public class Transactions extends HttpServlet {
 
-    private ArrayList<Transaction> listeTra;
-    private ArrayList<TransactionAdvanced> listeTraJoin;
+    private ArrayList<TransactionAdvanced> transactions;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,10 +44,8 @@ public class Transactions extends HttpServlet {
 
         User current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
 
-        listeTra = new ArrayList<Transaction>();
-        listeTra.addAll(TransactionDao.researchAll());
-        listeTraJoin = new ArrayList<TransactionAdvanced>();
-        listeTraJoin.addAll(TransactionAdvancedDao.researchByUser(current_user));
+        transactions = new ArrayList<TransactionAdvanced>();
+        transactions.addAll(TransactionAdvancedDao.researchByUser(current_user));
         
         SimpleDateFormat formater = new SimpleDateFormat("dd MMMM yyyy");   
         DecimalFormat myFormatter = new DecimalFormat("###.00 CHF");
@@ -65,12 +60,11 @@ public class Transactions extends HttpServlet {
         
         out.println("<div class=\"panel panel-default\">");
         out.println("<div class=\"panel-heading\">");
-        out.println("<a href=\"TransfertFromTransfertManag?status=deb\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
+        out.println("<a href=\"TransfertFromTransfertManag?status=deb&idCompteDeb=-1&idCompteCred=-1\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
         out.println("</div>");
         
         try {
-            out.println("<a href=\"TransfertFromTransfertManag?status=deb&idCompteDeb=-1&idCompteCred=-1\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
-            if (listeTraJoin.isEmpty()) {
+            if (transactions.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");
                 out.println("</div>");
@@ -85,7 +79,7 @@ public class Transactions extends HttpServlet {
                 out.println("<td class=\"listRow\">Montant</td>");
                 out.println("<td class=\"listRow\">Date</td>");
                 out.println("</tr>");
-                for (TransactionAdvanced tra : listeTraJoin) {
+                for (TransactionAdvanced tra : transactions) {
                     out.println("<tr>");
                     out.println("<td>" + tra.getClient_debit() + "</td>");
                     out.println("<td>" + tra.getAccount_debit() + "</td>");
