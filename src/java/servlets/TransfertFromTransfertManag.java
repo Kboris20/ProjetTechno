@@ -5,13 +5,10 @@
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +70,7 @@ public class TransfertFromTransfertManag extends HttpServlet {
                     out.println("<p>Souhaitez vous réellement effectuer le transfert pour le montant de:</p>");
                     out.println("<b> " + request.getParameter("amount") + " CHF?</b>");
                     out.println("<br/>");
-                    out.println("<a href=\"DoTransfer?amount=" + request.getParameter("amount") + "&id=" + request.getParameter("idCompteDeb") + "&id1=" + request.getParameter("idCompteCred") + "&idCli=0\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
+                    out.println("<a href=\"transfere?amount=" + request.getParameter("amount") + "&id=" + request.getParameter("idCompteDeb") + "&id1=" + request.getParameter("idCompteCred") + "&idCli=0\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
                     out.println("</div>");
                 }
             } catch (Exception ex) {
