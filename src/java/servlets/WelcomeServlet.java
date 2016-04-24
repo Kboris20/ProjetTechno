@@ -69,17 +69,16 @@ public class WelcomeServlet extends HttpServlet {
             out.println("<h3><b><u>Statistiques</u></b></h3>");
             out.println("<div class=\"row\">");
 
-            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            //Line Chart : Chacune des barres affiche le nombre de transferts pour un utilisateur
+            /*out.println("<div class=\"col-md-4\" style=\"width: 50%\">");
             out.println("<h3>Nombre de transferts par utilisateur</h3>");
             out.println("<canvas id=\"canvas\" height=\"300\" width=\"600\"></canvas>");
             out.println("<script>");
             out.println("var barChartData = {");
-
             for (User user : users) {
                 out.println("labels : [\"" + user.getUsername() + "\",");
             }
             out.println("\"" + users.get(users.size() - 1).getUsername() + "\"],");
-
             out.println("datasets : [ {");
             out.println("label : \"Nombre de transactions\",");
             out.println("fillColor : \"rgba(151,187,205,0.5)\",");
@@ -88,13 +87,34 @@ public class WelcomeServlet extends HttpServlet {
             out.println("highlightStroke : \"rgbargba(151,187,205,1)\",");
             out.println("data : [60, 20, 40, 10] } ] };");
             out.println("</script>");
-            out.println("</div>");
-
+            out.println("</div>");*/
+            
+            //Pie Chart : La part en "rouge" affiche le montant des transferts au total ; tout utilisateur compris
+            //            et la part en "bleu" affiche le montant des transferts cumulé ; de l'utilisateur connecté (sa performance)
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
-            out.println("<h3>Mes transferts</h3>");
-            out.println("<canvas id=\"chart-area\" width=\"300\" height=\"300\"/>");
+            out.println("<h3>Mes transferts (francs)</h3>");
+            out.println("<canvas id=\"chart-area-2\" height=\"300\" width=\"300\"/>");
             out.println("<script>");
-            out.println("var pieData = [ {");
+            out.println("var pieData2 = [ {");
+            out.println("value: \"montantTransactionUtilisateur\",");
+            out.println("color:\"#46BFBD\",");
+            out.println("highlight: \"#5AD3D1\",");
+            out.println("label: \"Utilisateur\" },");
+            out.println("{");
+            out.println("value: \"montantTransactionTotal\",");
+            out.println("color: \"#F7464A\",");
+            out.println("highlight: \"#FF5A5E\",");
+            out.println("label: \"Total\" } ];");
+            out.println("</script>");
+            out.println(" </div>");
+
+            //Pie Chart : La part en "rouge" affiche le nombre de transferts au total ; tout utilisateur compris
+            //            et la part en "bleu" affiche le nombre de transferts calculé ; de l'utilisateur connecté (sa performance)
+            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<h3>Mes transferts (quantité)</h3>");
+            out.println("<canvas id=\"chart-area-1\" height=\"300\" width=\"300\"/>");
+            out.println("<script>");
+            out.println("var pieData1 = [ {");
             out.println("value: " + nbTransactionsByUser + ",");
             out.println("color:\"#46BFBD\",");
             out.println("highlight: \"#5AD3D1\",");
@@ -106,10 +126,12 @@ public class WelcomeServlet extends HttpServlet {
             out.println("label: \"Total\" } ];");
 
             out.println("window.onload = function(){");
-            out.println("var ctx = document.getElementById(\"chart-area\").getContext(\"2d\");");
-            out.println("window.myPie = new Chart(ctx).Pie(pieData);");
-            out.println("var ctx = document.getElementById(\"canvas\").getContext(\"2d\");");
-            out.println("window.myBar = new Chart(ctx).Bar(barChartData, { responsive : true }); };");
+            out.println("var ctx1 = document.getElementById(\"chart-area-1\").getContext(\"2d\");");
+            out.println("window.myPie1 = new Chart(ctx1).Pie(pieData1);");
+            out.println("var ctx2 = document.getElementById(\"chart-area-2\").getContext(\"2d\");");
+            out.println("window.myPie2 = new Chart(ctx2).Pie(pieData2); };");
+            /*out.println("var ctx3 = document.getElementById(\"canvas\").getContext(\"2d\");");
+            out.println("window.myBar = new Chart(ctx3).Bar(barChartData, { responsive : true }); };");*/
             out.println("</script>");
             out.println(" </div>");
 
