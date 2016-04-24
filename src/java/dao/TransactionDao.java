@@ -195,4 +195,65 @@ public class TransactionDao {
         }
     }
 
+    public static double getAmountTransactions() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            con = OracleConnections.getConnection();
+
+            String query = "select sum(montant) as amount from transfert";
+            statement = con.createStatement();
+
+            resultSet = statement.executeQuery(query);
+            resultSet.next();
+            double amountTransfers = resultSet.getDouble("amount");
+
+            return amountTransfers;
+
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return 0;
+        } finally {
+            try {
+                resultSet.close();
+                statement.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
+        }
+    }
+
+    public static double getAmountTransactionsByUser(String username) {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            con = OracleConnections.getConnection();
+
+            String query = "select sum(montant) as amountbyuser from transfert where num_employe = (select numero from employe where upper(username)=upper('" + username + "'))";
+            statement = con.createStatement();
+
+            resultSet = statement.executeQuery(query);
+            resultSet.next();
+            double amountTransactionsByUser = resultSet.getDouble("amountbyuser");
+
+            return amountTransactionsByUser;
+
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return 0;
+        } finally {
+            try {
+                resultSet.close();
+                statement.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
+        }
+    }
 }

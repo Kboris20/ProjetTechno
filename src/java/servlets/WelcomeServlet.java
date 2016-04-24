@@ -5,18 +5,13 @@
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.TransactionDao;
-import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
-import modele.User;
 import utilities.WebUtilities;
 
 /**
@@ -61,14 +56,18 @@ public class WelcomeServlet extends HttpServlet {
             } catch (NullPointerException ex) {
             }
 
+            double amountTransactions = TransactionDao.getAmountTransactions();
+            double amountTransactionsByUser = TransactionDao.getAmountTransactionsByUser(userConnected);
+            //amountTransactionsByUser = (amountTransactionsByUser * 100) / amountTransactions;
             int nbTransactions = TransactionDao.getNbTransactions();
             int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
+            //nbTransactionsByUser = (nbTransactionsByUser * 100) / nbTransactions;
 
-            ArrayList<User> users = UserDao.researchAll();
+            //ArrayList<User> users = UserDao.researchAll();
 
-            out.println("<h3><b><u>Statistiques</u></b></h3>");
+            out.println("<div class=\"performancesBox\"><h2 class=\"performancesTitle\">Mes performances</h2></div>");
+            
             out.println("<div class=\"row\">");
-
             //Line Chart : Chacune des barres affiche le nombre de transferts pour un utilisateur
             /*out.println("<div class=\"col-md-4\" style=\"width: 50%\">");
             out.println("<h3>Nombre de transferts par utilisateur</h3>");
@@ -92,16 +91,16 @@ public class WelcomeServlet extends HttpServlet {
             //Pie Chart : La part en "rouge" affiche le montant des transferts au total ; tout utilisateur compris
             //            et la part en "bleu" affiche le montant des transferts cumulé ; de l'utilisateur connecté (sa performance)
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
-            out.println("<h3>Mes transferts (francs)</h3>");
+            out.println("<h3>Mes transferts (en francs)</h3>");
             out.println("<canvas id=\"chart-area-2\" height=\"300\" width=\"300\"/>");
             out.println("<script>");
             out.println("var pieData2 = [ {");
-            out.println("value: \"montantTransactionUtilisateur\",");
+            out.println("value: " + amountTransactionsByUser + ",");
             out.println("color:\"#46BFBD\",");
             out.println("highlight: \"#5AD3D1\",");
-            out.println("label: \"Utilisateur\" },");
+            out.println("label: \"" + userConnected + "\" },");
             out.println("{");
-            out.println("value: \"montantTransactionTotal\",");
+            out.println("value: " + amountTransactions + ",");
             out.println("color: \"#F7464A\",");
             out.println("highlight: \"#FF5A5E\",");
             out.println("label: \"Total\" } ];");
@@ -111,7 +110,7 @@ public class WelcomeServlet extends HttpServlet {
             //Pie Chart : La part en "rouge" affiche le nombre de transferts au total ; tout utilisateur compris
             //            et la part en "bleu" affiche le nombre de transferts calculé ; de l'utilisateur connecté (sa performance)
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
-            out.println("<h3>Mes transferts (quantité)</h3>");
+            out.println("<h3>Mes transferts (en quantité)</h3>");
             out.println("<canvas id=\"chart-area-1\" height=\"300\" width=\"300\"/>");
             out.println("<script>");
             out.println("var pieData1 = [ {");
