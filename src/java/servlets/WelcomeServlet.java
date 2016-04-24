@@ -24,7 +24,6 @@ import utilities.WebUtilities;
  * @author boris.klett
  */
 public class WelcomeServlet extends HttpServlet {
-    public static ArrayList<Client> listeCli;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,8 +38,6 @@ public class WelcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        listeCli = new ArrayList<Client>();
-        listeCli.addAll(ClientDao.researchAll());
         String userConnected = HtmlHttpUtils.getUser(request);
 
         try {
@@ -64,7 +61,7 @@ public class WelcomeServlet extends HttpServlet {
             }
 
             int nbTransactions = TransactionDao.getNbTransactions();
-            int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser();
+            int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
             
             ArrayList<User> users = UserDao.researchAll();
 

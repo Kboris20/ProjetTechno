@@ -20,7 +20,7 @@ import oracle.jdbc.OracleTypes;
  */
 public class AccountDao {
 
-    public static long create(Account compte, int client_id) {
+    public static long create(Account compte, int client_id) throws SQLException {
         Connection con = null;
         OraclePreparedStatement prepStatement = null;
         ResultSet resultSet = null;
@@ -30,8 +30,8 @@ public class AccountDao {
         try {
             con = OracleConnections.getConnection();
 
-            StringBuilder sql = new StringBuilder("insert into compte(nom,solde,taux,numero_client) values (?,?,?,?) returning numero into ?");
-            prepStatement = (OraclePreparedStatement) con.prepareStatement(sql.toString());
+            String sql = "insert into compte(nom,solde,taux,numero_client) values (?,?,?,?) returning numero into ?";
+            prepStatement = (OraclePreparedStatement) con.prepareStatement(sql);
 
             prepStatement.setString(1, compte.getName());
             prepStatement.setFloat(2, compte.getBalance());
@@ -48,12 +48,8 @@ public class AccountDao {
         } catch (SQLException ex) {
             System.out.println("Error INSERT: " + ex.getMessage());
         } finally {
-            try {
                 prepStatement.close();
                 con.close();
-            } catch (SQLException ex) {
-                System.out.println("Error INSERT CLOSE: " + ex.getMessage());
-            }
         }
 
         return rId;

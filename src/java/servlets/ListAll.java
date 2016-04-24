@@ -8,6 +8,7 @@ import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,9 @@ import utilities.WebUtilities;
  * @author christop.francill
  */
 public class ListAll extends HttpServlet {
+    
+    public static List<Client> listClients;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -117,13 +121,50 @@ public class ListAll extends HttpServlet {
                     + "<td><input type=\"text\" name=\"adresse\" placeholder=\"Adresse\" required/></td>"
                     + "<td><input type=\"text\" name=\"ville\" placeholder=\"Ville\" required/></td>"
                     + "<td><img src=\"http://localhost:8080/crud/theme/img/nouveau_client1.png\" alt=\"image nouveau client\"/></td>"
-                    
                     + "</tr></table></form>"
-                    + "</div>");
+                    + "</div></div>");
 
-            out.println("</div><div style=\"text-align:center\" id=\"resultat\"><img src=\"http://localhost:8080/crud/theme/img/ajax-loader.gif\" alt=\"Chargement\"/></div>");
+            out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
+            out.println("<tr>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td class=\"listRow\">Nom</td>");
+            out.println("<td class=\"listRow\">Prenom</td>");
+            out.println("<td class=\"listRow\">Adresse</td>");
+            out.println("<td class=\"listRow\">Ville</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("<td>&nbsp;</td>");
+            out.println("</tr>");
 
-            
+            listClients = new ArrayList<Client>();
+            listClients.addAll(ClientDao.researchAll());
+            Integer nombreClient;
+
+            if (listClients.isEmpty()) {
+                out.println("<div class=\"alert alert-info\">");
+                out.println("Il n'y a pas de client");
+                out.println("</div>");
+            } else {
+                nombreClient = 0;
+                for (Client cli : listClients) {
+                    out.println("<tr>");
+                    out.println("<td>" + ++nombreClient + "</td>");
+                    out.println("<td>" + cli.getLastName() + "</td>");
+                    out.println("<td>" + cli.getFirstName() + "</td>");
+                    out.println("<td>" + cli.getAddres() + "</td>");
+                    out.println("<td>" + cli.getCity() + "</td>");
+                    out.println("<td></td>");
+                    out.println("<td></td>");
+                    out.println("<td><a href=\"afficherClient?idCli=" + cli.getId() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\" title=\"Détailler\"></i></a>");
+                    out.println("<a href=\"modifier?id=" + cli.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                    out.println("<a href=\"index?dele=true&id=" + cli.getId() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
+                    out.println("</tr>");
+                }
+
+            }
+            out.println("</table>");
+            out.println("</html>");
+
             out.println("</div>");
         } finally {
             WebUtilities.doFooter(out);

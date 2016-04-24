@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import dao.ClientDao;
@@ -18,6 +14,9 @@ import modele.Client;
  * @author christop.francill
  */
 public class AddClient extends HttpServlet {
+
+    private Client client;
+    private Integer identifiant;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,13 +40,13 @@ public class AddClient extends HttpServlet {
 
         try {
 
-            Client newCli = new Client();
-            newCli.setLastName(request.getParameter("nom"));
-            newCli.setFirstName(request.getParameter("prenom"));
-            newCli.setAddres(request.getParameter("adresse"));
-            newCli.setCity(request.getParameter("ville"));
+            client = new Client();
+            client.setLastName(request.getParameter("nom"));
+            client.setFirstName(request.getParameter("prenom"));
+            client.setAddres(request.getParameter("adresse"));
+            client.setCity(request.getParameter("ville"));
 
-            int identifiant = (int) ClientDao.create(newCli);
+            identifiant = (int) ClientDao.create(client);
 
             response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + identifiant + "&add=true");
 

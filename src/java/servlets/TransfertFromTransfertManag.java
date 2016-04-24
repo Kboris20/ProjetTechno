@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
-import dao.ClientDao;
 import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -143,7 +135,7 @@ public class TransfertFromTransfertManag extends HttpServlet {
             out.println("<div id=\"popupChoixCliTransfCompte\" class=\"alert alert-warning alert-dismissible clients\" role=\"alert\">");
             out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
             ArrayList<Client> listeCli = new ArrayList<Client>();
-            listeCli.addAll(WelcomeServlet.listeCli);
+            listeCli.addAll(ListAll.listClients);
             out.println("<div class=\"list-group\">");
             out.println("<a class=\"list-group-item disabled\">Liste des clients</a>");
 

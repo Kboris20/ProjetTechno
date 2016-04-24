@@ -166,7 +166,7 @@ public class TransactionDao {
         }
     }
 
-    public static int getNbTransactionsByUser() {
+    public static int getNbTransactionsByUser(String username) {
         Connection con = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -174,7 +174,7 @@ public class TransactionDao {
         try {
             con = OracleConnections.getConnection();
 
-            String query = "select count(*) as rowcountbyuser from transfert where num_employe = 3";
+            String query = "select count(*) as rowcountbyuser from transfert where num_employe = (select numero from employe where upper(username)=upper('"+username+"'))";
             statement = con.createStatement();
 
             resultSet = statement.executeQuery(query);

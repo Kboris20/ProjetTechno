@@ -80,10 +80,6 @@
         <servlet-name>GetClients</servlet-name>
         <servlet-class>servlets.GetClients</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>GetClients2</servlet-name>
-        <servlet-class>servlets.GetClients2</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>listAll</servlet-name>
         <url-pattern>/index</url-pattern>
@@ -163,10 +159,6 @@
     <servlet-mapping>
         <servlet-name>GetClients</servlet-name>
         <url-pattern>/GetClients</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>GetClients2</servlet-name>
-        <url-pattern>/GetClients2</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

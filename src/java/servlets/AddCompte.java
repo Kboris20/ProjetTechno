@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import dao.AccountDao;
@@ -19,10 +15,11 @@ import modele.Account;
  */
 public class AddCompte extends HttpServlet {
 
+    private Account account;
+
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -33,31 +30,30 @@ public class AddCompte extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
         try {
             HtmlHttpUtils.isAuthenticate(request);
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-        
+
         try {
-            Account newCompt = new Account();
-            newCompt.setName(request.getParameter("nom"));
-            newCompt.setBalance(Float.parseFloat(request.getParameter("solde")));
-            newCompt.setRate(Float.parseFloat(request.getParameter("taux")));
-                        
-            AccountDao.create(newCompt,Integer.parseInt(request.getParameter("clientId")));
+            account = new Account();
+            account.setName(request.getParameter("nom"));
+            account.setBalance(Float.parseFloat(request.getParameter("solde")));
+            account.setRate(Float.parseFloat(request.getParameter("taux")));
+
+            AccountDao.create(account, Integer.parseInt(request.getParameter("clientId")));
 
             response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + Integer.parseInt(request.getParameter("clientId")) + "&addCompte=true");
-        } finally {            
+        } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -71,8 +67,7 @@ public class AddCompte extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

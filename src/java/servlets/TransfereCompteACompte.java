@@ -5,7 +5,6 @@
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -158,7 +157,7 @@ public class TransfereCompteACompte extends HttpServlet {
                     out.println("<div id=\"popupChoixCliTransfCompte\" class=\"alert alert-warning alert-dismissible clients\" role=\"alert\">");
                     out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
                     ArrayList<Client> listeCli = new ArrayList<Client>();
-                    listeCli.addAll(WelcomeServlet.listeCli);
+                    listeCli.addAll(ListAll.listClients);
                     out.println("<div class=\"list-group\">");
                     out.println("<a class=\"list-group-item disabled\">Liste des clients</a>");
 
