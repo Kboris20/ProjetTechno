@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import dao.ClientDao;
@@ -19,6 +15,9 @@ import modele.Client;
  */
 public class AddClient extends HttpServlet {
 
+    private Client client;
+    private Integer identifiant;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,20 +33,22 @@ public class AddClient extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            HtmlHttpUtils.isAuthenticate(request);
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
         try {
 
-            Client newCli = new Client();
-            newCli.setLastName(request.getParameter("nom"));
-            newCli.setFirstName(request.getParameter("prenom"));
-            newCli.setAddress(request.getParameter("adresse"));
-            newCli.setCity(request.getParameter("ville"));
+            client = new Client();
+            client.setLastName(request.getParameter("nom"));
+            client.setFirstName(request.getParameter("prenom"));
+            client.setAddres(request.getParameter("adresse"));
+            client.setCity(request.getParameter("ville"));
 
-            int identifiant = (int) ClientDao.create(newCli);
+            identifiant = (int) ClientDao.create(client);
 
             response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + identifiant + "&add=true");
 

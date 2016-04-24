@@ -21,7 +21,7 @@ import oracle.jdbc.OracleTypes;
  */
 public class ClientDao {
 
-    public static long create(Client client) {
+    public static long create(Client p_client) {
         Connection con = null;
         OraclePreparedStatement prepStatement = null;
         ResultSet resultSet = null;
@@ -34,10 +34,10 @@ public class ClientDao {
             StringBuilder sql = new StringBuilder("insert into client(nom,prenom,adresse,ville) values (?,?,?,?) returning numero into ?");
             prepStatement = (OraclePreparedStatement) con.prepareStatement(sql.toString());
 
-            prepStatement.setString(1, client.getLastName());
-            prepStatement.setString(2, client.getFirstName());
-            prepStatement.setString(3, client.getAddress());
-            prepStatement.setString(4, client.getCity());
+            prepStatement.setString(1, p_client.getLastName());
+            prepStatement.setString(2, p_client.getFirstName());
+            prepStatement.setString(3, p_client.getAddres());
+            prepStatement.setString(4, p_client.getCity());
             prepStatement.registerReturnParameter(5, OracleTypes.NUMBER);
             prepStatement.executeUpdate();
             con.commit();
@@ -61,8 +61,8 @@ public class ClientDao {
     }
 
     public static ArrayList<Client> researchAll() {
-        ArrayList<Client> listCli = new ArrayList<Client>();
 
+        ArrayList<Client> listClient = new ArrayList<Client>();
         Connection con = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -79,12 +79,13 @@ public class ClientDao {
                 client.setId(resultSet.getInt("numero"));
                 client.setLastName(resultSet.getString("nom"));
                 client.setFirstName(resultSet.getString("prenom"));
-                client.setAddress(resultSet.getString("adresse"));
+
+                client.setAddres(resultSet.getString("adresse"));
                 client.setCity(resultSet.getString("ville"));
                 client.setListAccount(AccountDao.research(client.getId()));
-                listCli.add(client);
+                listClient.add(client);
             }
-            return listCli;
+            return listClient;
         } catch (SQLException ex) {
             System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
             return null;
@@ -100,9 +101,8 @@ public class ClientDao {
         }
     }
 
-    public static ArrayList<Client> research(Client cli) {
-        ArrayList<Client> listCli = new ArrayList<Client>();
-
+    public static ArrayList<Client> research(Client p_client) {
+        ArrayList<Client> listClient = new ArrayList<Client>();
         boolean and = false;
 
         Connection con = null;
@@ -114,47 +114,52 @@ public class ClientDao {
 
             StringBuilder sql = new StringBuilder("select numero, nom, prenom, adresse, ville from client");
 
-            if (!cli.isNull()) {
+            if (!p_client.isNull()) {
                 sql.append(" where ");
-                if (cli.getId() != -1) {
+
+                if (p_client.getId() != -1) {
                     sql.append("numero = '");
-                    sql.append(cli.getId());
+                    sql.append(p_client.getId());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getLastName() != null) {
+                if (p_client.getLastName() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("nom = '");
-                    sql.append(cli.getLastName());
+
+                    sql.append(p_client.getLastName());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getFirstName() != null) {
+                if (p_client.getFirstName() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("prenom = '");
-                    sql.append(cli.getFirstName());
+
+                    sql.append(p_client.getFirstName());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getAddress() != null) {
+                if (p_client.getAddres() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("adresse = '");
-                    sql.append(cli.getAddress());
+
+                    sql.append(p_client.getAddres());
                     sql.append("'");
                     and = true;
                 }
-                if (cli.getCity() != null) {
+                if (p_client.getCity() != null) {
                     if (and) {
                         sql.append(" and ");
                     }
                     sql.append("ville = '");
-                    sql.append(cli.getCity());
+
+                    sql.append(p_client.getCity());
                     sql.append("'");
                 }
             }
@@ -168,12 +173,13 @@ public class ClientDao {
                 client.setId(resultSet.getInt("numero"));
                 client.setLastName(resultSet.getString("nom"));
                 client.setFirstName(resultSet.getString("prenom"));
-                client.setAddress(resultSet.getString("adresse"));
+
+                client.setAddres(resultSet.getString("adresse"));
                 client.setCity(resultSet.getString("ville"));
                 client.setListAccount(AccountDao.research(client.getId()));
-                listCli.add(client);
+                listClient.add(client);
             }
-            return listCli;
+            return listClient;
         } catch (SQLException ex) {
             System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
             return null;
@@ -189,7 +195,7 @@ public class ClientDao {
         }
     }
 
-    public static void update(Client cli) {
+    public static void update(Client p_client) {
         Connection con = null;
         PreparedStatement prepStatement = null;
 
@@ -199,11 +205,11 @@ public class ClientDao {
             StringBuilder sql = new StringBuilder("UPDATE client SET NOM = ?, PRENOM = ?, ADRESSE = ?, VILLE = ? WHERE numero = ?");
             prepStatement = (OraclePreparedStatement) con.prepareStatement(sql.toString());
 
-            prepStatement.setString(1, cli.getLastName());
-            prepStatement.setString(2, cli.getFirstName());
-            prepStatement.setString(3, cli.getAddress());
-            prepStatement.setString(4, cli.getCity());
-            prepStatement.setLong(5, cli.getId());
+            prepStatement.setString(1, p_client.getLastName());
+            prepStatement.setString(2, p_client.getFirstName());
+            prepStatement.setString(3, p_client.getAddres());
+            prepStatement.setString(4, p_client.getCity());
+            prepStatement.setLong(5, p_client.getId());
             prepStatement.executeUpdate();
             con.commit();
         } catch (SQLException ex) {
@@ -218,7 +224,7 @@ public class ClientDao {
         }
     }
 
-    public static boolean delete(Client cli) {
+    public static boolean delete(Client p_client) {
         Connection con = null;
         PreparedStatement prepStatement = null;
 
@@ -228,7 +234,7 @@ public class ClientDao {
             StringBuilder sql = new StringBuilder("DELETE FROM client WHERE numero = ?");
             prepStatement = (OraclePreparedStatement) con.prepareStatement(sql.toString());
 
-            prepStatement.setLong(1, cli.getId());
+            prepStatement.setLong(1, p_client.getId());
             prepStatement.executeUpdate();
             con.commit();
             return true;

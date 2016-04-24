@@ -1,13 +1,10 @@
-                                                                                       /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +17,12 @@ import modele.Account;
  */
 public class DeleteCompte extends HttpServlet {
 
+    private Account account;
+    private List<Account> listAccounts;
+
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -35,31 +34,32 @@ public class DeleteCompte extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            HtmlHttpUtils.isAuthenticate(request);
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-        
+
         try {
-            Account cpt = new Account();
-            cpt.setId(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Account> cptListe = AccountDao.research(cpt);
-            if(cptListe.size()>0){
-                cpt = cptListe.get(0);
-                AccountDao.delete(cpt);
+            account = new Account();
+            account.setId(Integer.parseInt(request.getParameter("id")));
+            listAccounts = AccountDao.research(account);
+            if (listAccounts.size() > 0) {
+                account = listAccounts.get(0);
+                AccountDao.delete(account);
                 response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=true");
-            }else{
-                response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=error1");
             }
-        } finally {            
+            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=error1");
+
+        } finally {
             out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -73,8 +73,7 @@ public class DeleteCompte extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response

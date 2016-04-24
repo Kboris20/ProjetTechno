@@ -14,7 +14,7 @@
     try {
         if (request.getParameter("error").equalsIgnoreCase("true")) {
             out.println("<div class=\"alert alert-error\">");
-            out.println("Le mot de passe/nom d'utilisateur est incorrect!");
+            out.println("Le nom d'utilisateur ou le mot de passe est incorrect !");
             out.println("</div>");
         }
     } catch (Exception ex) {

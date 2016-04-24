@@ -43,12 +43,22 @@ CSS style sheet for the app ICM
     margin-bottom:1%;
 }
 
-
 .tablePageConnexion{
     margin: auto;
 }
 
-.tdConnexion{
+
+#connectionButton{
+    width:50%;
+    margin-left:auto; 
+    margin-right: auto
+}
+
+.tablePageConnection{
+    margin: auto;
+}
+
+.identification .tdConnexion{
     text-align: right;
     vertical-align: bottom;
     margin: auto;
@@ -80,7 +90,7 @@ CSS style sheet for the app ICM
     background-color: #e6e6e6;
 }
 
-#divPageTitle, #divPageTitleForm{
+.pagesHeader{
     text-align:left; 
     padding-left:3%;
     float: left;

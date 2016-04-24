@@ -6,16 +6,19 @@
 package servlets;
 
 import dao.TransactionAdvancedDao;
+import dao.TransactionDao;
 import static dao.UtilisateurDao.researchByUsername;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modele.Transaction;
 import modele.TransactionAdvanced;
 import modele.User;
 import utilities.WebUtilities;
@@ -26,7 +29,12 @@ import utilities.WebUtilities;
  */
 public class Transactions extends HttpServlet {
 
-    private ArrayList<TransactionAdvanced> transactions;
+    private static final SimpleDateFormat FORMATER = new SimpleDateFormat("dd MMMM yyyy");
+    private static final DecimalFormat MY_FORMATER = new DecimalFormat("###.00 CHF");
+
+    private List<Transaction> listTransfers;
+    private List<TransactionAdvanced> joinedTransfers;
+    private User current_user;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,29 +50,31 @@ public class Transactions extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        User current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+        current_user = researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
 
-        transactions = new ArrayList<TransactionAdvanced>();
-        transactions.addAll(TransactionAdvancedDao.researchByUser(current_user));
-        
-        SimpleDateFormat formater = new SimpleDateFormat("dd MMMM yyyy");   
-        DecimalFormat myFormatter = new DecimalFormat("###.00 CHF");
-        
-        try {
-            HtmlHttpUtils.isAuthenticate(request);
+        listTransfers = new ArrayList<Transaction>();
+        listTransfers.addAll(TransactionDao.researchAll());
+        joinedTransfers = new ArrayList<TransactionAdvanced>();
+        joinedTransfers.addAll(TransactionAdvancedDao.researchByUser(current_user));
+
+       try {
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
         WebUtilities.doHeader(out, "Liste des transactions", request, "transactions", 0);
-        
+
         out.println("<div class=\"panel panel-default\">");
         out.println("<div class=\"panel-heading\">");
         out.println("<a href=\"TransfertFromTransfertManag?status=deb&idCompteDeb=-1&idCompteCred=-1\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
         out.println("</div>");
-        
+
         try {
-            if (transactions.isEmpty()) {
+            out.println("<a href=\"TransfertFromTransfertManag?status=deb&idCompteDeb=-1&idCompteCred=-1\"class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouvelle transaction\"></i></a>");
+            if (joinedTransfers.isEmpty()) {
                 out.println("<div class=\"alert alert-info\">");
                 out.println("Vous n'avez fait encore aucune transaction");
                 out.println("</div>");
@@ -79,14 +89,14 @@ public class Transactions extends HttpServlet {
                 out.println("<td class=\"listRow\">Montant</td>");
                 out.println("<td class=\"listRow\">Date</td>");
                 out.println("</tr>");
-                for (TransactionAdvanced tra : transactions) {
+                for (TransactionAdvanced tra : joinedTransfers) {
                     out.println("<tr>");
                     out.println("<td>" + tra.getClient_debit() + "</td>");
                     out.println("<td>" + tra.getAccount_debit() + "</td>");
                     out.println("<td>" + tra.getClient_credit() + "</td>");
                     out.println("<td>" + tra.getAccount_credit() + "</td>");
-                    out.println("<td>" + myFormatter.format(tra.getAmount()) + "</td>");
-                    out.println("<td>" + formater.format(tra.getDate()) + "</td>");
+                    out.println("<td>" + MY_FORMATER.format(tra.getAmount()) + "</td>");
+                    out.println("<td>" + FORMATER.format(tra.getDate()) + "</td>");
                     out.println("</tr>");
                 }
                 out.println("</table>");

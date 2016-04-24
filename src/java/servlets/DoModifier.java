@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package servlets;
 
 import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +16,9 @@ import modele.Client;
  * @author christop.francill
  */
 public class DoModifier extends HttpServlet {
+
+    private Client client;
+    private List<Client> listClients;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,26 +35,27 @@ public class DoModifier extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            HtmlHttpUtils.isAuthenticate(request);
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
         try {
-            Client cli = new Client();
-            cli.setId(Integer.parseInt(request.getParameter("id")));
-            ArrayList<Client> cliListe = ClientDao.research(cli);
-            if (cliListe.size() > 0) {
-                cli = cliListe.get(0);
-                cli.setLastName(request.getParameter("nom"));
-                cli.setFirstName(request.getParameter("prenom"));
-                cli.setAddress(request.getParameter("adresse"));
-                cli.setCity(request.getParameter("ville"));
-                ClientDao.update(cli);
-                response.sendRedirect(request.getContextPath() + "/modifier?id=" + cli.getId() + "&mod=true");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/index?mod=error1");
+            client = new Client();
+            client.setId(Integer.parseInt(request.getParameter("id")));
+            listClients = ClientDao.research(client);
+            if (listClients.size() > 0) {
+                client = listClients.get(0);
+                client.setLastName(request.getParameter("nom"));
+                client.setFirstName(request.getParameter("prenom"));
+                client.setAddres(request.getParameter("adresse"));
+                client.setCity(request.getParameter("ville"));
+                ClientDao.update(client);
+                response.sendRedirect(request.getContextPath() + "/modifier?id=" + client.getId() + "&mod=true");
             }
+            response.sendRedirect(request.getContextPath() + "/index?mod=error1");
         } catch (Exception ex) {
             response.sendRedirect(request.getContextPath() + "/index?mod=error2&text=\"" + ex.getMessage() + "\"");
         } finally {

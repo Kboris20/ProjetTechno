@@ -4,20 +4,21 @@ import exception.InsufficientBalanceException;
 import exception.NegativeAmmountException;
 import java.io.Serializable;
 
-public class Account implements Serializable{
+public class Account implements Serializable {
+
     private Integer id;
-    private String  name;
-    private Float   balance;
-    private Float   rate;
-    
-    public Account(Integer id,String name,Float balance,Float rate){
+    private String name;
+    private Float balance;
+    private Float rate;
+
+    public Account(Integer id, String name, Float balance, Float rate) {
         this.id = id;
         this.name = name;
         this.balance = balance;
         this.rate = rate;
     }
-    
-    public Account(){
+
+    public Account() {
         this.id = null;
         this.name = null;
         this.balance = null;
@@ -25,18 +26,18 @@ public class Account implements Serializable{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.valueOf(id) + "," + name + "," + String.valueOf(balance) + "," + String.valueOf(rate);
     }
-    
-    public void print(){
+
+    public void print() {
         System.out.println(this.toString());
     }
-    
-    public boolean isNull(){
-        return name==null && balance==null && rate==null && id==null;
+
+    public boolean isNull() {
+        return name == null && balance == null && rate == null && id == null;
     }
-    
+
     public Integer getId() {
         return id;
     }
@@ -68,7 +69,12 @@ public class Account implements Serializable{
     public void setRate(Float rate) {
         this.rate = rate;
     }
-    
+
+    /**
+     *
+     * @param amount le balance du compte
+     * @throws NegativeAmmountException si le balance est positif
+     */
     public void credit(float amount) throws NegativeAmmountException {
         if (amount > 0) {
             this.balance += amount;
@@ -76,7 +82,13 @@ public class Account implements Serializable{
             throw new NegativeAmmountException();
         }
     }
-    
+
+    /**
+     *
+     * @param amount
+     * @throws ch.hearc.ig.odi.serie3.exceptions.NegativeAmmountException
+     * @throws ch.hearc.ig.odi.serie3.exceptions.InsufficientBalanceException
+     */
     public void debit(Float amount) throws NegativeAmmountException, InsufficientBalanceException {
         if (this.balance > amount && amount > 0) {
             this.balance -= amount;
@@ -87,6 +99,14 @@ public class Account implements Serializable{
         }
     }
 
+    /**
+     *
+     * @param amount
+     * @param source
+     * @param target
+     * @throws ch.hearc.ig.odi.serie3.exceptions.NegativeAmmountException
+     * @throws ch.hearc.ig.odi.serie3.exceptions.InsufficientBalanceException
+     */
     public static void transfer(Float amount, Account source, Account target) throws NegativeAmmountException, InsufficientBalanceException {
         if (source.getBalance() > amount && amount > 0) {
             source.debit(amount);

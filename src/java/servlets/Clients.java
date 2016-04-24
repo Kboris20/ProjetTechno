@@ -22,7 +22,7 @@ import utilities.WebUtilities;
  */
 public class Clients extends HttpServlet {
 
-    private List<Client> clients;
+    public static List<Client> clients;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,13 +33,15 @@ public class Clients extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)            
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         try {
-            HtmlHttpUtils.isAuthenticate(request);
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
@@ -54,6 +56,7 @@ public class Clients extends HttpServlet {
                 Client client = new Client();
                 client.setId(Integer.valueOf(request.getParameter("id")));
                 listeCli.addAll(ClientDao.research(client));
+
                 out.println("<b><u>Confirmation</u></b>");
                 out.println("<p>Voulez vous réellement supprimer</p>");
                 out.println("<b> " + listeCli.get(0).getLastName() + " " + listeCli.get(0).getFirstName() + "</b>");
@@ -125,6 +128,7 @@ public class Clients extends HttpServlet {
                     + "</tr></table></form>"
                     + "</div>"
                     + "</div>");
+
             out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
             out.println("<tr>");
             out.println("<td>&nbsp;</td>");
@@ -148,7 +152,7 @@ public class Clients extends HttpServlet {
                     out.println("<td>" + ++nbClient + "</td>");
                     out.println("<td>" + client.getLastName() + "</td>");
                     out.println("<td>" + client.getFirstName() + "</td>");
-                    out.println("<td>" + client.getAddress() + "</td>");
+                    out.println("<td>" + client.getAddres() + "</td>");
                     out.println("<td>" + client.getCity() + "</td>");
                     out.println("<td></td>");
                     out.println("<td></td>");
@@ -160,7 +164,6 @@ public class Clients extends HttpServlet {
 
             }
             out.println("</table>");
-
             out.println("</div>");
         } finally {
             WebUtilities.doFooter(out);

@@ -16,7 +16,7 @@ public class WebUtilities {
         out.println("<html>");
         out.println("<head>");
         out.println("<title>" + title + "</title>");
-        
+
         out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js\"></script>");
 
         out.println("<link href=\"bootstrap/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
@@ -43,7 +43,7 @@ public class WebUtilities {
         out.println("<div  class=\"divCommonHeader\">");
 
         out.println("<div class=\"row\">");
-        out.println("<div id=\"divPageTitle\" class=\"col-md-8;\">");
+        out.println("<div class=\"col-md-8; pagesHeader\">");
         out.println("<h1>" + title + "</h1>");
         out.println("</div>");
 
@@ -152,9 +152,8 @@ public class WebUtilities {
         Client c = new Client();
         Client cli = new Client();
         c.setId(AccountDao.researchOwnerId(cpte.getId()));
-        cli = ClientDao.research(c).get(0);      
-        
-        
+        cli = ClientDao.research(c).get(0);
+
         out.println("<ul class=\"nav nav-tabs\">");
         out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
         out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
@@ -204,7 +203,7 @@ public class WebUtilities {
             out.println("<div class=\"divCommonHeader\">");
 
             out.println("<div class=\"row\">");
-            out.println("<div id=\"divPageTitleForm\" class=\"col-md-8\">");
+            out.println("<div class=\"col-md-8 pagesHeader\">");
             out.println("<h1>" + title + "</h1>");
             out.println("</div>");
 

@@ -7,7 +7,7 @@ package servlets;
 
 import dao.AccountDao;
 import dao.TransactionDao;
-import dao.UtilisateurDao;
+import dao.UserDao;
 import exception.InsufficientBalanceException;
 import exception.NegativeAmmountException;
 import java.io.IOException;
@@ -46,7 +46,9 @@ public class DoTransfer extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            HtmlHttpUtils.isAuthenticate(request);
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
@@ -58,7 +60,7 @@ public class DoTransfer extends HttpServlet {
             Integer idCli = Integer.valueOf(request.getParameter("idCli"));
             Account cpt = new Account();
             Account cptDest = new Account();
-            User user = UtilisateurDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+            User user = UserDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
 
             cpt.setId(Integer.valueOf(id));
             cptDest.setId(Integer.valueOf(id1));

@@ -7,7 +7,7 @@ package servlets;
 
 import dao.ClientDao;
 import dao.TransactionDao;
-import dao.UtilisateurDao;
+import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import utilities.WebUtilities;
  * @author boris.klett
  */
 public class WelcomeServlet extends HttpServlet {
-    public static ArrayList<Client> clients;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,12 +38,12 @@ public class WelcomeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        clients = new ArrayList<Client>();
-        clients.addAll(ClientDao.researchAll());
         String userConnected = HtmlHttpUtils.getUser(request);
 
         try {
-            HtmlHttpUtils.isAuthenticate(request);
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
@@ -63,9 +62,9 @@ public class WelcomeServlet extends HttpServlet {
             }
 
             int nbTransactions = TransactionDao.getNbTransactions();
-            int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser();
-            
-            ArrayList<User> users = UtilisateurDao.researchAll();
+            int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
+
+            ArrayList<User> users = UserDao.researchAll();
 
             out.println("<h3><b><u>Statistiques</u></b></h3>");
             out.println("<div class=\"row\">");
@@ -75,12 +74,12 @@ public class WelcomeServlet extends HttpServlet {
             out.println("<canvas id=\"canvas\" height=\"300\" width=\"600\"></canvas>");
             out.println("<script>");
             out.println("var barChartData = {");
-            
+
             for (User user : users) {
                 out.println("labels : [\"" + user.getUsername() + "\",");
             }
             out.println("\"" + users.get(users.size() - 1).getUsername() + "\"],");
-            
+
             out.println("datasets : [ {");
             out.println("label : \"Nombre de transactions\",");
             out.println("fillColor : \"rgba(151,187,205,0.5)\",");

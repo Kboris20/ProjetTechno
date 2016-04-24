@@ -4,18 +4,19 @@
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.AccountDao;
+import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
 import modele.Account;
+import modele.Client;
 import utilities.WebUtilities;
 
 /**
@@ -24,7 +25,12 @@ import utilities.WebUtilities;
  */
 public class AllComptes extends HttpServlet {
 
-    private Integer nombreComptes;
+    private Integer countAccount;
+    private Enumeration parameters;
+    private List<String> aParameter;
+    private Client client;
+    private List<Client> listClients;
+    private List<Account> listAccounts;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,27 +46,29 @@ public class AllComptes extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        try {
-            HtmlHttpUtils.isAuthenticate(request);
+       try {
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
         try {
-            Enumeration parameters = request.getParameterNames();
-            ArrayList<String> aParam = new ArrayList<String>();
+            parameters = request.getParameterNames();
+            aParameter = new ArrayList<String>();
 
             if (request.getParameter("idCli") != null) {
                 out.println("<h3>Liste des comptes</h3>");
 
-                Client cli = new Client();
-                cli.setId(Integer.parseInt(request.getParameter("idCli")));
-                ArrayList<Client> cliListe = new ArrayList<Client>();
-                cliListe.addAll(ClientDao.research(cli));
+                client = new Client();
+                client.setId(Integer.parseInt(request.getParameter("idCli")));
+                listClients = new ArrayList<Client>();
+                listClients.addAll(ClientDao.research(client));
 
-                if (cliListe.size() > 0) {
-                    cli = cliListe.get(0);
-                    cli.setListAccount(AccountDao.research(cli.getId()));
+                if (listClients.size() > 0) {
+                    client = listClients.get(0);
+                    client.setListAccount(AccountDao.research(client.getId()));
 
                     try {
                         if (request.getParameter("addCompte").equals("true")) {
@@ -70,6 +78,7 @@ public class AllComptes extends HttpServlet {
                         }
                     } catch (Exception ex) {
                     }
+
                     try {
                         if (request.getParameter("modCpt").equals("true")) {
                             out.println("<div class=\"alert alert-success\">");
@@ -78,6 +87,7 @@ public class AllComptes extends HttpServlet {
                         }
                     } catch (Exception ex) {
                     }
+
                     try {
                         if (request.getParameter("del").equals("true")) {
                             out.println("<div class=\"alert alert-success\">");
@@ -89,11 +99,11 @@ public class AllComptes extends HttpServlet {
 
                     out.println("<div class=\"panel panel-default\">");
                     out.println("<div class=\"panel-heading\">");
-                    out.println("<a href=\"addAccount.jsp?idCli=" + cli.getId() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
+                    out.println("<a href=\"ajouterCompte.jsp?idCli=" + client.getId() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
                     out.println("</div>");
 
                     out.println("<br/>");
-                    if (cli.getListAccount().size() > 0) {
+                    if (client.getListAccount().size() > 0) {
                         out.println("<form action=\"deleteMultiCompteConfirm\">");
                         out.println("<table class=\"table table-hover inset list\" >");
                         out.println("<thead>");
@@ -105,17 +115,17 @@ public class AllComptes extends HttpServlet {
                         out.println("<th>&nbsp;</td>");
                         out.println("<th>&nbsp;</td>");
                         out.println("</thead>");
-                        nombreComptes = 0;
-                        for (Account compt : cli.getListAccount()) {
-                            out.println("<tr class=\"trAccount\">");
+                        countAccount = 0;
+                        for (Account account : client.getListAccount()) {
+                            out.println("<tr class=\"trCompte\">");
 
-                            out.println("<td>" + ++nombreComptes + "</td>");
-                            out.println("<td>" + compt.getName() + "</td>");
-                            out.println("<td>" + compt.getBalance() + "</td>");
-                            out.println("<td>" + compt.getRate() + "</td>");
-                            out.println("<td><a href=\"transfereCompteACompte?id=" + compt.getId() + "&id1=-1&idCli=" + cli.getId() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a>");
-                            out.println("<a href=\"modifierCompte?id=" + compt.getId() + "&idCli=" + cli.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
-                            out.println("<a href=\"afficherClient?id=" + compt.getId() + "&idCli=" + cli.getId() + "&dele=true\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
+                            out.println("<td>" + ++countAccount + "</td>");
+                            out.println("<td>" + account.getName() + "</td>");
+                            out.println("<td>" + account.getBalance() + "</td>");
+                            out.println("<td>" + account.getRate() + "</td>");
+                            out.println("<td><a href=\"transfereCompteACompte?id=" + account.getId() + "&id1=-1&idCli=" + client.getId() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a>");
+                            out.println("<a href=\"modifierCompte?id=" + account.getId() + "&idCli=" + client.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                            out.println("<a href=\"afficherClient?id=" + account.getId() + "&idCli=" + client.getId() + "&dele=true\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
                             out.println("</tr>");
                         }
                         out.println("</table>");
@@ -135,23 +145,23 @@ public class AllComptes extends HttpServlet {
             } else {
                 WebUtilities.doHeader(out, "Afficher tous les comptes", request, "clientDetail", Integer.valueOf(request.getParameter("id")));
 
-                ArrayList<Account> listeCpt = new ArrayList<Account>();
-                listeCpt.addAll(AccountDao.research(new Account()));
+                listAccounts = new ArrayList<Account>();
+                listAccounts.addAll(AccountDao.research(new Account()));
 
-                if (listeCpt.size() > 0) {
-                    out.println("<table class=\"table table-hover list\" >");
+                if (listAccounts.size() > 0) {
+                    out.println("<table class=\"table table-hover\" id=\"tableComptesAllComptes\">");
                     out.println("<tr>");
                     out.println("<td class=\"listRow\">Nom</td>");
                     out.println("<td class=\"listRow\">Solde</td>");
                     out.println("<td class=\"listRow\">Taux</td>");
                     out.println("<td class=\"listRow\">Client</td>");
                     out.println("</tr>");
-                    for (Account cpt : listeCpt) {
+                    for (Account account : listAccounts) {
                         out.println("<tr>");
-                        out.println("<td>" + cpt.getName() + "</td>");
-                        out.println("<td>" + cpt.getBalance() + "</td>");
-                        out.println("<td>" + cpt.getRate() + "</td>");
-                        out.println("<td>" + AccountDao.researchOwner(cpt.getId()) + "</td>");
+                        out.println("<td>" + account.getName() + "</td>");
+                        out.println("<td>" + account.getBalance() + "</td>");
+                        out.println("<td>" + account.getRate() + "</td>");
+                        out.println("<td>" + AccountDao.researchOwner(account.getId()) + "</td>");
                         out.println("</tr>");
                     }
                     out.println("</table>");

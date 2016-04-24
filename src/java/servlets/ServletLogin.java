@@ -4,7 +4,6 @@
  */
 package servlets;
 
-
 import MemoryUser.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,8 +19,10 @@ import javax.servlet.http.HttpSession;
  */
 public class ServletLogin extends HttpServlet {
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -35,27 +36,30 @@ public class ServletLogin extends HttpServlet {
         try {
 
             HtmlHttpUtils.doHeader("Login Page - Gestion de personnes (CRUD)", out);
-            
+
             username = request.getParameter("username");
-            password= request.getParameter("password");
-            boolean errorlogin=false;
+            password = request.getParameter("password");
+            boolean errorlogin = false;
             if (username != null && password != null) {
                 if (!username.equals("") && !password.equals("")) {
 
-
-                      if(Users.verifyUser(username, password)){
-                        HttpSession s= request.getSession(true);
+                    if (Users.verifyUser(username, password)) {
+                        HttpSession s = request.getSession(true);
                         s.setAttribute("username", username);
                         response.sendRedirect(request.getContextPath() + "/welcomeServlet");
-                     }else errorlogin=true;
-              }else errorlogin=true;
-            }else errorlogin=true;
-            
-            if(errorlogin){
-                response.sendRedirect(request.getContextPath() + "/login.jsp?error=true");
+                    } else {
+                        errorlogin = true;
+                    }
+                } else {
+                    errorlogin = true;
+                }
+            } else {
+                errorlogin = true;
             }
 
-
+            if (errorlogin) {
+                response.sendRedirect(request.getContextPath() + "/login.jsp?error=true");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -65,8 +69,9 @@ public class ServletLogin extends HttpServlet {
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -78,8 +83,9 @@ public class ServletLogin extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -91,8 +97,9 @@ public class ServletLogin extends HttpServlet {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

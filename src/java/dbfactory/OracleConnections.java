@@ -31,9 +31,9 @@ public class OracleConnections {
             ods.setURL(url);
         }
         
-        Connection c = ods.getConnection();
-        c.setAutoCommit(false);
+        Connection connection = ods.getConnection();
+        connection.setAutoCommit(false);
         
-        return c;
+        return connection;
     }
 }

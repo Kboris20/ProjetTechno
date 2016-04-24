@@ -39,7 +39,9 @@ public class TransactionAccountToAccount extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            HtmlHttpUtils.isAuthenticate(request);
+            if (!HtmlHttpUtils.isAuthenticate(request)){
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
@@ -155,7 +157,7 @@ public class TransactionAccountToAccount extends HttpServlet {
                     out.println("<div class=\"alert alert-warning alert-dismissible clients popupAlert\" role=\"alert\">");
                     out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
                     ArrayList<Client> clients = new ArrayList<Client>();
-                    clients.addAll(WelcomeServlet.clients);
+                    clients.addAll(Clients.clients);
                     out.println("<div class=\"list-group\">");
                     out.println("<a class=\"list-group-item disabled\">Liste des clients</a>");
 
@@ -183,9 +185,10 @@ public class TransactionAccountToAccount extends HttpServlet {
                             out.println("</div></div>");
                         }
                     }
-                
-                out.println("</div>");
-                out.println("</div>");}
+
+                    out.println("</div>");
+                    out.println("</div>");
+                }
 
             } else {
                 out.println("<div class=\"alert alert-warning\">");
