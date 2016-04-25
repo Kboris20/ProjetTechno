@@ -256,4 +256,35 @@ public class TransactionDao {
             }
         }
     }
+
+    public static double getAverageAmountTransactions() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            con = OracleConnections.getConnection();
+
+            String query = "select max (averageamount) from (select num_employe, avg(montant) AS averageamount from transfert group by num_employe)";
+            statement = con.createStatement();
+
+            resultSet = statement.executeQuery(query);
+            resultSet.next();
+            double averageAmountTransactions = resultSet.getDouble(1);
+
+            return averageAmountTransactions;
+
+        } catch (SQLException ex) {
+            System.out.println("Error SELECT CONNECTION: " + ex.getMessage());
+            return 0;
+        } finally {
+            try {
+                resultSet.close();
+                statement.close();
+                con.close();
+            } catch (SQLException ex) {
+                System.out.println("Error SELECT SQL: " + ex.getMessage());
+            }
+        }
+    }
 }

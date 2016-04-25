@@ -55,7 +55,8 @@ public class WelcomeServlet extends HttpServlet {
                 }
             } catch (NullPointerException ex) {
             }
-
+            
+            //ArrayList : Liste des utilisateurs utile à la construction des données des graphiques en barres
             ArrayList<User> users = UserDao.researchAll();
             
             double amountTransactions = TransactionDao.getAmountTransactions();
@@ -64,14 +65,29 @@ public class WelcomeServlet extends HttpServlet {
             int nbTransactions = TransactionDao.getNbTransactions();
             int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
             int nbTransactionsAllUsers = nbTransactions - nbTransactionsByUser;
+            
+            //Gamification : La moyenne des montants des transferts par rapport au nombre de transfert de l'utilisateur
+            double averageJava = amountTransactionsByUser / nbTransactionsByUser;
+            double averageOracle = TransactionDao.getAverageAmountTransactions();
+            if (averageJava == averageOracle) {
+                out.println("<div class=\"img-medaille\"><img src=\"http://localhost:8080/crud/theme/img/medaille.png\"/></div>");
+                if (request.getParameter("nbFois") == null) {
+                    out.println("<div id=\"popup1\" class=\"overlay\">");
+                    out.println("<div class=\"popup\">");
+                    out.println("<h2>Félicitations !</h2>");
+                    out.println("<a class=\"close\" href=\"#popup1\">&times;</a>");
+                    out.println("<div class=\"content\">Vous êtes le plus chanceux.</div>");
+                    out.println("</div>");
+                    out.println("</div>");
+                }
+            }
 
+            out.println("<br />");
             out.println("<h2 class=\"performancesTitle\">Toutes les performances</h2></center>");
             
-            out.println("<div class=\"row\">");
-            out.println("<div class=\"row\">");
-            
+            out.println("<div class=\"row\">");    
             //Line Chart : Les barres affichent le montant des transferts par utilisateur
-            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<div class=\"col-md-6 col-centered\">");
             out.println("<h3>Montant des transactions par utilisateur</h3>");
             out.println("<canvas id=\"canvas-2\" height=\"300\" width=\"500\"></canvas>");
             out.println("<script>");
@@ -96,7 +112,7 @@ public class WelcomeServlet extends HttpServlet {
             out.println("</div>");
             
             //Line Chart : Les barres affichent le nombre de transferts par utilisateur
-            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<div class=\"col-md-6 col-centered\">");
             out.println("<h3>Nombre de transactions par utilisateur</h3>");
             out.println("<canvas id=\"canvas-1\" height=\"300\" width=\"500\"></canvas>");
             out.println("<script>");
@@ -124,9 +140,10 @@ public class WelcomeServlet extends HttpServlet {
             out.println("<br />");
             out.println("<center><h2 class=\"performancesTitle\">Mes performances</h2></center>");
             
+            out.println("<div class=\"row\">");
             //Pie Chart : La part en "rouge" affiche le montant des transferts au total ; tout utilisateur compris
             //            et la part en "bleu" affiche le montant des transferts cumulé ; de l'utilisateur connecté (sa performance)
-            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<div class=\"col-md-6 col-centered\">");
             out.println("<h3>Mes transferts (en francs)</h3>");
             out.println("<p>Montant total des transactions : " + amountTransactions + "</p>");
             out.println("<canvas id=\"chart-area-2\" height=\"300\" width=\"300\"/>");
@@ -146,7 +163,7 @@ public class WelcomeServlet extends HttpServlet {
 
             //Pie Chart : La part en "rouge" affiche le nombre de transferts au total ; tout utilisateur compris
             //            et la part en "bleu" affiche le nombre de transferts calculé ; de l'utilisateur connecté (sa performance)
-            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<div class=\"col-md-6 ccol-centered\">");
             out.println("<h3>Mes transferts (en quantité)</h3>");
             out.println("<p>Nombre total de transactions : " + nbTransactions + "</p>");
             out.println("<canvas id=\"chart-area-1\" height=\"300\" width=\"300\"/>");
