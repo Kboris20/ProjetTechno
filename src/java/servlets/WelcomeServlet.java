@@ -5,7 +5,6 @@
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.TransactionDao;
 import dao.UserDao;
 import java.io.IOException;
@@ -15,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modele.Client;
 import modele.User;
 import utilities.WebUtilities;
 
@@ -50,70 +48,148 @@ public class WelcomeServlet extends HttpServlet {
 
         try {
             WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
-            out.println("<hr/>");
-
-            out.println("<center>");
-            out.println("<br/>");
+            
             try {
                 if (request.getParameter("nbFois") == null) {
-                    out.println("<h2>Bonjour Mme/M : " + userConnected + " !</h2>");
+                    out.println("<center><h2>Bonjour Mme/M : " + userConnected + " !</h2>");
                 }
             } catch (NullPointerException ex) {
             }
-
+            
+            //ArrayList : Liste des utilisateurs utile à la construction des données des graphiques en barres
+            ArrayList<User> users = UserDao.researchAll();
+            
+            double amountTransactions = TransactionDao.getAmountTransactions();
+            double amountTransactionsByUser = TransactionDao.getAmountTransactionsByUser(userConnected);
+            double amountTransactionsAllUsers = amountTransactions - amountTransactionsByUser;
             int nbTransactions = TransactionDao.getNbTransactions();
             int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
-
-            ArrayList<User> users = UserDao.researchAll();
-
-            out.println("<h3><b><u>Statistiques</u></b></h3>");
-            out.println("<div class=\"row\">");
-
-            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
-            out.println("<h3>Nombre de transferts par utilisateur</h3>");
-            out.println("<canvas id=\"canvas\" height=\"300\" width=\"600\"></canvas>");
-            out.println("<script>");
-            out.println("var barChartData = {");
-
-            for (User user : users) {
-                out.println("labels : [\"" + user.getUsername() + "\",");
+            int nbTransactionsAllUsers = nbTransactions - nbTransactionsByUser;
+            
+            //Gamification : La moyenne des montants des transferts par rapport au nombre de transfert de l'utilisateur
+            double averageJava = amountTransactionsByUser / nbTransactionsByUser;
+            double averageOracle = TransactionDao.getAverageAmountTransactions();
+            if (averageJava == averageOracle) {
+                out.println("<div class=\"img-medaille\"><img src=\"http://localhost:8080/crud/theme/img/medaille.png\"/></div>");
+                if (request.getParameter("nbFois") == null) {
+                    out.println("<div id=\"popup1\" class=\"overlay\">");
+                    out.println("<div class=\"popup\">");
+                    out.println("<h2>Félicitations !</h2>");
+                    out.println("<a class=\"close\" href=\"#popup1\">&times;</a>");
+                    out.println("<div class=\"content\">Vous êtes le plus chanceux.</div>");
+                    out.println("</div>");
+                    out.println("</div>");
+                }
             }
-            out.println("\"" + users.get(users.size() - 1).getUsername() + "\"],");
 
+            out.println("<br />");
+            out.println("<h2 class=\"performancesTitle\">Toutes les performances</h2></center>");
+            
+            out.println("<div class=\"row\">");    
+            //Line Chart : Les barres affichent le montant des transferts par utilisateur
+            out.println("<div class=\"col-md-6 col-centered\">");
+            out.println("<h3>Montant des transactions par utilisateur</h3>");
+            out.println("<canvas id=\"canvas-2\" height=\"300\" width=\"500\"></canvas>");
+            out.println("<script>");
+            out.println("var barChartData2 = {");
+            out.println("labels : [");
+            for (User user : users) {
+                out.println("\"" + user.getUsername() + "\", ");
+            }
+            out.println("],");
             out.println("datasets : [ {");
-            out.println("label : \"Nombre de transactions\",");
-            out.println("fillColor : \"rgba(151,187,205,0.5)\",");
-            out.println("strokeColor : \"rgba(151,187,205,0.8)\",");
-            out.println("highlightFill : \"rgba(151,187,205,0.75)\",");
-            out.println("highlightStroke : \"rgbargba(151,187,205,1)\",");
-            out.println("data : [60, 20, 40, 10] } ] };");
+            out.println("label : \"Montant des transactions\",");
+            out.println("fillColor : \"#46BFBD\",");
+            out.println("strokeColor : \"#F7464A\",");
+            out.println("highlightFill : \"#5AD3D1\",");
+            out.println("highlightStroke : \"#FF5A5E\",");
+            out.println("data : [");
+            for (User user : users) {
+                out.println(TransactionDao.getAmountTransactionsByUser(user.getUsername()) + ", ");
+            }
+            out.println("] } ] };");
             out.println("</script>");
             out.println("</div>");
-
-            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
-            out.println("<h3>Mes transferts</h3>");
-            out.println("<canvas id=\"chart-area\" width=\"300\" height=\"300\"/>");
+            
+            //Line Chart : Les barres affichent le nombre de transferts par utilisateur
+            out.println("<div class=\"col-md-6 col-centered\">");
+            out.println("<h3>Nombre de transactions par utilisateur</h3>");
+            out.println("<canvas id=\"canvas-1\" height=\"300\" width=\"500\"></canvas>");
             out.println("<script>");
-            out.println("var pieData = [ {");
+            out.println("var barChartData1 = {");
+            out.println("labels : [");
+            for (User user : users) {
+                out.println("\"" + user.getUsername() + "\", ");
+            }
+            out.println("],");
+            out.println("datasets : [ {");
+            out.println("label : \"Nombre de transactions\",");
+            out.println("fillColor : \"#46BFBD\",");
+            out.println("strokeColor : \"#F7464A\",");
+            out.println("highlightFill : \"#5AD3D1\",");
+            out.println("highlightStroke : \"#FF5A5E\",");
+            out.println("data : [");
+            for (User user : users) {
+                out.println(TransactionDao.getNbTransactionsByUser(user.getUsername()) + ", ");
+            }
+            out.println("] } ] };");
+            out.println("</script>");
+            out.println("</div>");
+            out.println("</div>");
+            
+            out.println("<br />");
+            out.println("<center><h2 class=\"performancesTitle\">Mes performances</h2></center>");
+            
+            out.println("<div class=\"row\">");
+            //Pie Chart : La part en "rouge" affiche le montant des transferts au total ; tout utilisateur compris
+            //            et la part en "bleu" affiche le montant des transferts cumulé ; de l'utilisateur connecté (sa performance)
+            out.println("<div class=\"col-md-6 col-centered\">");
+            out.println("<h3>Mes transferts (en francs)</h3>");
+            out.println("<p>Montant total des transactions : " + amountTransactions + "</p>");
+            out.println("<canvas id=\"chart-area-2\" height=\"300\" width=\"300\"/>");
+            out.println("<script>");
+            out.println("var pieData2 = [ {");
+            out.println("value: " + amountTransactionsByUser + ",");
+            out.println("color:\"#46BFBD\",");
+            out.println("highlight: \"#5AD3D1\",");
+            out.println("label: \"" + userConnected + "\" },");
+            out.println("{");
+            out.println("value: " + amountTransactionsAllUsers + ",");
+            out.println("color: \"#F7464A\",");
+            out.println("highlight: \"#FF5A5E\",");
+            out.println("label: \"autres utilisateurs\" } ];");
+            out.println("</script>");
+            out.println(" </div>");
+
+            //Pie Chart : La part en "rouge" affiche le nombre de transferts au total ; tout utilisateur compris
+            //            et la part en "bleu" affiche le nombre de transferts calculé ; de l'utilisateur connecté (sa performance)
+            out.println("<div class=\"col-md-6 ccol-centered\">");
+            out.println("<h3>Mes transferts (en quantité)</h3>");
+            out.println("<p>Nombre total de transactions : " + nbTransactions + "</p>");
+            out.println("<canvas id=\"chart-area-1\" height=\"300\" width=\"300\"/>");
+            out.println("<script>");
+            out.println("var pieData1 = [ {");
             out.println("value: " + nbTransactionsByUser + ",");
             out.println("color:\"#46BFBD\",");
             out.println("highlight: \"#5AD3D1\",");
             out.println("label: \"" + userConnected + "\" },");
             out.println("{");
-            out.println("value: " + nbTransactions + ",");
+            out.println("value: " + nbTransactionsAllUsers + ",");
             out.println("color: \"#F7464A\",");
             out.println("highlight: \"#FF5A5E\",");
-            out.println("label: \"Total\" } ];");
+            out.println("label: \"autres utilisateurs\" } ];");
 
             out.println("window.onload = function(){");
-            out.println("var ctx = document.getElementById(\"chart-area\").getContext(\"2d\");");
-            out.println("window.myPie = new Chart(ctx).Pie(pieData);");
-            out.println("var ctx = document.getElementById(\"canvas\").getContext(\"2d\");");
-            out.println("window.myBar = new Chart(ctx).Bar(barChartData, { responsive : true }); };");
+            out.println("var ctx1 = document.getElementById(\"chart-area-1\").getContext(\"2d\");");
+            out.println("window.myPie1 = new Chart(ctx1).Pie(pieData1);");
+            out.println("var ctx2 = document.getElementById(\"chart-area-2\").getContext(\"2d\");");
+            out.println("window.myPie2 = new Chart(ctx2).Pie(pieData2);");
+            out.println("var ctx3 = document.getElementById(\"canvas-1\").getContext(\"2d\");");
+            out.println("window.myBar1 = new Chart(ctx3).Bar(barChartData1, { responsive : true });");
+            out.println("var ctx4 = document.getElementById(\"canvas-2\").getContext(\"2d\");");
+            out.println("window.myBar2 = new Chart(ctx4).Bar(barChartData2, { responsive : true }); };");
             out.println("</script>");
             out.println(" </div>");
-
-            out.println("</center>");
             out.println(" </div>");
 
         } finally {
