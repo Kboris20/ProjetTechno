@@ -10,7 +10,6 @@ import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -69,13 +68,39 @@ public class WelcomeServlet extends HttpServlet {
             out.println("<h2 class=\"performancesTitle\">Toutes les performances</h2></center>");
             
             out.println("<div class=\"row\">");
-            out.println("<div class=\"row\">");            
-            //Line Chart : Chacune des barres affiche le nombre de transferts pour un utilisateur
-            out.println("<div class=\"col-md-12\" style=\"width: 50%\">");
-            out.println("<h3>Nombre de transactions par utilisateur</h3>");
-            out.println("<canvas id=\"canvas\" height=\"300\" width=\"600\"></canvas>");
+            out.println("<div class=\"row\">");
+            
+            //Line Chart : Les barres affichent le montant des transferts par utilisateur
+            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<h3>Montant des transactions par utilisateur</h3>");
+            out.println("<canvas id=\"canvas-2\" height=\"300\" width=\"500\"></canvas>");
             out.println("<script>");
-            out.println("var barChartData = {");
+            out.println("var barChartData2 = {");
+            out.println("labels : [");
+            for (User user : users) {
+                out.println("\"" + user.getUsername() + "\", ");
+            }
+            out.println("],");
+            out.println("datasets : [ {");
+            out.println("label : \"Montant des transactions\",");
+            out.println("fillColor : \"#46BFBD\",");
+            out.println("strokeColor : \"#F7464A\",");
+            out.println("highlightFill : \"#5AD3D1\",");
+            out.println("highlightStroke : \"#FF5A5E\",");
+            out.println("data : [");
+            for (User user : users) {
+                out.println(TransactionDao.getAmountTransactionsByUser(user.getUsername()) + ", ");
+            }
+            out.println("] } ] };");
+            out.println("</script>");
+            out.println("</div>");
+            
+            //Line Chart : Les barres affichent le nombre de transferts par utilisateur
+            out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
+            out.println("<h3>Nombre de transactions par utilisateur</h3>");
+            out.println("<canvas id=\"canvas-1\" height=\"300\" width=\"500\"></canvas>");
+            out.println("<script>");
+            out.println("var barChartData1 = {");
             out.println("labels : [");
             for (User user : users) {
                 out.println("\"" + user.getUsername() + "\", ");
@@ -96,6 +121,7 @@ public class WelcomeServlet extends HttpServlet {
             out.println("</div>");
             out.println("</div>");
             
+            out.println("<br />");
             out.println("<center><h2 class=\"performancesTitle\">Mes performances</h2></center>");
             
             //Pie Chart : La part en "rouge" affiche le montant des transferts au total ; tout utilisateur compris
@@ -141,8 +167,10 @@ public class WelcomeServlet extends HttpServlet {
             out.println("window.myPie1 = new Chart(ctx1).Pie(pieData1);");
             out.println("var ctx2 = document.getElementById(\"chart-area-2\").getContext(\"2d\");");
             out.println("window.myPie2 = new Chart(ctx2).Pie(pieData2);");
-            out.println("var ctx3 = document.getElementById(\"canvas\").getContext(\"2d\");");
-            out.println("window.myBar = new Chart(ctx3).Bar(barChartData, { responsive : true }); };");
+            out.println("var ctx3 = document.getElementById(\"canvas-1\").getContext(\"2d\");");
+            out.println("window.myBar1 = new Chart(ctx3).Bar(barChartData1, { responsive : true });");
+            out.println("var ctx4 = document.getElementById(\"canvas-2\").getContext(\"2d\");");
+            out.println("window.myBar2 = new Chart(ctx4).Bar(barChartData2, { responsive : true }); };");
             out.println("</script>");
             out.println(" </div>");
             out.println(" </div>");
