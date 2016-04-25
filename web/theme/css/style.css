@@ -75,20 +75,15 @@ CSS style sheet for the app ICM
     padding-top:5%;
 }
 
-div.performancesBox{
-    width: 579px;
-    height: 225px;
-}
-
 h2.performancesTitle{
-    background-image: url("http://localhost:8080/crud/theme/img/imgwelcomepageperformances.jpg" );
-    font-size: 32px;
-    line-height: 150px;
+    /*background-image: url("http://localhost:8080/crud/theme/img/imgwelcomepageperformances.jpg" );
+      font-size: 32px;
+      line-height: 150px;*/
     color: #5AD3D1; 
-    padding:32px;
-    font-weight:lighter;
-    text-align:center;
-    display:inline;
+    /*padding:32px;
+      font-weight:lighter;
+      text-align:center;
+      display:inline;*/
 }
 
 .divContainer{

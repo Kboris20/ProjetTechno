@@ -6,12 +6,16 @@
 package servlets;
 
 import dao.TransactionDao;
+import dao.UserDao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modele.User;
 import utilities.WebUtilities;
 
 /**
@@ -45,17 +49,16 @@ public class WelcomeServlet extends HttpServlet {
 
         try {
             WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
-            out.println("<hr/>");
-
-            out.println("<center>");
-            out.println("<br/>");
+            
             try {
                 if (request.getParameter("nbFois") == null) {
-                    out.println("<h2>Bonjour Mme/M : " + userConnected + " !</h2>");
+                    out.println("<center><h2>Bonjour Mme/M : " + userConnected + " !</h2>");
                 }
             } catch (NullPointerException ex) {
             }
 
+            ArrayList<User> users = UserDao.researchAll();
+            
             double amountTransactions = TransactionDao.getAmountTransactions();
             double amountTransactionsByUser = TransactionDao.getAmountTransactionsByUser(userConnected);
             double amountTransactionsAllUsers = amountTransactions - amountTransactionsByUser;
@@ -63,31 +66,37 @@ public class WelcomeServlet extends HttpServlet {
             int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
             int nbTransactionsAllUsers = nbTransactions - nbTransactionsByUser;
 
-            //ArrayList<User> users = UserDao.researchAll();
-
-            out.println("<div class=\"performancesBox\"><h2 class=\"performancesTitle\">Mes performances</h2></div>");
+            out.println("<h2 class=\"performancesTitle\">Toutes les performances</h2></center>");
             
             out.println("<div class=\"row\">");
-            
+            out.println("<div class=\"row\">");            
             //Line Chart : Chacune des barres affiche le nombre de transferts pour un utilisateur
-            /*out.println("<div class=\"col-md-4\" style=\"width: 50%\">");
-            out.println("<h3>Nombre de transferts par utilisateur</h3>");
+            out.println("<div class=\"col-md-12\" style=\"width: 50%\">");
+            out.println("<h3>Nombre de transactions par utilisateur</h3>");
             out.println("<canvas id=\"canvas\" height=\"300\" width=\"600\"></canvas>");
             out.println("<script>");
             out.println("var barChartData = {");
+            out.println("labels : [");
             for (User user : users) {
-                out.println("labels : [\"" + user.getUsername() + "\",");
+                out.println("\"" + user.getUsername() + "\", ");
             }
-            out.println("\"" + users.get(users.size() - 1).getUsername() + "\"],");
+            out.println("],");
             out.println("datasets : [ {");
             out.println("label : \"Nombre de transactions\",");
-            out.println("fillColor : \"rgba(151,187,205,0.5)\",");
-            out.println("strokeColor : \"rgba(151,187,205,0.8)\",");
-            out.println("highlightFill : \"rgba(151,187,205,0.75)\",");
-            out.println("highlightStroke : \"rgbargba(151,187,205,1)\",");
-            out.println("data : [60, 20, 40, 10] } ] };");
+            out.println("fillColor : \"#46BFBD\",");
+            out.println("strokeColor : \"#F7464A\",");
+            out.println("highlightFill : \"#5AD3D1\",");
+            out.println("highlightStroke : \"#FF5A5E\",");
+            out.println("data : [");
+            for (User user : users) {
+                out.println(TransactionDao.getNbTransactionsByUser(user.getUsername()) + ", ");
+            }
+            out.println("] } ] };");
             out.println("</script>");
-            out.println("</div>");*/
+            out.println("</div>");
+            out.println("</div>");
+            
+            out.println("<center><h2 class=\"performancesTitle\">Mes performances</h2></center>");
             
             //Pie Chart : La part en "rouge" affiche le montant des transferts au total ; tout utilisateur compris
             //            et la part en "bleu" affiche le montant des transferts cumulé ; de l'utilisateur connecté (sa performance)
@@ -131,13 +140,11 @@ public class WelcomeServlet extends HttpServlet {
             out.println("var ctx1 = document.getElementById(\"chart-area-1\").getContext(\"2d\");");
             out.println("window.myPie1 = new Chart(ctx1).Pie(pieData1);");
             out.println("var ctx2 = document.getElementById(\"chart-area-2\").getContext(\"2d\");");
-            out.println("window.myPie2 = new Chart(ctx2).Pie(pieData2); };");
-            /*out.println("var ctx3 = document.getElementById(\"canvas\").getContext(\"2d\");");
-            out.println("window.myBar = new Chart(ctx3).Bar(barChartData, { responsive : true }); };");*/
+            out.println("window.myPie2 = new Chart(ctx2).Pie(pieData2);");
+            out.println("var ctx3 = document.getElementById(\"canvas\").getContext(\"2d\");");
+            out.println("window.myBar = new Chart(ctx3).Bar(barChartData, { responsive : true }); };");
             out.println("</script>");
             out.println(" </div>");
-
-            out.println("</center>");
             out.println(" </div>");
 
         } finally {
