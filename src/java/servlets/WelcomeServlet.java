@@ -58,16 +58,17 @@ public class WelcomeServlet extends HttpServlet {
 
             double amountTransactions = TransactionDao.getAmountTransactions();
             double amountTransactionsByUser = TransactionDao.getAmountTransactionsByUser(userConnected);
-            //amountTransactionsByUser = (amountTransactionsByUser * 100) / amountTransactions;
+            double amountTransactionsAllUsers = amountTransactions - amountTransactionsByUser;
             int nbTransactions = TransactionDao.getNbTransactions();
             int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
-            //nbTransactionsByUser = (nbTransactionsByUser * 100) / nbTransactions;
+            int nbTransactionsAllUsers = nbTransactions - nbTransactionsByUser;
 
             //ArrayList<User> users = UserDao.researchAll();
 
             out.println("<div class=\"performancesBox\"><h2 class=\"performancesTitle\">Mes performances</h2></div>");
             
             out.println("<div class=\"row\">");
+            
             //Line Chart : Chacune des barres affiche le nombre de transferts pour un utilisateur
             /*out.println("<div class=\"col-md-4\" style=\"width: 50%\">");
             out.println("<h3>Nombre de transferts par utilisateur</h3>");
@@ -92,6 +93,7 @@ public class WelcomeServlet extends HttpServlet {
             //            et la part en "bleu" affiche le montant des transferts cumulé ; de l'utilisateur connecté (sa performance)
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
             out.println("<h3>Mes transferts (en francs)</h3>");
+            out.println("<p>Montant total des transactions : " + amountTransactions + "</p>");
             out.println("<canvas id=\"chart-area-2\" height=\"300\" width=\"300\"/>");
             out.println("<script>");
             out.println("var pieData2 = [ {");
@@ -100,10 +102,10 @@ public class WelcomeServlet extends HttpServlet {
             out.println("highlight: \"#5AD3D1\",");
             out.println("label: \"" + userConnected + "\" },");
             out.println("{");
-            out.println("value: " + amountTransactions + ",");
+            out.println("value: " + amountTransactionsAllUsers + ",");
             out.println("color: \"#F7464A\",");
             out.println("highlight: \"#FF5A5E\",");
-            out.println("label: \"Total\" } ];");
+            out.println("label: \"autres utilisateurs\" } ];");
             out.println("</script>");
             out.println(" </div>");
 
@@ -111,6 +113,7 @@ public class WelcomeServlet extends HttpServlet {
             //            et la part en "bleu" affiche le nombre de transferts calculé ; de l'utilisateur connecté (sa performance)
             out.println("<div class=\"col-md-6\" style=\"width: 50%\">");
             out.println("<h3>Mes transferts (en quantité)</h3>");
+            out.println("<p>Nombre total de transactions : " + nbTransactions + "</p>");
             out.println("<canvas id=\"chart-area-1\" height=\"300\" width=\"300\"/>");
             out.println("<script>");
             out.println("var pieData1 = [ {");
@@ -119,10 +122,10 @@ public class WelcomeServlet extends HttpServlet {
             out.println("highlight: \"#5AD3D1\",");
             out.println("label: \"" + userConnected + "\" },");
             out.println("{");
-            out.println("value: " + nbTransactions + ",");
+            out.println("value: " + nbTransactionsAllUsers + ",");
             out.println("color: \"#F7464A\",");
             out.println("highlight: \"#FF5A5E\",");
-            out.println("label: \"Total\" } ];");
+            out.println("label: \"autres utilisateurs\" } ];");
 
             out.println("window.onload = function(){");
             out.println("var ctx1 = document.getElementById(\"chart-area-1\").getContext(\"2d\");");
