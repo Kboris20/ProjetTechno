@@ -56,6 +56,25 @@ public class WebUtilities {
         out.println("<br/>");
     }
 
+    /**
+     *
+     * @param out
+     * @param title
+     */
+    public static void doHeaderPopup(PrintWriter out, String title) {
+        doHeader(out, title);
+        out.println("<center>");
+        out.println("<div class=\"divContainer\">");
+        out.println("<div class=\"divCommonHeader\">");
+
+        out.println("<div class=\"row\">");
+        out.println("<div class=\"col-md-8 pagesHeader\">");
+        out.println("<h1>" + title + "</h1>");
+        out.println("</div>");
+        out.println("</div>");
+        out.println("<div class=\"divContent\">");
+    }
+
     public static void doHeader(PrintWriter out, String title, HttpServletRequest request, String page) {
         doHeader(out, title);
         doDivBody(out, title, request);
@@ -206,18 +225,6 @@ public class WebUtilities {
             out.println("<div class=\"col-md-8 pagesHeader\">");
             out.println("<h1>" + title + "</h1>");
             out.println("</div>");
-
-            out.println("<div id=\"divPageUserForm\" class=\"col-md-4\">");
-            out.println("<p><span class=\"glyphicon glyphicon-user\" title=\"Utilisateur\"></span> " + HtmlHttpUtils.getUser(request) + ",");
-            out.println("<a href=\"" + request.getContextPath() + "/logout\"><span class=\"glyphicon glyphicon-log-out\" title=\"Déconnexion\"></span></a>");
-            out.println("</p>");
-            out.println("</div>");
-            out.println("</div>");
-            out.println("<br/>");
-            out.println("<ul class=\"nav nav-tabs\">");
-            out.println("<li role=\"presentation\"><a href=\"" + request.getContextPath() + "/welcomeServlet?nbFois=1\">Home</a></li>");
-            out.println("<li role=\"presentation\"><a href=\"index\">Clients</a></li>");
-            out.println("</ul>");
             out.println("</div>");
             out.println("<div class=\"divContent\">");
         }

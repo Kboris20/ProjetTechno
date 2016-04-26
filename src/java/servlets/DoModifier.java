@@ -3,7 +3,6 @@ package servlets;
 import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +34,7 @@ public class DoModifier extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -53,9 +52,10 @@ public class DoModifier extends HttpServlet {
                 client.setAddres(request.getParameter("adresse"));
                 client.setCity(request.getParameter("ville"));
                 ClientDao.update(client);
-                response.sendRedirect(request.getContextPath() + "/modifier?id=" + client.getId() + "&mod=true");
+                response.sendRedirect(request.getContextPath() + "/afficherClient?idCli=" + client.getId() + "&mod=true");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/index?mod=error1");
             }
-            response.sendRedirect(request.getContextPath() + "/index?mod=error1");
         } catch (Exception ex) {
             response.sendRedirect(request.getContextPath() + "/index?mod=error2&text=\"" + ex.getMessage() + "\"");
         } finally {

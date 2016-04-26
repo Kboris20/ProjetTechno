@@ -21,6 +21,14 @@ import modele.Account;
  */
 public class TransactionCheck extends HttpServlet {
 
+    private String amount;
+    private String cents;
+    private String id;
+    private String id1;
+    private Integer idCli;
+    private Account account;
+    private Float total;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -36,7 +44,7 @@ public class TransactionCheck extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -44,13 +52,13 @@ public class TransactionCheck extends HttpServlet {
         }
 
         try {
-            String amount = request.getParameter("amount");
-            String cents = request.getParameter("cents");
-            String id = request.getParameter("id");
-            String id1 = request.getParameter("id1");
-            Integer idCli = Integer.valueOf(request.getParameter("idCli"));
-            Account account = new Account();
-            Float total = Float.valueOf(amount + "." + cents);
+            amount = request.getParameter("amount");
+            cents = request.getParameter("cents");
+            id = request.getParameter("id");
+            id1 = request.getParameter("id1");
+            idCli = Integer.valueOf(request.getParameter("idCli"));
+            account = new Account();
+            total = Float.valueOf(amount + "." + cents);
 
             account.setId(Integer.valueOf(id));
             ArrayList<Account> cptListe = AccountDao.research(account);

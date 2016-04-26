@@ -19,6 +19,13 @@ import modele.User;
  */
 public class UtilisateurDao {
 
+    private UtilisateurDao() {
+    }
+
+    /**
+     *
+     * @return
+     */
     public static ArrayList<User> researchAll() {
         ArrayList<User> users = new ArrayList<User>();
 
@@ -56,6 +63,11 @@ public class UtilisateurDao {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public static ArrayList<User> researchByUsername(String username) {
         ArrayList<User> users = new ArrayList<User>();
 

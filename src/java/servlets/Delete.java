@@ -3,7 +3,6 @@ package servlets;
 import dao.ClientDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +33,7 @@ public class Delete extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -49,10 +48,12 @@ public class Delete extends HttpServlet {
                 client = listClients.get(0);
                 if (ClientDao.delete(client)) {
                     response.sendRedirect(request.getContextPath() + "/index?del=true");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/index?del=false");
                 }
-                response.sendRedirect(request.getContextPath() + "/index?del=false");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/index?del=error1");
             }
-            response.sendRedirect(request.getContextPath() + "/index?del=error1");
         } catch (Exception ex) {
             response.sendRedirect(request.getContextPath() + "/index?del=error2&text=\"" + ex.getMessage() + "\"");
         } finally {

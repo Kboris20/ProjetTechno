@@ -46,8 +46,8 @@ public class AllComptes extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-       try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+        try {
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -72,7 +72,7 @@ public class AllComptes extends HttpServlet {
 
                     try {
                         if (request.getParameter("addCompte").equals("true")) {
-                            out.println("<div class=\"alert alert-success\">");
+                            out.println("<div class=\"alert alert-success popupInformation\">");
                             out.println("Compte crée.");
                             out.println("</div>");
                         }
@@ -81,7 +81,7 @@ public class AllComptes extends HttpServlet {
 
                     try {
                         if (request.getParameter("modCpt").equals("true")) {
-                            out.println("<div class=\"alert alert-success\">");
+                            out.println("<div class=\"alert alert-success popupInformation\">");
                             out.println("Compte modifié.");
                             out.println("</div>");
                         }
@@ -90,7 +90,7 @@ public class AllComptes extends HttpServlet {
 
                     try {
                         if (request.getParameter("del").equals("true")) {
-                            out.println("<div class=\"alert alert-success\">");
+                            out.println("<div class=\"alert alert-success popupInformation\">");
                             out.println("Compte supprimé.");
                             out.println("</div>");
                         }
@@ -99,7 +99,9 @@ public class AllComptes extends HttpServlet {
 
                     out.println("<div class=\"panel panel-default\">");
                     out.println("<div class=\"panel-heading\">");
-                    out.println("<a href=\"ajouterCompte.jsp?idCli=" + client.getId() + "\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
+                    out.println("<a onClick=\"addAccount(" + client.getId() + ")\" class=\"btn btn-primary\"><i class=\"icon-white icon-plus\" title=\"Nouveau compte\"></i></a>");
+                    out.println("<div class=\"customPopup\"></div>");
+
                     out.println("</div>");
 
                     out.println("<br/>");
@@ -124,7 +126,7 @@ public class AllComptes extends HttpServlet {
                             out.println("<td>" + account.getBalance() + "</td>");
                             out.println("<td>" + account.getRate() + "</td>");
                             out.println("<td><a href=\"transfereCompteACompte?id=" + account.getId() + "&id1=-1&idCli=" + client.getId() + "\" class=\"btn btn-primary btn-mini\"><span class=\"glyphicon glyphicon-transfer\" title=\"Transférer\"></span></a>");
-                            out.println("<a href=\"modifierCompte?id=" + account.getId() + "&idCli=" + client.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                            out.println("<a onClick=\"modAccount(" + account.getId() + ", " + client.getId() + ")\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
                             out.println("<a href=\"afficherClient?id=" + account.getId() + "&idCli=" + client.getId() + "&dele=true\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
                             out.println("</tr>");
                         }

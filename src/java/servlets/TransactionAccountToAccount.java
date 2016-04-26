@@ -5,7 +5,6 @@
  */
 package servlets;
 
-import dao.ClientDao;
 import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,6 +23,9 @@ import utilities.WebUtilities;
  */
 public class TransactionAccountToAccount extends HttpServlet {
 
+    private Account account;
+    private Account accountDest;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,7 +41,7 @@ public class TransactionAccountToAccount extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -48,10 +50,10 @@ public class TransactionAccountToAccount extends HttpServlet {
 
         try {
 
-            WebUtilities.doHeader(out, "Transfert compte à compte", request, "transfert", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id")));
+            WebUtilities.doHeader(out, "Nouveau transfert", request, "transfert", Integer.valueOf(request.getParameter("id")), Integer.valueOf(request.getParameter("id")));
             try {
                 if (request.getParameter("trans").equals("ok")) {
-                    out.println("<div class=\"alert alert-success\">");
+                    out.println("<div class=\"alert alert-success popupInformation\">");
                     out.println("Transfert effectué.");
                     out.println("</div>");
                 }
@@ -59,14 +61,14 @@ public class TransactionAccountToAccount extends HttpServlet {
             }
             try {
                 if (request.getParameter("error").equalsIgnoreCase("true")) {
-                    out.println("<div class=\"alert alert-error\">");
-                    out.println("Veuillez entrer un montant valide !");
+                    out.println("<div class=\"alert alert-error popupInformation\">");
+                    out.println("Transfert non autorisé");
                     out.println("</div>");
                 }
             } catch (Exception ex) {
             }
 
-            Account account = new Account();
+            account = new Account();
             account.setId(Integer.parseInt(request.getParameter("id")));
             ArrayList<Account> cptListe = AccountDao.research(account);
 
@@ -92,21 +94,24 @@ public class TransactionAccountToAccount extends HttpServlet {
                 out.println("<br/>");
 
                 if (Integer.valueOf(request.getParameter("id1")) > -1) {
+//########################################### Confirmation du transfer ##############################################
                     try {
                         if (request.getParameter("error").equals("false")) {
-                            out.println("<div class=\"alert alert-warning alert-dismissible popupAlert\" role=\"alert\">");
-                            out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+                            out.println("<div class=\"confirm\"></div>");
+                            out.println("<div class=\"confirmPopup\">");
                             out.println("<b><u>Confirmation</u></b>");
-                            out.println("<p>Souhaitez vous réellement effectuer de de: ");
+                            out.println("<p>Veuillez confirmer le transfert pour le montant de: ");
                             out.println("<b> " + request.getParameter("amount") + " CHF?</b></p>");
                             out.println("<br/>");
-                            out.println("<a href=\"transfere?amount=" + request.getParameter("amount") + "&id=" + request.getParameter("id") + "&id1=" + request.getParameter("id1") + "&idCli=" + request.getParameter("idCli") + "\" class=\"btn btn-info btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> Oui</a>");
+                            out.println("<a href=\"transfere?amount=" + request.getParameter("amount") + "&id=" + request.getParameter("id") + "&id1=" + request.getParameter("id1") + "&idCli=" + request.getParameter("idCli") + "\" class=\"btn btn-success btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> </a>");
+                            out.println("<a href=\"javascript:hidePopup();\" class=\"btn btn-danger btn-mini\"><span class=\"glyphicon glyphicon-remove\"></span></a>");
                             out.println("</div>");
+//###################################################################################################################
                         }
                     } catch (Exception ex) {
                     }
 
-                    Account accountDest = new Account();
+                    accountDest = new Account();
                     accountDest.setId(Integer.parseInt(request.getParameter("id1")));
                     ArrayList<Account> accountsDest = AccountDao.research(accountDest);
 
@@ -152,18 +157,22 @@ public class TransactionAccountToAccount extends HttpServlet {
 
                 } else {
                     out.println("<h3>Compte à créditer... </h3>");
-                    out.println("<a class=\"btn btn-primary choisirCompte\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
-
-                    out.println("<div class=\"alert alert-warning alert-dismissible clients popupAlert\" role=\"alert\">");
-                    out.println("<button type=\"button\" class=\"fermer\">Annuler</button>");
+                    out.println("<a href=\"javascript:showPopup();\" class=\"btn btn-primary choisirCompte\"><i class=\"icon-white icon-plus\"></i>Choisir un compte</a>");
                     ArrayList<Client> clients = new ArrayList<Client>();
                     clients.addAll(Clients.clients);
+
+                    //########################################## Popup customiser pour le choix des comptes #################################################
+                    out.println("<div class=\"customPopup\">");
+                    out.println("<button onclick=\"hidePopup();\" class=\"btn btn-default btn-sm\"><span class=\"glyphicon glyphicon-remove\"></span></button>");
+                    out.println("<hr/>");
+                    out.println("<br/>");
+
                     out.println("<div class=\"list-group\">");
                     out.println("<a class=\"list-group-item disabled\">Liste des clients</a>");
 
                     if (!clients.isEmpty()) {
                         for (Client client : clients) {
-                            out.println("<a href=\"#this\" onClick=\"Affiche('#compte_" + client.getId() + "')\" href=\"#\" class=\"list-group-item\">" + client.getLastName() + " " + client.getFirstName() + "</a>");
+                            out.println("<a href=\"#this\" onClick=\"affiche('#compte_" + client.getId() + "')\" href=\"#\" class=\"list-group-item\">" + client.getLastName() + " " + client.getFirstName() + "</a>");
                             ArrayList<Account> comptListe = new ArrayList<Account>();
                             out.println("<div id=\"compte_" + client.getId() + "\" style=\"width:50%; margin:auto;\" class=\"alert alert-info alert-dismissible comptes\" role=\"alert\">");
                             out.println("<div class=\"list-group\">");
@@ -187,7 +196,10 @@ public class TransactionAccountToAccount extends HttpServlet {
                     }
 
                     out.println("</div>");
+
                     out.println("</div>");
+                    //#################################################################################################
+
                 }
 
             } else {

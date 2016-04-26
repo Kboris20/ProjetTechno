@@ -38,15 +38,15 @@ public class DoModifierCompte extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
-
-        WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
         try {
+            WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("idCli")));
+
             client = new Client();
             client.setId(Integer.parseInt(request.getParameter("idCli")));
             listClients = ClientDao.research(client);
@@ -56,21 +56,14 @@ public class DoModifierCompte extends HttpServlet {
 
                 account = new Account();
                 account.setId(Integer.parseInt(request.getParameter("id")));
-                if (AccountDao.researchOwnerId(account.getId()) == client.getId()) {
-                    account.setName(request.getParameter("nom"));
-                    account.setBalance(Float.valueOf(request.getParameter("solde")));
-                    account.setRate(Float.valueOf(request.getParameter("taux")));
+                account.setName(request.getParameter("nom"));
+                account.setBalance(Float.valueOf(request.getParameter("solde")));
+                account.setRate(Float.valueOf(request.getParameter("taux")));
 
-                    AccountDao.update(account);
+                AccountDao.update(account);
 
-                    response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + client.getId() + "&modCpt=true");
-                } else {
-                    WebUtilities.doHeader(out, "Modifier un compte", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
-                    out.println("<div class=\"alert alert-error\">");
-                    out.println("Ce compte n'appartient pas au bon client.");
-                    out.println("</div>");
-                    WebUtilities.doFooter(out);
-                }
+                response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + client.getId() + "&modCpt=true");
+
             } else {
                 out.println("Aucun client n'existe avec cet identifiant.");
             }

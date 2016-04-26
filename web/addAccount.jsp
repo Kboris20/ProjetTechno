@@ -16,7 +16,7 @@
 
 <div class="row">
     <div class="col-sm-8">
-         <form id="formAddAccount" name="formAddAccount" method="post" action="addCompte">
+        <form id="formAddAccount" name="formAddAccount" method="post" action="addCompte">
             <input type="hidden" name="clientId" id="clientId" value="<%= id%>"/>
             <table>
                 <tr>
@@ -49,9 +49,9 @@
                 </tr>
             </table>
             <p>
-                <button class="btn btn-primary" type="submit"><i class="icon-white icon-plus"></i> Ajouter</button>
-                <button class="btn btn-success" type="reset"><i class="icon-white icon-refresh"></i> Vider le formulaire</button>
-                <a href="afficherClient?idCli=<%= id%>" class="btn btn-inverse"><i class="icon-white icon-share-alt"></i> Retour au client</a>
+                <button class="btn btn-primary btn-mini" type="submit"><i class="icon-white icon-plus"></i></button>
+                <button class="btn btn-success btn-mini" type="reset"><i class="icon-white icon-refresh"></i></button>
+                <a href="javascript:hidePopup();" class="btn btn-inverse btn-mini"><i class="icon-white icon-share-alt"></i></a>
             </p>
         </form>
     </div>

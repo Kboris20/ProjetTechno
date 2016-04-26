@@ -18,6 +18,14 @@ import modele.User;
  */
 public class TransactionDao {
 
+    private TransactionDao() {
+    }
+
+    /**
+     *
+     * @param p_transfer
+     * @param user
+     */
     public static void create(Transaction p_transfer, User user) {
         Connection con = null;
         PreparedStatement prepStatement = null;
@@ -46,6 +54,10 @@ public class TransactionDao {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static ArrayList<Transaction> researchAll() {
 
         ArrayList<Transaction> listTransfer = new ArrayList<Transaction>();
@@ -91,6 +103,11 @@ public class TransactionDao {
         }
     }
 
+    /**
+     *
+     * @param user
+     * @return
+     */
     public static ArrayList<Transaction> researchByUser(User user) {
         ArrayList<Transaction> listTransfer = new ArrayList<Transaction>();
         Connection con = null;
@@ -133,6 +150,10 @@ public class TransactionDao {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static int getNbTransactions() {
         Connection con = null;
         Statement statement = null;
@@ -164,6 +185,11 @@ public class TransactionDao {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @return
+     */
     public static int getNbTransactionsByUser(String username) {
         Connection con = null;
         Statement statement = null;

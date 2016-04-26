@@ -23,6 +23,10 @@ import utilities.WebUtilities;
  */
 public class WelcomeServlet extends HttpServlet {
 
+    private ArrayList<User> users;
+    private int nbTransactions;
+    private int nbTransactionsByUser;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,7 +43,7 @@ public class WelcomeServlet extends HttpServlet {
         String userConnected = HtmlHttpUtils.getUser(request);
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -48,24 +52,24 @@ public class WelcomeServlet extends HttpServlet {
 
         try {
             WebUtilities.doHeader(out, "Gestion des clients (CRUD)", request, "home", 0);
-            
+
             try {
                 if (request.getParameter("nbFois") == null) {
                     out.println("<center><h2>Bonjour Mme/M : " + userConnected + " !</h2>");
                 }
             } catch (NullPointerException ex) {
             }
-            
+
             //ArrayList : Liste des utilisateurs utile à la construction des données des graphiques en barres
             ArrayList<User> users = UserDao.researchAll();
-            
+
             double amountTransactions = TransactionDao.getAmountTransactions();
             double amountTransactionsByUser = TransactionDao.getAmountTransactionsByUser(userConnected);
             double amountTransactionsAllUsers = amountTransactions - amountTransactionsByUser;
             int nbTransactions = TransactionDao.getNbTransactions();
             int nbTransactionsByUser = TransactionDao.getNbTransactionsByUser(userConnected);
             int nbTransactionsAllUsers = nbTransactions - nbTransactionsByUser;
-            
+
             //Gamification : La moyenne des montants des transferts par rapport au nombre de transfert de l'utilisateur
             double averageJava = amountTransactionsByUser / nbTransactionsByUser;
             double averageOracle = TransactionDao.getAverageAmountTransactions();
@@ -84,8 +88,8 @@ public class WelcomeServlet extends HttpServlet {
 
             out.println("<br />");
             out.println("<h2 class=\"performancesTitle\">Toutes les performances</h2></center>");
-            
-            out.println("<div class=\"row\">");    
+
+            out.println("<div class=\"row\">");
             //Line Chart : Les barres affichent le montant des transferts par utilisateur
             out.println("<div class=\"col-md-6 col-centered\">");
             out.println("<h3>Montant des transactions par utilisateur</h3>");
@@ -110,7 +114,7 @@ public class WelcomeServlet extends HttpServlet {
             out.println("] } ] };");
             out.println("</script>");
             out.println("</div>");
-            
+
             //Line Chart : Les barres affichent le nombre de transferts par utilisateur
             out.println("<div class=\"col-md-6 col-centered\">");
             out.println("<h3>Nombre de transactions par utilisateur</h3>");
@@ -136,10 +140,10 @@ public class WelcomeServlet extends HttpServlet {
             out.println("</script>");
             out.println("</div>");
             out.println("</div>");
-            
+
             out.println("<br />");
             out.println("<center><h2 class=\"performancesTitle\">Mes performances</h2></center>");
-            
+
             out.println("<div class=\"row\">");
             //Pie Chart : La part en "rouge" affiche le montant des transferts au total ; tout utilisateur compris
             //            et la part en "bleu" affiche le montant des transferts cumulé ; de l'utilisateur connecté (sa performance)

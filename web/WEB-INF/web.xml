@@ -57,7 +57,7 @@
         <servlet-class>servlets.TransactionCheck</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>transfere</servlet-name>
+        <servlet-name>DoTransfer</servlet-name>
         <servlet-class>servlets.DoTransfer</servlet-class>
     </servlet>
     <servlet>
@@ -75,6 +75,10 @@
     <servlet>
         <servlet-name>TransfertFromTransfertManag</servlet-name>
         <servlet-class>servlets.TransactionFromTransactiontManag</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TransactionAjax</servlet-name>
+        <servlet-class>servlets.TransactionAjax</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Clients</servlet-name>
@@ -133,7 +137,7 @@
         <url-pattern>/transfereCheck</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>transfere</servlet-name>
+        <servlet-name>DoTransfer</servlet-name>
         <url-pattern>/transfere</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
@@ -151,6 +155,10 @@
     <servlet-mapping>
         <servlet-name>TransfertFromTransfertManag</servlet-name>
         <url-pattern>/TransfertFromTransfertManag</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TransactionAjax</servlet-name>
+        <url-pattern>/TransactionAjax</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

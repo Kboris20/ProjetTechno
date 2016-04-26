@@ -20,6 +20,13 @@ import modele.User;
  */
 public class TransactionAdvancedDao {
 
+    private TransactionAdvancedDao() {
+    }
+
+    /**
+     *
+     * @return
+     */
     public static ArrayList<TransactionAdvanced> researchAll() {
         ArrayList<TransactionAdvanced> listTransfer = new ArrayList<TransactionAdvanced>();
 
@@ -77,6 +84,12 @@ public class TransactionAdvancedDao {
         }
     }
 
+    /**
+     *
+     * @param user the user for which we want to get the transactions made by
+     * him/her
+     * @return
+     */
     public static ArrayList<TransactionAdvanced> researchByUser(User user) {
 
         ArrayList<TransactionAdvanced> listTransfer = new ArrayList<TransactionAdvanced>();

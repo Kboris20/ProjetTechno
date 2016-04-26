@@ -20,7 +20,18 @@ import oracle.jdbc.OracleTypes;
  */
 public class AccountDao {
 
-    public static long create(Account compte, int client_id) throws SQLException {
+    private AccountDao() {
+    }
+
+    /**
+     * Allow to create a new account for a client
+     *
+     * @param p_account The new account
+     * @param client_id The owner id
+     * @return The account which has been created
+     * @throws SQLException
+     */
+    public static long create(Account p_account, int client_id) throws SQLException {
         Connection con = null;
         OraclePreparedStatement prepStatement = null;
         ResultSet resultSet = null;
@@ -33,9 +44,9 @@ public class AccountDao {
             String sql = "insert into compte(nom,solde,taux,numero_client) values (?,?,?,?) returning numero into ?";
             prepStatement = (OraclePreparedStatement) con.prepareStatement(sql);
 
-            prepStatement.setString(1, compte.getName());
-            prepStatement.setFloat(2, compte.getBalance());
-            prepStatement.setFloat(3, compte.getRate());
+            prepStatement.setString(1, p_account.getName());
+            prepStatement.setFloat(2, p_account.getBalance());
+            prepStatement.setFloat(3, p_account.getRate());
             prepStatement.setInt(4, client_id);
             prepStatement.registerReturnParameter(5, OracleTypes.NUMBER);
             prepStatement.executeUpdate();
@@ -59,6 +70,12 @@ public class AccountDao {
         return rId;
     }
 
+    /**
+     * Search the accounts of a client in the database
+     *
+     * @param client_id the id of the client for who we want to get the accounts
+     * @return the searched accoutn
+     */
     public static ArrayList<Account> research(int client_id) {
         ArrayList<Account> listAccount = new ArrayList<Account>();
 
@@ -99,6 +116,12 @@ public class AccountDao {
         }
     }
 
+    /**
+     * Get the id of a client
+     *
+     * @param account_id the account id for which we want to get owner id
+     * @return the id of a client
+     */
     public static Account researchById(int account_id) {
         Connection con = null;
         PreparedStatement prepStatement = null;
@@ -137,6 +160,12 @@ public class AccountDao {
         }
     }
 
+    /**
+     * Used to get a searched account if it exist in the data base
+     *
+     * @param p_account the account that is looked for
+     * @return the searched account
+     */
     public static ArrayList<Account> research(Account p_account) {
         ArrayList<Account> listAccount = new ArrayList<Account>();
 
@@ -215,6 +244,10 @@ public class AccountDao {
         }
     }
 
+    /**
+     *
+     * @param p_account the account that we want to update in the DB
+     */
     public static void update(Account p_account) {
         Connection con = null;
         PreparedStatement prepStatement = null;
@@ -243,6 +276,10 @@ public class AccountDao {
         }
     }
 
+    /**
+     *
+     * @param p_account
+     */
     public static void delete(Account p_account) {
         Connection con = null;
         PreparedStatement prepStatement = null;
@@ -303,6 +340,11 @@ public class AccountDao {
 
     }
 
+    /**
+     *
+     * @param account_id
+     * @return
+     */
     public static int researchOwnerId(int account_id) {
         Connection con = null;
         Statement statement = null;

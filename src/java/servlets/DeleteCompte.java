@@ -3,7 +3,6 @@ package servlets;
 import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +33,7 @@ public class DeleteCompte extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -49,9 +48,10 @@ public class DeleteCompte extends HttpServlet {
                 account = listAccounts.get(0);
                 AccountDao.delete(account);
                 response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=true");
-            }
-            response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=error1");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/afficherClient?&idCli=" + request.getParameter("cliId") + "&del=error1");
 
+            }
         } finally {
             out.close();
         }

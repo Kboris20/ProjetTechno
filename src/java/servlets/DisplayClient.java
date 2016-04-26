@@ -40,8 +40,8 @@ public class DisplayClient extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-       try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+        try {
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -51,6 +51,7 @@ public class DisplayClient extends HttpServlet {
         try {
 
             WebUtilities.doHeader(out, "Afficher un client", request, "clientDetail", Integer.parseInt(request.getParameter("idCli")));
+
             client = new Client();
             client.setId(Integer.parseInt(request.getParameter("idCli")));
             listClients = new ArrayList<Client>();
@@ -62,30 +63,48 @@ public class DisplayClient extends HttpServlet {
                     if (request.getParameter("add").equals("true")) {
                         Clients.clients = new ArrayList<Client>();
                         Clients.clients.addAll(ClientDao.researchAll());
-                        out.println("<div class=\"alert alert-success\">");
+                        out.println("<div class=\"alert alert-success popupInformation\">");
                         out.println("Client crée.");
                         out.println("</div>");
                     }
                 } catch (Exception ex) {
                 }
+
+                try {
+                    if (request.getParameter("mod").equals("true")) {
+                        Clients.clients = new ArrayList<Client>();
+                        Clients.clients.addAll(ClientDao.researchAll());
+                        out.println("<div class=\"alert alert-success popupInformation\">");
+                        out.println("Client modifié.");
+                        out.println("</div>");
+                    }
+                } catch (Exception ex) {
+                }
+
                 out.println("<fieldset><legend>" + client.getLastName() + " " + client.getFirstName() + "</legend>");
                 out.println(client.getAddres() + "<br/>");
                 out.println(client.getCity());
 
+                //########################################### Confirmation de suppression d'un compte ##############################################
                 try {
-                    if (request.getParameter("dele").equalsIgnoreCase("true")) {
-                        out.println("<div class=\"alert alert-warning alert-dismissible popupAlert\" role=\"alert\">");
-                        out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+                    if (request.getParameter("dele").equals("true")) {
+                        out.println("<div class=\"confirm\"></div>");
+                        out.println("<div class=\"confirmPopup\">");
+
                         listAccounts = new ArrayList<Account>();
                         account = new Account();
                         account.setId(Integer.valueOf(request.getParameter("id")));
                         listAccounts.addAll(AccountDao.research(account));
+
                         out.println("<b><u>Confirmation</u></b>");
                         out.println("<p>Voulez vous réellement supprimer le compte</p>");
                         out.println("<b> " + listAccounts.get(0).getName() + ", solde: " + listAccounts.get(0).getBalance() + "</b>");
                         out.println("<br/>");
-                        out.println("<a href=\"deleteCompte?id=" + request.getParameter("id") + "&cliId=" + request.getParameter("idCli") + "\" class=\"btn btn-danger btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span></a>");
+
+                        out.println("<a href=\"deleteCompte?id=" + request.getParameter("id") + "&cliId=" + request.getParameter("idCli") + "\" class=\"btn btn-success btn-mini\"> <span class=\"glyphicon glyphicon-ok\"></span> </a>");
+                        out.println("<a href=\"javascript:hidePopup();\" class=\"btn btn-danger btn-mini\"><span class=\"glyphicon glyphicon-remove\"></span></a>");
                         out.println("</div>");
+//###################################################################################################################
                     }
                 } catch (Exception ex) {
                 }

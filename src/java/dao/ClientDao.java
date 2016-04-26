@@ -21,6 +21,14 @@ import oracle.jdbc.OracleTypes;
  */
 public class ClientDao {
 
+    private ClientDao() {
+    }
+
+    /**
+     *
+     * @param p_client
+     * @return
+     */
     public static long create(Client p_client) {
         Connection con = null;
         OraclePreparedStatement prepStatement = null;
@@ -60,6 +68,10 @@ public class ClientDao {
         return rId;
     }
 
+    /**
+     *
+     * @return The clients stored in the DB
+     */
     public static ArrayList<Client> researchAll() {
 
         ArrayList<Client> listClient = new ArrayList<Client>();
@@ -101,6 +113,11 @@ public class ClientDao {
         }
     }
 
+    /**
+     *
+     * @param p_client
+     * @return
+     */
     public static ArrayList<Client> research(Client p_client) {
         ArrayList<Client> listClient = new ArrayList<Client>();
         boolean and = false;
@@ -195,6 +212,10 @@ public class ClientDao {
         }
     }
 
+    /**
+     *
+     * @param p_client
+     */
     public static void update(Client p_client) {
         Connection con = null;
         PreparedStatement prepStatement = null;
@@ -224,6 +245,11 @@ public class ClientDao {
         }
     }
 
+    /**
+     *
+     * @param p_client
+     * @return
+     */
     public static boolean delete(Client p_client) {
         Connection con = null;
         PreparedStatement prepStatement = null;

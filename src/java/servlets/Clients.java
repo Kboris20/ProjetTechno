@@ -23,6 +23,7 @@ import utilities.WebUtilities;
 public class Clients extends HttpServlet {
 
     public static List<Client> clients;
+    private Integer clientsNumber;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,7 +40,7 @@ public class Clients extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -48,21 +49,26 @@ public class Clients extends HttpServlet {
 
         WebUtilities.doHeader(out, "Liste des clients", request, "clients", 0);
 
+        //########################################### Confirmation de suppression d'un client ##############################################
         try {
-            if (request.getParameter("dele").equalsIgnoreCase("true")) {
-                out.println("<div class=\"alert alert-warning alert-dismissible popupAlert\" role=\"alert\">");
-                out.println("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
+            if (request.getParameter("dele").equals("true")) {
+                out.println("<div class=\"confirm\"></div>");
+                out.println("<div class=\"confirmPopup\">");
+
                 ArrayList<Client> listeCli = new ArrayList<Client>();
                 Client client = new Client();
                 client.setId(Integer.valueOf(request.getParameter("id")));
                 listeCli.addAll(ClientDao.research(client));
 
                 out.println("<b><u>Confirmation</u></b>");
-                out.println("<p>Voulez vous réellement supprimer</p>");
-                out.println("<b> " + listeCli.get(0).getLastName() + " " + listeCli.get(0).getFirstName() + "</b>");
+                out.println("<p>Supprimer définitivement: </p>");
+                out.println("<b> " + listeCli.get(0).getLastName() + " " + listeCli.get(0).getFirstName() + "</b> ?");
                 out.println("<br/>");
-                out.println("<a href=\"delete?id=" + request.getParameter("id") + "\" class=\"btn btn-danger btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span></a>");
+                out.println("<a title=\"Oui\" href=\"delete?id=" + request.getParameter("id") + "\" class=\"btn btn-success btn-mini\"> <span class=\"glyphicon glyphicon-trash\"></span> </a>");
+                out.println("<a title=\"Non\" href=\"javascript:hidePopup();\" class=\"btn btn-danger btn-mini\"><span class=\"glyphicon glyphicon-remove\"></span></a>");
                 out.println("</div>");
+//###################################################################################################################
+
             }
         } catch (Exception ex) {
         }
@@ -72,19 +78,19 @@ public class Clients extends HttpServlet {
                 String delParam = request.getParameter("del");
 
                 if (delParam.equals("true")) {
-                    out.println("<div class=\"alert alert-success\">");
+                    out.println("<div class=\"alert alert-success popupInformation\">");
                     out.println("Client supprimé.");
                     out.println("</div>");
                 } else if (delParam.equals("false")) {
-                    out.println("<div class=\"alert alert-error\">");
+                    out.println("<div class=\"alert alert-error popupInformation\">");
                     out.println("Suppression impossible !");
                     out.println("</div>");
                 } else if (delParam.equals("error1")) {
-                    out.println("<div class=\"alert alert-error\">");
+                    out.println("<div class=\"alert alert-error popupInformation\">");
                     out.println("Client introuvable, suppression impossible !");
                     out.println("</div>");
                 } else if (delParam.equals("error2")) {
-                    out.println("<div class=\"alert alert-error\">");
+                    out.println("<div class=\"alert alert-error popupInformation\">");
                     out.println("Client non suprimé.<br/>");
                     out.println("Erreur rencontrée: " + request.getParameter("text"));
                     out.println("</div>");
@@ -96,11 +102,11 @@ public class Clients extends HttpServlet {
                 String modParam = request.getParameter("mod");
 
                 if (modParam.equals("error1")) {
-                    out.println("<div class=\"alert alert-error\">");
+                    out.println("<div class=\"alert alert-error popupInformation\">");
                     out.println("Client introuvable, modification impossible !");
                     out.println("</div>");
                 } else if (modParam.equals("error2")) {
-                    out.println("<div class=\"alert alert-error\">");
+                    out.println("<div class=\"alert alert-error popupInformation\">");
                     out.println("Client non modifié.<br/>");
                     out.println("Erreur rencontrée: " + request.getParameter("text"));
                     out.println("</div>");
@@ -108,17 +114,16 @@ public class Clients extends HttpServlet {
             } catch (Exception ex) {
             }
 
-            clients = new ArrayList<Client>();
-            clients.addAll(ClientDao.researchAll());
-            Integer nbClient;
             out.println("<div class=\"panel panel-default\">");
             out.println("<div class=\"panel-heading\">");
+
+            //################################## Ajout d'un nouveau client ####################################################
             out.println("<a class=\"btn btn-primary addC\"><i class=\"icon-white icon-plus\" title=\"Ajouter un client\"></i></a>");
             out.println("<div class=\"add\">\n"
                     + "<form id=\"form1\" name=\"form1\" method=\"post\" action=\"addClient\">"
                     + "<table><tr>"
-                    + "<td><button title=\"Sauvegarder\" type=\"submit\"><span class=\"glyphicon glyphicon-ok\"></span></button>"
-                    + "<a class=\"retour\"><span class=\"glyphicon glyphicon-share-alt\" title=\"Annuler\"></span></a></td>"
+                    + "<td><button class=\"btn btn-success\" title=\"Sauvegarder\" type=\"submit\"><span class=\"glyphicon glyphicon-ok\"></span></button>"
+                    + "<a title=\"Annuler\" class=\"btn btn-inverse btn-mini retour\"><i class=\"icon-white icon-share-alt\"></i></a></td>"
                     + "</tr><tr>"
                     + "<td><input type=\"text\" name=\"nom\" placeholder=\"Nom\" required/></td>"
                     + "<td><input type=\"text\" name=\"prenom\" placeholder=\"Prenom\" required/></td>"
@@ -127,7 +132,11 @@ public class Clients extends HttpServlet {
                     + "<td><img src=\"http://localhost:8080/crud/theme/img/nouveau_client1.png\" alt=\"image nouveau client\"/></td>"
                     + "</tr></table></form>"
                     + "</div>"
+                    //##########################################################################################################
                     + "</div>");
+
+            clients = new ArrayList<Client>();
+            clients.addAll(ClientDao.researchAll());
 
             out.println("<table class=\"table table-hover\" id=\"tableClientsListAll\">");
             out.println("<tr>");
@@ -146,10 +155,10 @@ public class Clients extends HttpServlet {
                 out.println("Il n'y a pas de client");
                 out.println("</div>");
             } else {
-                nbClient = 0;
+                clientsNumber = 0;
                 for (Client client : clients) {
                     out.println("<tr>");
-                    out.println("<td>" + ++nbClient + "</td>");
+                    out.println("<td>" + ++clientsNumber + "</td>");
                     out.println("<td>" + client.getLastName() + "</td>");
                     out.println("<td>" + client.getFirstName() + "</td>");
                     out.println("<td>" + client.getAddres() + "</td>");
@@ -157,14 +166,18 @@ public class Clients extends HttpServlet {
                     out.println("<td></td>");
                     out.println("<td></td>");
                     out.println("<td><a href=\"afficherClient?idCli=" + client.getId() + "\" class=\"btn btn-info btn-mini\"><i class=\"icon-white icon-eye-open\" title=\"Détailler\"></i></a>");
-                    out.println("<a href=\"modifier?id=" + client.getId() + "\" class=\"btn btn-warning btn-mini\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
+                    out.println("<a onClick=\"modify('" + client.getId() + "')\" class=\"btn btn-warning btn-mini modC\"><i class=\"icon-white icon-pencil\" title=\"Modifier\"></i></a>");
                     out.println("<a href=\"index?dele=true&id=" + client.getId() + "\" class=\"btn btn-danger btn-mini\"><i class=\"icon-white icon-trash\" title=\"Supprimer\"></i></a></td>");
                     out.println("</tr>");
+
                 }
 
             }
             out.println("</table>");
+
             out.println("</div>");
+            out.println("<div class=\"customPopup\"></div>");
+
         } finally {
             WebUtilities.doFooter(out);
             out.close();

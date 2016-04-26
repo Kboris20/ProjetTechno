@@ -23,6 +23,9 @@ import utilities.WebUtilities;
  */
 public class ModifyAccount extends HttpServlet {
 
+    private Client client;
+    private Account account;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,23 +41,23 @@ public class ModifyAccount extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
 
-        WebUtilities.doHeader(out, "Modifier un compte", request, "compteMod", Integer.valueOf(request.getParameter("id")));
+        WebUtilities.doHeaderPopup(out, "Modifier un compte");
         try {
-            Client client = new Client();
+            client = new Client();
             client.setId(Integer.parseInt(request.getParameter("idCli")));
             ArrayList<Client> clients = ClientDao.research(client);
 
             if (clients.size() > 0) {
                 client = clients.get(0);
 
-                Account account = new Account();
+                account = new Account();
                 account.setId(Integer.parseInt(request.getParameter("id")));
                 ArrayList<Account> accounts = AccountDao.research(account);
                 if (accounts.size() > 0) {
@@ -90,7 +93,8 @@ public class ModifyAccount extends HttpServlet {
                         out.println("</td>");
                         out.println("</tr>");
                         out.println("</table>");
-                        out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
+                        out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i></button>");
+                        out.println("<a href=\"javascript:hidePopup();\" class=\"btn btn-inverse btn-mini\"><i class=\"icon-white icon-share-alt\"></i></a>");
                         out.println("</form>");
                         out.println("</div><div class=\"col-sm-4\"><img src=\"http://localhost:8080/crud/theme/img/modifier_compte.png\" alt=\"image nouveau compte\"/></div></div>");
                     } else {

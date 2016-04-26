@@ -29,6 +29,14 @@ import modele.User;
  */
 public class DoTransfer extends HttpServlet {
 
+    private Float somme;
+    private String id;
+    private String id1;
+    private Integer idCli;
+    private Account cpt;
+    private Account cptDest;
+    private User user;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -46,7 +54,7 @@ public class DoTransfer extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -54,13 +62,13 @@ public class DoTransfer extends HttpServlet {
         }
 
         try {
-            Float somme = Float.valueOf(request.getParameter("amount"));
-            String id = request.getParameter("id");
-            String id1 = request.getParameter("id1");
-            Integer idCli = Integer.valueOf(request.getParameter("idCli"));
-            Account cpt = new Account();
-            Account cptDest = new Account();
-            User user = UserDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
+            somme = Float.valueOf(request.getParameter("amount"));
+            id = request.getParameter("id");
+            id1 = request.getParameter("id1");
+            idCli = Integer.valueOf(request.getParameter("idCli"));
+            cpt = new Account();
+            cptDest = new Account();
+            user = UserDao.researchByUsername(HtmlHttpUtils.getUser(request)).get(0);
 
             cpt.setId(Integer.valueOf(id));
             cptDest.setId(Integer.valueOf(id1));

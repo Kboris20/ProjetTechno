@@ -35,7 +35,7 @@ public class DisplayModifierClient extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            if (!HtmlHttpUtils.isAuthenticate(request)){
+            if (!HtmlHttpUtils.isAuthenticate(request)) {
                 response.sendRedirect(request.getContextPath() + "/login.jsp");
             }
         } catch (NullPointerException ex) {
@@ -45,7 +45,7 @@ public class DisplayModifierClient extends HttpServlet {
             client = new Client();
             client.setId(Integer.parseInt(request.getParameter("id")));
             listClients = ClientDao.research(client);
-            WebUtilities.doHeader(out, "Modifier un client", request, "clientDetail", Integer.parseInt(request.getParameter("id")));
+            WebUtilities.doHeaderPopup(out, "Modifier un client");
 
             try {
                 parameterModify = request.getParameter("mod");
@@ -63,22 +63,48 @@ public class DisplayModifierClient extends HttpServlet {
                 out.println("<form  id=\"form1\" name=\"form1\" method=\"post\"  action=\"doModifier\">");
                 out.println("<input type=\"hidden\" name=\"id\" value=\"" + client.getId() + "\"/>");
                 out.println("<p>");
+
+                out.println("<table>");
+                out.println("<tr>");
+                out.println("<td>");
                 out.println("<label for=\"nom\">Nom</label>");
-                out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + client.getLastName() + "\"/>");
-                out.println("</p>");
-                out.println("<p>");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input type=\"text\" name=\"nom\" id=\"nom\" value=\"" + client.getLastName() + "\" required/>");
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>");
                 out.println("<label for=\"prenom\">Prénom</label>");
-                out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\"" + client.getFirstName() + "\"/>");
-                out.println("</p>");
-                out.println("<p>");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input type=\"text\" name=\"prenom\" id=\"prenom\" value=\"" + client.getFirstName() + "\" required/>");
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>");
                 out.println("<label for=\"adresse\">Adresse</label>");
-                out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\"" + client.getAddres() + "\"/>");
-                out.println("</p>");
-                out.println("<p>");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input type=\"text\" name=\"adresse\" id=\"adresse\" value=\"" + client.getAddres() + "\" required/>");
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>");
                 out.println("<label for=\"ville\">Ville</label>");
-                out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\"" + client.getCity() + "\"/>");
-                out.println("</p>");
-                out.println("<button class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i> Modifier</button>");
+                out.println("</td>");
+                out.println("<td>");
+                out.println("<input type=\"text\" name=\"ville\" id=\"ville\" value=\"" + client.getCity() + "\" required/>");
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("<tr>");
+                out.println("<td>");
+                out.println("<button title=\"Modifier\" class=\"btn btn-warning\"><i class=\"icon-white icon-pencil\"></i></button>");
+                out.println("<a href=\"javascript:hidePopup();\" class=\"btn btn-danger btn-mini\"><span class=\"glyphicon glyphicon-remove\"></span></a>");
+
+                out.println("</td>");
+                out.println("</tr>");
+                out.println("</table>");
                 out.println("</form>");
             } else {
                 out.println("<div class=\"alert alert-warning\">");
